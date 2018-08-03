@@ -1,4 +1,12 @@
 ---
 # defaults file for ivansible.lin-mtproxy
+mtproxy_port: 13128
+mtproxy_bindip: 0.0.0.0
+mtproxy_secret: cf18fa8ea0267057e2c61a5f7322a8e7
+mtproxy_secure: yes
+mtproxy_release: latest
 
+mtproxy_rmdocker: no
+mtproxy_reinstall: no
+mtproxy_bin_file: /usr/local/sbin/mtg
 ...

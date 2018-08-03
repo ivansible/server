@@ -1,0 +1,11 @@
+---
+- name: install ansible docker bindings (optional)
+  apt:
+    name: "{{ ansible_python_version.startswith('3') | ternary('python3','python') }}-docker"
+
+- name: remove stale docker container (optional)
+  docker_container:
+    name: mtproxy
+    state: absent
+  ignore_errors: yes
+...

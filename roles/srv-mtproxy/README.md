@@ -1,7 +1,5 @@
 # ivansible.lin-mtproxy
-This role performs:
- - action1;
- - action2;
+This role installs mtg mtproto proxy on linux
 
 
 ## Requirements
@@ -13,28 +11,36 @@ None
 
 Available variables are listed below, along with default values.
 
-    variable1: 1
-    variable2: 2
+    mtproxy_port: 13128
+    mtproxy_bindip: 0.0.0.0
+    mtproxy_secret: cf18fa8ea0267057e2c61a5f7322a8e7
+    mtproxy_secure: yes
+    mtproxy_release: latest
+
+    mtproxy_rmdocker: yes
+    mtproxy_reinstall: no
+    mtproxy_bin_file: /usr/local/sbin/mtg
+
 
 ## Tags
 
-- `role1_tag1` -- action1
-- `role1_tag2` -- action2
+- `mtproxy_rmdocker`
+- `mtproxy_install`
+- `mtproxy_service`
+- `mtproxy_firewall`
 
 
 ## Dependencies
 
-None
+docker (optional)
 
 
 ## Example Playbook
 
-    - hosts: vagrant-boxes
-      strategy: linear
+    - hosts: vag1
       roles:
          - role: ivansible.lin-mtproxy
-           variable1: 1
-           variable2: 2
+           mtproxy_port: 13128
 
 
 ## License
