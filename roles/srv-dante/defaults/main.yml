@@ -1,4 +1,9 @@
 ---
 # defaults file for ivansible.lin-dante-auth
+dante_port: 1080
+dante_user: socks5
+dante_pass: secret
 
+# see: https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#hash-filters
+dante_salt: "{{ 32100 | random(seed=inventory_hostname) | string }}"
 ...

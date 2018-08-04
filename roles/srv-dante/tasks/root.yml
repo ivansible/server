@@ -1,5 +1,67 @@
 ---
-- name: ROLENAME root action 1
-  debug:
-    msg: action 1
+- name: create dante proxy user
+  # see: https://docs.ansible.com/ansible/latest/modules/user_module.html#user-module
+  user:
+    name: "{{ dante_user }}"
+    state: present
+    # see: https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#hash-filters
+    password: "{{ dante_pass | password_hash('sha512', dante_salt) }}"
+    update_password: always
+    group: users
+    shell: /usr/sbin/nologin
+    home: /usr/sbin
+    create_home: no
+    generate_ssh_key: no
+  notify: restart dante service
+  tags: dante_user
+
+
+- name: configure dante server
+  template:
+    src: danted.conf.j2
+    dest: /etc/danted.conf
+    mode: 0644
+  notify: restart dante service
+  tags: dante_conf
+
+
+- name: install dante server on xenial
+  # see: https://launchpad.net/ubuntu/bionic/amd64/dante-server/1.4.2+dfsg-2build1
+  apt:
+    deb: https://launchpadlibrarian.net/358625597/dante-server_1.4.2+dfsg-2build1_amd64.deb
+  when: "ansible_distribution_release == 'xenial'"
+  register: install_xenial
+  tags: dante_install
+
+- name: install dante server on bionic
+  apt:
+    name: dante-server
+  when: "ansible_distribution_release == 'bionic'"
+  register: install_bionic
+  tags: dante_install
+
+
+- name: temporarily stop dante service after fresh install
+  systemd:
+    name: danted
+    state: stopped
+    enabled: no
+    daemon_reload: yes
+  when: install_xenial is changed or install_bionic is changed
+  tags: dante_service
+
+- name: enable dante service
+  systemd:
+    name: danted
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  tags: dante_service
+
+
+- name: open dante port
+  ufw:
+    rule: allow
+    port: "{{ dante_port }}"
+  tags: dante_firewall
 ...
