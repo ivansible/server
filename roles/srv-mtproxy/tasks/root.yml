@@ -35,19 +35,10 @@
 
 
 - name: setup mtproxy service unit
-  copy:
+  template:
+    src: mtproxy.service.j2
     dest: /etc/systemd/system/mtproxy.service
-    content: |
-      # service: mtproxy
-      # ansible-managed
-      [Unit]
-      Description=mtg mtproto proxy server
-      [Service]
-      Type=simple
-      ExecStart={{ mtproxy_bin_file }} -b {{ mtproxy_bindip }} -p {{ mtproxy_port }} {{ mtproxy_secure | bool | ternary('dd','') }}{{ mtproxy_secret }}
-      Restart=always
-      [Install]
-      WantedBy=multi-user.target
+    mode: 0644
   register: unit_result
   tags: mtproxy_service
 

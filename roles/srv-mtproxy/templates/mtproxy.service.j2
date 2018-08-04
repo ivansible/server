@@ -1,0 +1,10 @@
+# service: mtproxy
+# ansible-managed
+[Unit]
+Description=mtg mtproto proxy server
+[Service]
+Type=simple
+ExecStart={{ mtproxy_bin_file }} -b {{ mtproxy_bindip }} -p {{ mtproxy_port }} {{ mtproxy_secure | bool | ternary('dd','') }}{{ mtproxy_secret }}
+Restart=always
+[Install]
+WantedBy=multi-user.target
