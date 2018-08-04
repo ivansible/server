@@ -42,6 +42,8 @@
 
 
 - name: temporarily stop dante service after fresh install
+  # note: this step is a workaround.
+  #       without this "recycling" the service might end up disabled.
   systemd:
     name: danted
     state: stopped
