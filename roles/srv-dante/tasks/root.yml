@@ -28,7 +28,7 @@
 - name: install dante server on xenial
   # see: https://launchpad.net/ubuntu/bionic/amd64/dante-server/1.4.2+dfsg-2build1
   apt:
-    deb: https://launchpadlibrarian.net/358625597/dante-server_1.4.2+dfsg-2build1_amd64.deb
+    deb: "{{ dante_deb_url }}"
   when: "ansible_distribution_release == 'xenial'"
   register: install_xenial
   tags: dante_install
