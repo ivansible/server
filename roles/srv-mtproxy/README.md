@@ -1,5 +1,5 @@
 # ivansible.lin-mtproxy
-This role installs mtg mtproto proxy on linux
+This role installs [mtg mtproto proxy](https://github.com/9seconds/mtg) on linux
 
 
 ## Requirements
@@ -17,7 +17,7 @@ Available variables are listed below, along with default values.
     mtproxy_secure: yes
     mtproxy_release: latest
 
-    mtproxy_rmdocker: yes
+    mtproxy_rmdocker: no
     mtproxy_reinstall: no
     mtproxy_bin_file: /usr/local/sbin/mtg
 
