@@ -3,8 +3,25 @@
 - setup:
   become: no
 
-# use import to become root globally
-- name: become root
-  import_tasks: root.yml
+- name: install tor
+  include_tasks: "install-{{ ansible_lsb.codename }}.yml"
+  tags: lin_tor_install
+
+- name: activate tor service
+  systemd:
+    name: tor
+    state: started
+    enabled: yes
   become: yes
+  tags: lin_tor_service
+
+- name: disable dangerous exit nodes
+  lineinfile:
+    path: /etc/tor/torrc
+    regexp: "^#?ExcludeNodes"
+    line: "ExcludeNodes {ru},{ua},{by}"
+    state: present
+  become: yes
+  notify: restart tor service
+  tags: lin_tor_config
 ...

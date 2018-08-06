@@ -1,7 +1,5 @@
 # ivansible.lin-tor
-This role performs:
- - action1;
- - action2;
+This role installs tor daemon on linux.
 
 
 ## Requirements
@@ -11,16 +9,14 @@ None
 
 ## Variables
 
-Available variables are listed below, along with default values.
-
-    variable1: 1
-    variable2: 2
+None
 
 
 ## Tags
 
-- `role1_tag1` -- action1
-- `role1_tag2` -- action2
+- `lin_tor_install`
+- `lin_tor_service`
+- `lin_tor_config`
 
 
 ## Dependencies
@@ -30,11 +26,9 @@ None
 
 ## Example Playbook
 
-    - hosts: vagrant-boxes
+    - hosts: vag1
       roles:
          - role: ivansible.lin-tor
-           variable1: 1
-           variable2: 2
 
 
 ## License
