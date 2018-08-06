@@ -1,5 +1,73 @@
 ---
-- name: ROLENAME root action 1
-  debug:
-    msg: action 1
+- name: install ziproxy package
+  apt:
+    name: ziproxy
+    state: present
+  register: ziproxy_apt_result
+  tags: lin_ziproxy_install
+
+
+- name: create ziproxy configuration
+  template:
+    src: ziproxy.conf.j2
+    dest: /etc/ziproxy/ziproxy.conf
+    owner: ziproxy
+    group: ziproxy
+    mode: 0640
+    backup: yes
+  notify: restart ziproxy service
+  tags: lin_ziproxy_config
+
+- name: setup ziproxy authentication
+  copy:
+    dest: /etc/ziproxy/http.passwd
+    content: "{{ ziproxy_userpass }}"
+    owner: ziproxy
+    group: ziproxy
+    mode: 0640
+    backup: no
+  when: "ziproxy_userpass != ''"
+  notify: restart ziproxy service
+  tags: lin_ziproxy_config
+
+- name: upload ziproxy lists
+  copy:
+    src: "{{ item }}"
+    dest: /etc/ziproxy/
+    owner: ziproxy
+    group: ziproxy
+    mode: 0644
+  loop:
+    - deny.list
+    - replace_ct.list
+  notify: restart ziproxy service
+  tags: lin_ziproxy_config
+
+
+- name: temporarily reset ziproxy service after fresh install
+  # note: this step is a workaround.
+  #       without this reset the service might end up disabled.
+  systemd:
+    name: ziproxy
+    state: stopped
+    enabled: no
+    daemon_reload: yes
+  when: ziproxy_apt_result is changed
+  tags: lin_ziproxy_service
+
+- name: activate ziproxy service
+  systemd:
+    name: ziproxy
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  tags: lin_ziproxy_service
+
+
+- name: open ziproxy port
+  ufw:
+    rule: allow
+    port: "{{ ziproxy_port }}"
+    proto: tcp
+  tags: lin_ziproxy_firewall
 ...

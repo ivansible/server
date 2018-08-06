@@ -1,7 +1,5 @@
 # ivansible.lin-ziproxy
-This role performs:
- - action1;
- - action2;
+This role installs ziproxy on linux.
 
 
 ## Requirements
@@ -13,14 +11,20 @@ None
 
 Available variables are listed below, along with default values.
 
-    variable1: 1
-    variable2: 2
+    ziproxy_port: 3168
+Port
+
+    ziproxy_userpass: ""
+Colon-separated `user:password` pair. Leave empty for no authentication.
 
 
 ## Tags
 
-- `role1_tag1` -- action1
-- `role1_tag2` -- action2
+- `lin_ziproxy_install`
+- `lin_ziproxy_config`
+- `lin_ziproxy_config`
+- `lin_ziproxy_service`
+- `lin_ziproxy_firewall`
 
 
 ## Dependencies
@@ -30,11 +34,10 @@ None
 
 ## Example Playbook
 
-    - hosts: vagrant-boxes
+    - hosts: vag1
       roles:
          - role: ivansible.lin-ziproxy
-           variable1: 1
-           variable2: 2
+           ziproxy_port: 8086
 
 
 ## License

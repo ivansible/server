@@ -1,4 +1,9 @@
 ---
 # defaults file for ivansible.lin-ziproxy
 
+ziproxy_port: 3168
+
+# colon-separated user:password pair
+# leave empty for no authentication
+ziproxy_userpass: ""
 ...

@@ -1,0 +1,278 @@
+# ziproxy.conf
+# ansible-managed
+
+Port = {{ ziproxy_port }}
+Address = "0.0.0.0"
+
+# RunAs user and group are specified on the daemon command line
+#RunAsUser = "ziproxy"
+#RunAsGroup = "ziproxy"
+
+#DebugLog = "/var/log/ziproxy/debug.log"   # by default disabled
+#ErrorLog = "/var/log/ziproxy/error.log"   # by default stderr
+#AccessLog = "/var/log/ziproxy/access.log" # by default disabled
+
+AllowMethodCONNECT = true
+
+{% if ziproxy_userpass != "" %}
+## Authentication mode to be used for proxy access: 1=plain text file
+## Plain text file containing authentication data should contain
+## user:pass pairs, lines no longer than 128 chars. Password is unencrypted.
+AuthMode = 1
+AuthPasswdFile = "/etc/ziproxy/http.passwd"
+
+{% endif %}
+## Whether to override the Accept-Encoding more to Ziproxy's liking.
+## If disabled, Ziproxy will just forward Accept-Encoding received from the client
+## (thus the data may or not come gzipped, depending on what the HTTP client says).
+##
+## Currently, this option is used to always advertise Gzip capability to
+## the remote HTTP server.
+## Enabling this does not neccessarily mean that the data will come compressed
+## from the server. This option just advertises the capability at Ziproxy's side,
+## the remote server must support that capability aswell.
+##
+## This has _no_ relation to the Gzip support between Ziproxy and the client, thus
+## you may leave this enabled even if you have clients that do not support Gzip.
+## Ziproxy will compress/decompress the data according to the client.
+##
+## Enabled by default.
+OverrideAcceptEncoding = true
+
+## When Ziproxy receives Gzip data it will try to decompress in order to do
+## further processing (HTMLopt, PreemptDNS etc).
+## This makes Ziproxy vulnerable to 'gzip-bombs' (eg. like 10 GB of zeroes, compressed)
+## which could be used to slow down or even crash the server.
+## In order to avoid/minimise such problems, you can limit the max
+## decompression proportion, related to the original file.
+## If a Gzipped file exceedes that proportion while decompressing, its
+## decompression is aborted.
+## The user will receive an error page instead or (if already transferring)
+## transfer will simply be aborted.
+##
+## You may disable this feature defining its value to '0'.
+## default: 2000 (that's 2000% == 20 times the compressed size)
+MaxUncompressedGzipRatio = 2000
+
+## When limiting decompression rate with MaxUncompressedGzipRatio
+## _and_ gunzipping while streaming it's not possible to know the
+## file size until the transfer is finished. So Ziproxy verifies this while
+## decompressing.
+## The problem by doing this is the possible false positives:
+## certain files compress a lot at their beginning, but then not-so
+## shortly after.
+## In order to prevent/minimize such problems, we define the minimum
+## output (the decompressed data) generated before starting to
+## check the decompression rate.
+## If defined as '0', it will check the rate immediately.
+## A too large value will increase the rate-limit precision, at the cost of less
+## protection.
+## Streams with output less that this value won't have decompression
+## rate checking at all.
+## This feature is only active if MaxUncompressedGzipRatio is defined.
+## This does not affect data wholly loaded to memory (for further processing).
+## default: 10000000 (bytes)
+## Note: The previous default (until version 2.7.9_BETA) was 250000
+## See also: MaxUncompressedGzipRatio
+MinUncompressedGzipStreamEval = 10000000
+
+## This is the maximum compression rate allowable for an incoming
+## (before recompression) image file.
+## If an image has a higher compression rate than this, it will not
+## be unpacked and it will be forwarded to the client as is.
+## This feature protects against (or mitigates) the problem with
+## "image bombs" (gif bombs, etc) done with huge bitmaps with the same
+## pixel color (thus very small once compressed).
+## Since Ziproxy may try to recompress the image, if several of this
+## kind are requested, the server may run out of memory, so this
+## may be used as a DoS attack against Ziproxy.
+## This feature will not protect the client, since it will receive
+## the unmodified picture.
+## There are rare legitimate cases matching such high compression rate,
+## including poor website design. But in such cases is not really worth
+## recompressing anyway (the processing costs are not worth the savings).
+## Usually "image bomb" pictures have a >1000:1 compression ratio.
+## Setting this to less than 100 risks not processing legitimate pictures.
+## Setting 0 disables this feature.
+## Default: 500 (500:1 ratio)
+MaxUncompressedImageRatio = 500
+
+## If processing of request exceeds specified time in seconds,
+## or connection is idle beyond that time (stalled) it will abort.
+## This avoids processes staying forever (or for a very long time)
+## in case of a stalled connection or software bug.
+## This will NOT necessarily abort the streaming of very big files,
+## it will ONLY if the connection stalls or there's a software bug.
+## If "0", no timeout.
+## Default: 90 (seconds)
+ConnTimeout = 90
+
+## Max file size to try to (re)compress, in bytes;
+## If "0", means that this limitation won't apply.
+## This regards to the file size as received from the remote HTTP server
+## (which may arrive gzipped or not -- it doesn't matter).
+## If a file is bigger than this limit, Ziproxy will simply stream it unmodified,
+## unless the user also requested gzip compression (see below).
+## Attention: If setting a very big size, the request answer latency will
+##   increase since Ziproxy needs to fetch the whole file before
+##   attempting to (re)compress it.
+##   A too low value will prevent data bigger that that to de processed
+##   (jpg/png/gif recompression, htmlopt, preemptdns..).
+## Note that if:
+##   - Only gzipping is to be applied *OR*
+##   - Gzipping and other is to be applied, but data is > MaxSize
+##   Gzip compression (and only that) will be applied while streaming.
+## Default: 1048576 (bytes)
+##   (default used to be "0" in ziproxy 2.3.0 and earlier)
+# MaxSize = 1048576
+
+UseContentLength = false
+
+## Whether to try to apply lossless compression with gzip.
+## This option concerns traffic between Ziproxy and the client only.
+## This optimization is not limited by MaxSize.
+##
+## Gzip compression applies only to content-types specified with
+## the parameter LosslessCompressCT.
+##
+## See also: LosslessCompressCT
+## Default: true
+Gzip = true
+
+## Whether to try to (re)compress incoming data originally in
+## the following formats (true) or not (false)
+## default: true
+ProcessJPG = true
+ProcessPNG = true
+ProcessGIF = true
+
+## Whether to try to optimize HTML, CSS and Javascript, thus reducing their size
+## ProcessHTML: text/html
+## ProcessCSS:  text/css
+## ProcessJS:   application/[x-]javascript)
+## Although such data may be Gzipped too, optimizing prior to Gzipping normally
+## reduces the data size even further.
+## The final size depends much on how unoptimal is the coding of such data;
+## some sites already present HTML pre-optimized so, in such cases, there won't
+## be much gain.
+## Note: Due to the higher complexity of such optimization, there's some risk of a page
+## being corrupted.
+## ****** THESE OPTIONS ARE EXPERIMENTAL ******
+##
+ProcessHTML = true
+ProcessCSS = true
+ProcessJS = false
+
+## Options for fine-tuning text/html optimization.
+## Only used when ProcessHTML=true
+## Certain optimizations may be disabled as quick 'fix' when a text data
+## gets currupted after being optimized.
+## Note: CSS and JS switches apply _only_ to such data when embedded into HTML data,
+##       for JS, CSS-only data, see ProcessJS and ProcessCSS options.
+##
+ProcessHTML_CSS = true
+ProcessHTML_JS = false
+ProcessHTML_tags = true
+ProcessHTML_text = true
+ProcessHTML_PRE = false
+ProcessHTML_NoComments = true
+ProcessHTML_TEXTAREA = false
+
+## If enabled, will discard PNG/GIF/JP2K transparency and de-animate
+## GIF images if necessary for recompression, at the cost of some image
+## distortion.
+## Note: Images with useless transparency/alpha data (all pixels
+##       being opaque) do not require this option. In such cases Ziproxy
+##       will detect that and remove the useless data automatically.
+## Disabled by default.
+#AllowLookChange = true
+
+## If enabled, convert images to grayscale before recompressing.
+## This provides extra compression, at the cost of losing color data.
+## Note: Not all images sent will be in grayscale, only the ones
+##       considered worth recompression that way.
+## Disabled by default.
+#ConvertToGrayscale = true
+
+## Image quality for JPG (JPEG) compression.
+## Image quality is specified in integers between 100 (best) and 0 (worst).
+# {5000(~70),50000(~220),250000(~500),+}
+ImageQuality = {35,35,30,25}
+
+## Alpha channel (image transparency data) removal threshold
+## Removes alpha channel from images with a minimum opacity
+## of AlphaRemovalMinAvgOpacity
+## (1000000: completely opaque, 0: completely transparent).
+##
+## This reduces data by removing unnecessary alpha channel from
+## fully-opaque images; and from (subjectively) not-so-relevant transparency
+## information.
+## This also allows recompression to JPEG for PNG/JP2k images originally
+## with alpha channel (which is not supported by JPEG image format).
+## Note: Debug log reports the average alpha opacity for each
+##       image with alpha channel.
+## Default: 1000000 (remove alpha only from fully-opaque images)
+##
+AlphaRemovalMinAvgOpacity = 700000
+
+## This option specifies a file containing a list of URLs which its
+## data should be intercepted and replaced by another.
+## Header data such as cookies is maintained.
+## Currently the only replacing data available is an empty image
+## (1x1 transparent pixel GIF).
+##
+## The list contain full URLS (http://site.com/path), one URL per line.
+## The URLs may also contain pattern-matching asterisks.
+## Comments may be present if prefixed by '#' (shell-alike).
+## In order to exempt a whole site from processing: "http://ad.somehost.xyz/*"
+##
+## The way it is, this option may be used as an AD-BLOCKER which is
+## transparent to the remote host (data is downloaded from the remove server
+## and cookies are transported) -- a stealthy ad-blocker, if you like.
+##
+## Default: empty (no file specified, inactive)
+## See also: URLReplaceDataCT
+# URLReplaceData = "/etc/ziproxy/replace.list"
+
+## Same as URLReplaceData, except it will only replace the data
+## from matching URLs if the content-type matches
+## the list in URLReplaceDataCTList (mandatory parameter) aswell.
+##
+## URLReplaceDataCT may be useful as a more compatible AD-BLOCKER
+## if only visual files are replaced. Certain websites rely on
+## external javascript from advertisement hosts and break when
+## that data is missing, this is a way to block advertisements
+## in such cases.
+##
+## Default: empty (no file specified, inactive)
+## See also: URLReplaceDataCTList, URLReplaceData
+URLReplaceDataCT = "/etc/ziproxy/replace_ct.list"
+
+## List of content-types to use with the URLReplaceDataCT option.
+## This option is required by URLReplaceDataCT.
+## Default: empty (no content-type specified, inactive)
+## See also: URLReplaceDataCTListAlsoXST, URLReplaceDataCT
+URLReplaceDataCTList = {"image/jpeg", "image/gif", "image/png", "application/x-shockwave-flash"}
+
+## When using URLReplaceDataCTList, this defines whether to also automatically add
+## content-type entries with 'x-' prefix appended to subtypes
+## (aaaa/bbbb also adding aaaa/x-bbbb).
+## Usually it's convenient to do this way, that avoids worrying about
+## having to create duplicated entries, or whether which variant is valid.
+##
+## You may want to disable this is you wish to have a precise control
+## of what types of content-type you wish to include.
+##
+## See also: URLReplaceDataCTList
+## Default: true
+# URLReplaceDataCTListAlsoXST = true
+
+## List of URLs which should be blocked with 403 "access denied" error
+URLDeny = "/etc/ziproxy/deny.list"
+
+## Custom HTTP Error Messages
+{% for errcode in [ 400, 403, 404, 407, 408, 409, 500, 503 ] %}
+CustomError{{errcode}}="/usr/share/ziproxy/error/{{errcode}}.html"
+{% endfor %}
+
+{# end #}
