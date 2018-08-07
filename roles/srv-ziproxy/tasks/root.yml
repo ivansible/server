@@ -71,4 +71,6 @@
     proto: tcp
   no_log: true
   tags: lin_ziproxy_firewall
+
+- meta: flush_handlers
 ...
