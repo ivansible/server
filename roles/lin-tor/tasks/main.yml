@@ -24,4 +24,6 @@
   become: yes
   notify: restart tor service
   tags: lin_tor_config
+
+- meta: flush_handlers
 ...
