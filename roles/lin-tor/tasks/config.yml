@@ -1,0 +1,17 @@
+---
+- name: set tor socks port
+  lineinfile:
+    path: /etc/tor/torrc
+    regexp: "^#?SocksPort"
+    line: "SocksPort {{ tor_socks_port }}"
+    state: present
+  notify: restart tor service
+
+- name: disable dangerous exit nodes
+  lineinfile:
+    path: /etc/tor/torrc
+    regexp: "^#?ExcludeNodes"
+    line: "ExcludeNodes {ru},{ua},{by}"
+    state: present
+  notify: restart tor service
+...

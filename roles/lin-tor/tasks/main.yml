@@ -15,15 +15,16 @@
   become: yes
   tags: lin_tor_service
 
-- name: disable dangerous exit nodes
-  lineinfile:
-    path: /etc/tor/torrc
-    regexp: "^#?ExcludeNodes"
-    line: "ExcludeNodes {ru},{ua},{by}"
-    state: present
+- name: configure tor
+  import_tasks: config.yml
   become: yes
-  notify: restart tor service
   tags: lin_tor_config
+
+- name: setup privoxy
+  when: tor_privoxy_enable | bool
+  import_tasks: privoxy.yml
+  become: yes
+  tags: lin_tor_privoxy
 
 - meta: flush_handlers
 ...

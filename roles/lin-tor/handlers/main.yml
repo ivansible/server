@@ -6,4 +6,10 @@
     name: tor
     state: restarted
   become: yes
+
+- name: restart privoxy service
+  systemd:
+    name: privoxy
+    state: restarted
+  become: yes
 ...

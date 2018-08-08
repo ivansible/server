@@ -1,0 +1,28 @@
+---
+- name: install privoxy package
+  apt:
+    name: privoxy
+    state: present
+
+- name: configure privoxy listen port
+  lineinfile:
+    path: /etc/privoxy/config
+    regexp: "^#?listen-address"
+    line: "listen-address {{ tor_privoxy_bindip }}:{{ tor_privoxy_port }}"
+    state: present
+  notify: restart privoxy service
+
+- name: configure tor forwarding in privoxy
+  lineinfile:
+    path: /etc/privoxy/config
+    regexp: "^#?forward-socks5"
+    line: "forward-socks5 / 127.0.0.1:{{ tor_socks_port }} ."
+    state: present
+  notify: restart privoxy service
+
+- name: activate privoxy service
+  systemd:
+    name: privoxy
+    state: started
+    enabled: yes
+...

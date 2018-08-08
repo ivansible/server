@@ -1,3 +1,9 @@
 ---
 # defaults file for ivansible.lin-tor
+
+tor_socks_port: 9050
+
+tor_privoxy_enable: yes
+tor_privoxy_bindip: 127.0.0.1
+tor_privoxy_port: 8118
 ...
