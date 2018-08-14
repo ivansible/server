@@ -4,7 +4,7 @@ dependencies: []
 galaxy_info:
   role_name: srv-postgres
   author: "Ivan Andreev"
-  description: "install postgresql-10 server and client on linux"
+  description: "install postgresql-10 server on linux"
   company: "IvanSible"
   license: MIT
   min_ansible_version: 2.5
@@ -17,7 +17,9 @@ galaxy_info:
 
   galaxy_tags:
     - linux
-    - ansible
+    - server
+    - postgresql
+    - postgres
 
   github_branch: master
 ...

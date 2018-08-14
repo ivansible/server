@@ -1,4 +1,34 @@
 ---
 # handlers file for ivansible.srv-postgres
 
+- name: restart postgres service
+  systemd:
+    name: "{{ srv_pg_service }}"
+    state: restarted
+  become: yes
+
+
+# this is a multi-task handler
+# see: https://stackoverflow.com/questions/31618967/how-do-i-write-an-ansible-handler-with-multiple-tasks
+- name: wait for postgres to start
+  listen: reset postgres admin password
+  wait_for:
+    port: "{{ srv_pg_port }}"
+    state: started
+    host: localhost
+    connect_timeout: 5
+    timeout: 10
+
+- name: alter postgres admin password
+  listen: reset postgres admin password
+  no_log: "{{ hide_secrets }}"
+  command:
+    argv:
+      - psql
+      - --port={{ srv_pg_port }}
+      - --no-password
+      - --command
+      - "ALTER ROLE postgres ENCRYPTED PASSWORD '{{ srv_pg_admin_password }}';"
+  become: yes
+  become_user: postgres
 ...

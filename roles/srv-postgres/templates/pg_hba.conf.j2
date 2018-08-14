@@ -1,0 +1,34 @@
+# PostgreSQL Client Authentication Configuration File
+# ansible-managed
+# =====================================================================
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+# Administrative login by Unix domain socket
+local   all             postgres                                peer
+# Unix domain sockets
+#local  all             all                                     peer
+# IPv4 connections:
+host    all             all             127.0.0.1/32            md5
+{% for subnet in srv_pg_local_subnets %}
+host    all             all             {{ subnet.ljust(22) }}  md5
+{% endfor %}
+hostssl all             all             0.0.0.0/0               md5
+# IPv6 connections:
+host    all             all             ::1/128                 md5
+# Replication connections:
+#local  replication     postgres                                peer
+#host   replication     postgres        127.0.0.1/32            md5
+#host   replication     postgres        ::1/128                 md5
+#
+# =====================================================================
+# CONNECTION:
+# "local" = Unix-domain socket, "host" = any TCP socket,
+# "hostssl" = SSL-encrypted TCP socket, "hostnossl" = plain TCP socket.
+# DATABASE: "all", "sameuser", "samerole", "replication",
+# dbname, comma-separated list. "all" does not match "replication".
+# USER: "all", username, "+"groupname, comma-separated list thereof.
+# ADDRESS: host name, IP/CIDRmask, "samehost" (any server's own IP),
+# "samenet" (subnet that the server is directly connected to).
+# METHOD: "trust", "reject", "md5", "password", "gss", "sspi",
+# "ident", "peer", "pam", "ldap", "radius" or "cert".
+# OPTIONS: set of options NAME=VALUE.
+# =====================================================================

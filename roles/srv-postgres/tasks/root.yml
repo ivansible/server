@@ -1,5 +1,127 @@
 ---
-- name: ROLENAME root action 1
-  debug:
-    msg: action 1
+- name: install postgresql.org signing key
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+  tags: srv_postgres_install
+
+- name: add postgresql.org apt repository
+  apt_repository:
+    repo: deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_lsb.codename }}-pgdg main
+    filename: pgdg
+    update_cache: yes
+  tags: srv_postgres_install
+
+- name: install postgresql-{{ srv_pg_release }} server package
+  apt:
+    name:
+      - postgresql-{{ srv_pg_release }}
+      - ssl-cert  # for snakeoil certificate
+    state: present
+  tags: srv_postgres_install
+
+
+- name: tune kernel for postgresql server
+  sysctl:
+    name: net.core.somaxconn
+    value: 1024
+    state: present
+    sysctl_file: /etc/sysctl.d/77-postgres.conf
+  with_dict: "{{ srv_pg_kernel_params }}"
+  loop_control:
+    label: "{{ item.key }}"
+  notify:
+    - restart postgres service
+  tags: srv_postgres_sysctl
+
+
+- name: grant postgres user access to letsencrypt certificate
+  user:
+    name: postgres
+    groups: "{{ certbot_group }}"
+    append: yes
+  when: certbot_group is defined
+  notify:
+    - restart postgres service
+  tags: srv_postgres_ssl
+
+- name: check that postgres ssl certificate exists
+  file:
+    path: "{{ srv_pg_ssl_cert }}"
+    state: file
+  tags: srv_postgres_ssl
+
+# postgresql-10 server refuses to use world-readable private keys
+- name: check that postgres ssl private key exists and is not world-readable
+  file:
+    path: "{{ srv_pg_ssl_key }}"
+    state: file
+    group: "{{ certbot_group | default('ssl-cert') }}"
+    mode: "o="
+  tags: srv_postgres_ssl
+
+
+- name: backup vanilla config
+  command:
+    argv:
+      - cp
+      - -a
+      - "{{ srv_pg_conf_dir }}"
+      - "{{ srv_pg_conf_dir }}.orig"
+    creates: "{{ srv_pg_conf_dir }}.orig"
+  tags: srv_postgres_config
+
+- name: tweak postgres parameters
+  ini_file:
+    path: "{{ srv_pg_conf_dir }}/postgresql.conf"
+    section: ""
+    option: "{{ item.key }}"
+    value: "{{ item.value }}\t\t# [ansible]"
+  with_dict: "{{ srv_pg_parameters }}"
+  loop_control:
+    label: "{{ item.key | replace(\"'\", '') }}"
+  notify:
+    - restart postgres service
+    - reset postgres admin password
+  tags: srv_postgres_config
+
+- name: ansible-managed header in postgresql.conf
+  lineinfile:
+    path: "{{ srv_pg_conf_dir }}/postgresql.conf"
+    line: "# ansible-managed"
+    insertbefore: BOF
+  tags: srv_postgres_config
+
+
+- name: configure postgres authentication
+  template:
+    src: pg_hba.conf.j2
+    dest: "{{ srv_pg_conf_dir }}/pg_hba.conf"
+    owner: postgres
+    group: postgres
+    mode: 0640
+  notify:
+    - restart postgres service
+    - reset postgres admin password
+  tags: srv_postgres_config
+
+
+- name: enable postgres service
+  systemd:
+    name: "{{ srv_pg_service }}"
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  tags: srv_postgres_service
+
+- name: open postgres port
+  ufw:
+    rule: allow
+    port: "{{ srv_pg_port }}"
+    proto: tcp
+  tags: srv_postgres_firewall
+
+
+- name: notify postgres handlers now
+  meta: flush_handlers
+  tags: srv_postgres_service
 ...
