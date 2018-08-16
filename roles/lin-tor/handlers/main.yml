@@ -1,5 +1,5 @@
 ---
-# handlers file for ivansible.lin-tor
+# handlers file for ivansible.lin_tor
 
 - name: restart tor service
   systemd:

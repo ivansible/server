@@ -1,5 +1,5 @@
 ---
-# defaults file for ivansible.lin-tor
+# defaults file for ivansible.lin_tor
 
 tor_socks_port: 9050
 

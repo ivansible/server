@@ -1,4 +1,4 @@
-# ivansible.lin-tor
+# ivansible.lin_tor
 This role installs tor daemon with privoxy forwarding on linux.
 
 
@@ -33,7 +33,7 @@ None
 
     - hosts: vag1
       roles:
-         - role: ivansible.lin-tor
+         - role: ivansible.lin_tor
            tor_privoxy_port: 9058
 
 

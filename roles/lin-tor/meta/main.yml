@@ -2,7 +2,7 @@
 dependencies: []
 
 galaxy_info:
-  role_name: lin-tor
+  role_name: lin_tor
   author: "Ivan Andreev"
   description: "install tor with privoxy on linux"
   company: "IvanSible"
