@@ -2,7 +2,7 @@
 dependencies: []
 
 galaxy_info:
-  role_name: lin-mtproxy
+  role_name: lin_mtproxy
   author: "Ivan Andreev"
   description: "install mtg mtproto proxy on linux"
   company: "IvanSible"

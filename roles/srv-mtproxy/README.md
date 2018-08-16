@@ -1,4 +1,5 @@
-# ivansible.lin-mtproxy
+# ivansible.lin_mtproxy
+
 This role installs [mtg mtproto proxy](https://github.com/9seconds/mtg) on linux
 
 
@@ -39,7 +40,7 @@ docker (optional)
 
     - hosts: vag1
       roles:
-         - role: ivansible.lin-mtproxy
+         - role: ivansible.lin_mtproxy
            mtproxy_port: 13128
 
 
