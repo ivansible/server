@@ -1,4 +1,5 @@
-# ivansible.lin-ziproxy
+# ivansible.lin_ziproxy
+
 This role installs ziproxy on linux.
 
 
@@ -36,7 +37,7 @@ None
 
     - hosts: vag1
       roles:
-         - role: ivansible.lin-ziproxy
+         - role: ivansible.lin_ziproxy
            ziproxy_port: 8086
 
 

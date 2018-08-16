@@ -1,5 +1,5 @@
 ---
-# handlers file for ivansible.lin-ziproxy
+# handlers file for ivansible.lin_ziproxy
 
 - name: restart ziproxy service
   systemd:

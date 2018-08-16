@@ -2,7 +2,7 @@
 dependencies: []
 
 galaxy_info:
-  role_name: lin-ziproxy
+  role_name: lin_ziproxy
   author: "Ivan Andreev"
   description: "install ziproxy on linux"
   company: "IvanSible"
@@ -17,7 +17,7 @@ galaxy_info:
 
   galaxy_tags:
     - linux
-    - ansible
+    - proxy
 
   github_branch: master
 ...

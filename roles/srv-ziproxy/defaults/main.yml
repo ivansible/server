@@ -1,5 +1,5 @@
 ---
-# defaults file for ivansible.lin-ziproxy
+# defaults file for ivansible.lin_ziproxy
 
 ziproxy_port: 3168
 
