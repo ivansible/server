@@ -1,5 +1,6 @@
-# srv-postgres
-This role install postgresql-10 server on linux and also:
+# srv_postgres
+
+This role installs postgresql-10 server on linux and also:
  - tunes kernel parameters for postgresql performance;
  - enables ssl;
  - configures timezone and locale;

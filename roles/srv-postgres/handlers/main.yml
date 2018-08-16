@@ -1,5 +1,5 @@
 ---
-# handlers file for ivansible.srv-postgres
+# handlers file for ivansible.srv_postgres
 
 - name: restart postgres service
   systemd:

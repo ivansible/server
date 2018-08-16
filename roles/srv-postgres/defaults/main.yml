@@ -1,5 +1,5 @@
 ---
-# defaults file for ivansible.srv-postgres
+# defaults file for ivansible.srv_postgres
 
 srv_pg_release: 10
 srv_pg_service: postgresql@{{ srv_pg_release }}-main
