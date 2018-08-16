@@ -1,5 +1,5 @@
 ---
 - hosts: localhost
-  remote_user: vanko
+  remote_user: username
   roles:
-    - ROLENAME
+    - ivansible.lin_dante_auth

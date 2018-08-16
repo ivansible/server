@@ -1,5 +1,6 @@
 ---
-# defaults file for ivansible.lin-dante-auth
+# defaults file for ivansible.lin_dante_auth
+
 dante_port: 1080
 dante_user: socks5
 dante_pass: secret

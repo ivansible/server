@@ -1,5 +1,5 @@
 ---
-# handlers file for ivansible.lin-dante-auth
+# handlers file for ivansible.lin_dante_auth
 
 - name: restart dante service
   systemd:

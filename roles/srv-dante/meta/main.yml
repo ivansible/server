@@ -2,7 +2,7 @@
 dependencies: []
 
 galaxy_info:
-  role_name: lin-dante-auth
+  role_name: lin_dante_auth
   author: "Ivan Andreev"
   description: "install dante proxy server with authentication"
   company: "IvanSible"

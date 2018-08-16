@@ -1,4 +1,5 @@
-# ivansible.lin-dante-auth
+# ivansible.lin_dante_auth
+
 This role installs dante proxy server on linux and configures authentication.
 
 
@@ -37,7 +38,7 @@ None
 
     - hosts: vag1
       roles:
-         - role: ivansible.lin-dante-auth
+         - role: ivansible.lin_dante_auth
            dante_port: 3128
 
 
