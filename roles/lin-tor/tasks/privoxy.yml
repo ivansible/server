@@ -7,8 +7,12 @@
 - name: configure privoxy listen port
   lineinfile:
     path: /etc/privoxy/config
-    regexp: "^#?listen-address"
-    line: "listen-address {{ tor_privoxy_bindip }}:{{ tor_privoxy_port }}"
+    # default configuration on bionic 18.04 has two listen addresses:
+    #  listen-address  127.0.0.1:8118
+    #  listen-address  [::1]:8118
+    # we want to skip the second line and avoid service error
+    regexp: '^#?listen-address(?!\s+\[::1\])'
+    line: 'listen-address {{ tor_privoxy_bindip }}:{{ tor_privoxy_port }}'
     state: present
   notify: restart privoxy service
 
