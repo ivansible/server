@@ -30,9 +30,11 @@ Available variables are listed below.
 
     srv_pg_ssl_cert: /etc/ssl/certs/ssl-cert-snakeoil.pem
     srv_pg_ssl_key: /etc/ssl/private/ssl-cert-snakeoil.key
-Pair of key/certificate files for SSL access.
-By default this is _snakoil_ certificate,
-which is generated on the fly by the `ssl-cert` ubuntu package.
+Pair of certificate/private key files for SSL access.
+By default this is inherited from a nginx certificate defined by the role
+[ivansible.nginx_base](https://github.com/ivansible/nginx-base#variables)
+that in turn defaults to a so-called _snakoil_ certificate,
+which is generated on fly by the `ssl-cert` Ubuntu package.
 
     srv_pg_local_subnets: []
 List of IP networks formatted like `192.168.0.0/16` .
@@ -67,7 +69,8 @@ I suspect that too big `shmmax` can crash system.
 
 ## Dependencies
 
-None
+- [ivansible.nginx_base](https://github.com/ivansible/nginx-base#variables)
+  -- for default ssl certificate/key file paths
 
 
 ## TODO
