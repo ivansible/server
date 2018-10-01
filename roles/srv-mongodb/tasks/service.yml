@@ -1,0 +1,27 @@
+---
+- name: directory for mongodb service drop-in
+  file:
+    path: /etc/systemd/system/mongod.service.d
+    state: directory
+
+- name: setup mongodb service quotas
+  template:
+    src: service-quotas.conf
+    dest: /etc/systemd/system/mongod.service.d/quotas.conf
+  notify:
+    - reload systemd daemon
+    - restart mongodb service
+
+- name: enable mongodb service
+  systemd:
+    name: mongod
+    state: started
+    enabled: yes
+    daemon_reload: yes
+
+- name: open mongodb port in firewall
+  ufw:
+    rule: allow
+    port: "{{ mongodb_port }}"
+    proto: tcp
+...

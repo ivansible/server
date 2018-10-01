@@ -1,0 +1,40 @@
+---
+- name: check that mongodb ssl certificate and key are readable
+  file:
+    path: "{{ item }}"
+    state: file
+  loop:
+    - "{{ mongodb_ssl_cert }}"
+    - "{{ mongodb_ssl_key }}"
+
+- name: create a script for updating ssl certificate in mongodb
+  copy:
+    dest: "{{ mongodb_cert_update_script }}"
+    owner: root
+    group: root
+    mode: 0750
+    content: |
+      # /bin/bash
+      # mongodb certificate update hook
+      # ansible-managed
+      cat "{{ mongodb_ssl_cert }}" "{{ mongodb_ssl_key }}" > "{{ mongodb_ssl_pem_file }}" && \
+      chown root:mongodb "{{ mongodb_ssl_pem_file }}" && \
+      chmod 0640 "{{ mongodb_ssl_pem_file }}" && \
+      systemctl restart mongod
+  # a change in the script denotes ssl configuration change
+  register: cert_script_result
+
+- name: link a letsencrypt post-renewal hook for mongodb
+  file:
+    state: link
+    src: "{{ mongodb_cert_update_script }}"
+    dest: /etc/letsencrypt/renewal-hooks/post/mongodb
+  when: mongodb_ssl_cert.find('/letsencrypt/') != -1
+
+- name: update ssl certificate in mongodb now
+  shell: >-
+    cat "{{ mongodb_ssl_cert }}" "{{ mongodb_ssl_key }}" > "{{ mongodb_ssl_pem_file }}" && \
+    chown root:mongodb "{{ mongodb_ssl_pem_file }}" && \
+    chmod 0640 "{{ mongodb_ssl_pem_file }}"
+  when: cert_script_result is changed
+...

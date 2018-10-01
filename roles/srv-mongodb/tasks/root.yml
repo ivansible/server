@@ -1,5 +1,31 @@
 ---
-- name: ivansible.srv_mongodb root action 1
-  debug:
-    msg: action 1
+- name: install mongodb 4.0
+  import_tasks: install.yml
+  tags: mongodb_install
+
+- name: configure ssl in mongodb
+  import_tasks: ssl.yml
+  tags: mongodb_ssl
+
+- name: create mongodb configuration file
+  template:
+    src: mongod.conf
+    dest: /etc/mongod.conf
+    owner: root
+    group: mongodb
+    mode: 0644
+  notify: restart mongodb service
+  tags: mongodb_config
+
+- name: setup mongodb service
+  import_tasks: service.yml
+  tags: mongodb_service
+
+- name: set mongodb administrator password
+  import_tasks: password.yml
+  tags: mongodb_password
+
+- name: apply mongodb changes now
+  meta: flush_handlers
+  tags: mongodb_password
 ...

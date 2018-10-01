@@ -1,2 +1,21 @@
 ---
 # handlers file for ivansible.srv_mongodb
+
+# inherited from lin_base:
+# - reload systemd daemon
+
+- name: restore mongodb authorization
+  lineinfile:
+    path: /etc/mongod.conf
+    regexp: '^(\s+)authorization:'
+    line: '\g<1>authorization: enabled'
+    backrefs: yes
+  become: yes
+
+- name: restart mongodb service
+  systemd:
+    name: mongod
+    state: restarted
+  become: yes
+
+...

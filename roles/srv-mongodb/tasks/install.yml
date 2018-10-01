@@ -1,0 +1,30 @@
+---
+- name: add mongodb 4.0 signing key
+  apt_key:
+    url: https://www.mongodb.org/static/pgp/server-4.0.asc
+
+- name: add mongodb 4.0 repository
+  apt_repository:
+    repo: deb [arch=amd64] https://repo.mongodb.org/apt/ubuntu {{ ansible_lsb.codename }}/mongodb-org/4.0 multiverse
+    filename: mongodb
+
+- name: detect ansible python version
+  set_fact:
+    python_suffix: "{{ ansible_python_version.startswith('3') | ternary('3','') }}"
+
+- name: install mongodb packages
+  apt:
+    name:
+      - mongodb-org
+      # for parsing json
+      - jq
+      # for ansible
+      - python{{ python_suffix }}-pymongo
+      - python{{ python_suffix }}-pip
+
+- name: upgrade to the latest pymongo to avoid problems with SCRAM-SHA-256
+  # see: https://github.com/ansible/ansible/issues/44970
+  pip:
+    name: pymongo
+    state: latest
+...

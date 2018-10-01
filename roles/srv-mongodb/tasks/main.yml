@@ -7,4 +7,5 @@
 - name: become root
   import_tasks: root.yml
   become: yes
+  tags: mongodb_all
 ...
