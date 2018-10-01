@@ -1,0 +1,20 @@
+# stunnel4 ssl service for redis
+# ansible-managed
+[Unit]
+Description=stunnel4 ssl for redis
+Documentation=https://www.digitalocean.com/community/tutorials/how-to-encrypt-traffic-to-redis-with-stunnel-on-ubuntu-16-04
+After=network.target
+
+[Service]
+Type=simple
+User=nobody
+{% if "/letsencrypt/" in redis_ssl_key %}
+Group={{ certbot_group | default("ssl-cert") }}
+{% else %}
+Group=ssl-cert
+{% endif %}
+ExecStart=/usr/bin/stunnel4 /etc/redis/stunnel.conf
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

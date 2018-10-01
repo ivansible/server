@@ -1,2 +1,15 @@
 ---
 # handlers file for ivansible.srv_redis_ssl
+
+- name: restart redis service
+  systemd:
+    name: redis-server
+    state: restarted
+  become: yes
+
+- name: restart redis stunnel service
+  systemd:
+    name: redis-stunnel
+    state: restarted
+  become: yes
+...

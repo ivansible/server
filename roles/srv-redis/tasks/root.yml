@@ -1,5 +1,107 @@
 ---
-- name: ivansible.srv_redis_ssl root action 1
-  debug:
-    msg: action 1
+- name: add redis ppa repository from chris lea
+  apt_repository:
+    repo: ppa:chris-lea/redis-server
+    codename: "{{ ansible_lsb.codename }}"
+    filename: redis
+    update_cache: yes
+
+- name: install redis and stunnel packages
+  apt:
+    name:
+      - redis-server
+      - redis-tools
+      - stunnel4
+      - ssl-cert  # for snakeoil certificate
+
+
+- name: backup vanilla redis configuration
+  command: cp -a /etc/redis/redis.conf /etc/redis/redis.conf.orig
+  args:
+    creates: /etc/redis/redis.conf.orig
+
+- name: ansible comment in redis.conf
+  lineinfile:
+    path: /etc/redis/redis.conf
+    line: "# ansible-managed"
+    insertbefore: BOF
+
+- name: tweak redis parameters
+  lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: '^#?\s*{{ item.key }}\s'
+    line: "{{ item.key }} {{ item.value }}"
+  with_dict: "{{ redis_parameters }}"
+  loop_control:
+    label: "{{ item.key }}"
+  notify: restart redis service
+
+- name: set redis password
+  lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: '^#?\s*requirepass\s'
+    line: "requirepass {{ redis_password }}"
+    owner: redis
+    group: redis
+    mode: 0640
+  when: redis_password is defined
+        and redis_password is not none
+        and redis_password != ''
+  no_log: yes
+  notify: restart redis service
+
+- name: disable redis password
+  lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: '^#?\s*requirepass\s'
+    line: "#requirepass foobar"
+    owner: redis
+    group: redis
+    mode: 0640
+  when: redis_password is not defined
+        or redis_password is none
+        or redis_password == ''
+  no_log: yes
+  notify: restart redis service
+
+
+- name: verify that redis ssl certificate and key are readable
+  file:
+    path: "{{ item }}"
+    state: file
+  loop:
+    - "{{ redis_ssl_cert }}"
+    - "{{ redis_ssl_key }}"
+
+- name: configure stunnel for redis server
+  template:
+    src: redis-stunnel.conf
+    dest: /etc/redis/stunnel.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: setup stunnel ssl service for redis server
+  template:
+    src: redis-stunnel.service
+    dest: /etc/systemd/system/redis-stunnel.service
+  notify: restart redis stunnel service
+
+
+- name: enable redis and stunnel ssl services
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  loop:
+    - redis-server
+    - redis-stunnel
+
+- name: open redis ports in ubuntu firewall
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop: "{{ redis_open_ports }}"
 ...

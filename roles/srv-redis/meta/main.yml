@@ -1,5 +1,6 @@
 ---
-dependencies: []
+dependencies:
+  - ivansible.nginx_base  # for default ssl certificate/key file paths
 
 galaxy_info:
   role_name: srv_redis_ssl
@@ -17,7 +18,9 @@ galaxy_info:
 
   galaxy_tags:
     - linux
-    - ansible
+    - server
+    - database
+    - redis
 
   github_branch: master
 ...

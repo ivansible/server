@@ -1,4 +1,24 @@
 ---
 # defaults file for ivansible.srv_redis_ssl
 
+redis_port_tcp: 6379
+redis_port_ssl: 7379
+
+redis_open_ports:
+  #- "{{ redis_port_tcp }}"
+  - "{{ redis_port_ssl }}"
+
+redis_password: please_change
+
+redis_ssl_cert: "{{ nginx_ssl_cert }}"
+redis_ssl_key: "{{ nginx_ssl_key }}"
+
+redis_databases: 16
+
+redis_parameters:
+  bind: "0.0.0.0 ::"     # listen on all interfaces
+  port: "{{ redis_port_tcp }}"
+  databases: "{{ redis_databases }}"
+  dir: /var/lib/redis    # default from package
+  dbfilename: dump.rdb   # default from package
 ...
