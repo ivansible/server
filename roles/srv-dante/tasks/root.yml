@@ -18,14 +18,14 @@
 
 - name: configure dante server
   template:
-    src: danted.conf.j2
+    src: danted.conf
     dest: /etc/danted.conf
     mode: 0644
   notify: restart dante service
   tags: dante_conf
 
 
-- name: install dante server on xenial
+- name: install dante server (ubuntu xenial)
   # see: https://launchpad.net/ubuntu/bionic/amd64/dante-server/1.4.2+dfsg-2build1
   apt:
     deb: "{{ dante_deb_url }}"
@@ -33,7 +33,7 @@
   register: install_xenial
   tags: dante_install
 
-- name: install dante server on bionic
+- name: install dante server (ubuntu bionic)
   apt:
     name: dante-server
   when: "ansible_distribution_release == 'bionic'"

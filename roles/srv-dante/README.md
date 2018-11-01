@@ -1,6 +1,6 @@
 # ivansible.lin_dante_auth
 
-This role installs dante proxy server on linux and configures authentication.
+This role installs dante proxy server on linux and configures authentication and IPv6 support (see https://www.inet.no/dante/doc/1.4.x/config/ipv6.html).
 
 
 ## Requirements
