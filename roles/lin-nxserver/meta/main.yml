@@ -4,7 +4,7 @@ dependencies: []
 galaxy_info:
   role_name: lin_nxserver
   author: "Ivan Andreev"
-  description: "nxserver and windows manager on linux"
+  description: "nomachine nxserver and window manager on linux"
   company: "IvanSible"
   license: MIT
   min_ansible_version: 2.5

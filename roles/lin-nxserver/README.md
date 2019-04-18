@@ -1,8 +1,7 @@
 # ivansible.lin_nxserver
 
-This role performs:
- - action1;
- - action2;
+This role provisions [nomachine](https://www.nomachine.com/) nxserver on a linux box.
+Additionally, it can enable swap and install `xvfb`.
 
 
 ## Requirements
@@ -10,18 +9,35 @@ This role performs:
 None
 
 
-## Variables
+## Role Variables
 
 Available variables are listed below, along with default values.
 
-    variable1: 1
-    variable2: 2
+    lin_nxserver_deb_url: https://download.nomachine.com/download/6.6/Linux/nomachine_6.6.8_5_amd64.deb
+URL of nxserver package.
+
+    lin_nxserver_display: 1001
+The role will add this `DISPLAY` variable to the user `bashrc` file.
+
+    lin_nxserver_port: 4000
+You should not usually change this.
+
+    lin_swap_enable: no
+Enables or disables confiration of swap file.
+
+    lin_swap_file: /swap
+Path to the swap file.
+
+    lin_swap_mb: 1024
+Swap file size in megabytes,
 
 
 ## Tags
 
-- `role1_tag1` -- action1
-- `role1_tag2` -- action2
+- `nx_server` -- install nxserver
+- `nx_user` -- authorize user
+- `nx_wmanager` -- install `xfce4` window manager
+- `nx_swap` -- setup swap space
 
 
 ## Dependencies
@@ -31,11 +47,11 @@ None
 
 ## Example Playbook
 
-    - hosts: vagrant-boxes
+    - hosts: nxhost
       roles:
-         - role: lin_nxserver
-           variable1: 1
-           variable2: 2
+         - role: ivansible.lin_nxserver
+           lin_swap_enable: yes
+           lin_swap_mb: 2048
 
 
 ## License

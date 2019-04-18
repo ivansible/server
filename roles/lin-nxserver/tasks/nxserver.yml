@@ -1,0 +1,21 @@
+---
+- name: gather installed nxserver version
+  shell: dpkg -l nomachine | awk '/^ii / {print $3}'
+  changed_when: false
+  register: old_ver
+
+- name: derive new nxserver version
+  set_fact:
+    new_ver: "{{ lin_nxserver_deb_url | regex_replace('^.*?_([\\d\\._]{3,})_.*$', '\\1') | replace('_', '-') }}"
+
+- name: install nxserver package
+  apt:
+    deb: "{{ lin_nxserver_deb_url }}"
+  when: old_ver.stdout != new_ver
+
+- name: open nxserver port
+  ufw:
+    rule: allow
+    port: "{{ lin_nxserver_port }}"
+    proto: tcp
+...

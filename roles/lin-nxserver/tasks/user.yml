@@ -1,0 +1,21 @@
+---
+- name: create directory for nx authorized keys
+  file:
+    state: directory
+    path: ~/.nx/config
+
+- name: link ssh authorized keys to nx config
+  file:
+    state: link
+    src: ~/.ssh/authorized_keys
+    dest: ~/.nx/config/authorized.crt
+
+- name: add DISPLAY variable to the user bashrc` file
+  lineinfile:
+    # path file must correspond with role ivansible.dev_user
+    # https://github.com/ivansible/dev-user/blob/master/tasks/bashrc.yml
+    path: ~/.local/bashrc/1env.sh
+    line: "export DISPLAY=:{{ lin_nxserver_display }}"
+    create: yes
+  when: lin_nxserver_display != ''
+...

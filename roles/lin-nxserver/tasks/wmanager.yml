@@ -1,0 +1,10 @@
+---
+- name: install xfce packages
+  apt:
+    name:
+    - xfce4
+    - x11-apps
+    - xauth
+    - xterm
+    - fontconfig
+...
