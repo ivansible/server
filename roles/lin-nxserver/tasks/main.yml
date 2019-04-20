@@ -13,7 +13,7 @@
   tags: nx_user
 
 - name: install window manager
-  import_tasks: wmanager.yml
+  import_tasks: winman.yml
   become: yes
   tags: nx_wmanager
 
@@ -22,4 +22,11 @@
   become: yes
   when: lin_swap_enable | bool
   tags: nx_swap
+
+- name: reboot after fresh install to work around problems with dbus
+  reboot:
+    pre_reboot_delay: 5
+  become: yes
+  when: nx_nxserver_packages is changed and nx_winman_packages is changed
+  tags: nx_reboot
 ...

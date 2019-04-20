@@ -12,6 +12,7 @@
   apt:
     deb: "{{ lin_nxserver_deb_url }}"
   when: old_ver.stdout != new_ver
+  register: nx_nxserver_packages
 
 - name: open nxserver port
   ufw:

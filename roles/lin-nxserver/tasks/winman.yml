@@ -7,4 +7,5 @@
     - xauth
     - xterm
     - fontconfig
+  register: nx_winman_packages
 ...
