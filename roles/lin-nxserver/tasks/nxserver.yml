@@ -1,6 +1,8 @@
 ---
 - name: gather installed nxserver version
-  shell: dpkg -l nomachine | awk '/^ii / {print $3}'
+  # should ignore ansible-galaxy warning about pipefail here
+  # as it's perfectly valid to fail if package is not installed
+  shell: dpkg --list nomachine | awk '/^ii / {print $3}'
   changed_when: false
   register: old_ver
 
@@ -18,5 +20,6 @@
   ufw:
     rule: allow
     port: "{{ lin_nxserver_port }}"
-    proto: tcp
+    # allow both tcp (main) and udp (multimedia)
+    #proto: tcp
 ...

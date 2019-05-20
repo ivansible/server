@@ -1,21 +1,27 @@
 ---
-- setup:
+- name: refresh facts as non root
+  setup:
   become: no
+
+- name: install desktop environment (should come before nomachine)
+  import_tasks: desktop.yml
+  become: yes
+  tags: nx_desktop
 
 - name: install nxserver
   import_tasks: nxserver.yml
   become: yes
   tags: nx_server
 
+- name: enable audio in nxserver
+  import_tasks: audio.yml
+  become: yes
+  tags: nx_audio
+
 - name: authorize user
   import_tasks: user.yml
   become: no
   tags: nx_user
-
-- name: install window manager
-  import_tasks: winman.yml
-  become: yes
-  tags: nx_wmanager
 
 - name: setup swap space
   import_tasks: swap.yml
@@ -23,10 +29,11 @@
   when: lin_swap_enable | bool
   tags: nx_swap
 
-- name: reboot after fresh install to work around problems with dbus
+- name: reboot after fresh install to work around dbus issues (warnings are ok)
   reboot:
     pre_reboot_delay: 5
   become: yes
-  when: nx_nxserver_packages is changed and nx_winman_packages is changed
+  when: nx_nxserver_packages is changed
+        and nx_desktop_packages is changed
   tags: nx_reboot
 ...

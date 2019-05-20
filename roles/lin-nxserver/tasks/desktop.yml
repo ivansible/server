@@ -1,0 +1,17 @@
+---
+- name: install desktop (xfce) packages
+  apt:
+    name:
+    - xfce4
+    - x11-apps
+    - xauth
+    - xterm
+    - fontconfig
+    # note: pulseaudio must be installed before nomachine
+    #       (see link below for more information)
+    # https://www.vultr.com/docs/setup-nomachine-nx-on-ubuntu
+    - pulseaudio
+    # pavucontrol is required by xfce volume control applet
+    - pavucontrol
+  register: nx_desktop_packages
+...

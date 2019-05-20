@@ -34,9 +34,10 @@ Swap file size in megabytes,
 
 ## Tags
 
-- `nx_server` -- install nxserver
+- `nx_server` -- install nxserver package and open ports
 - `nx_user` -- authorize user
-- `nx_wmanager` -- install `xfce4` window manager
+- `nx_desktop` -- install `xfce4` desktop environment
+- `nx_audio` -- enable audio interface in nxserver
 - `nx_swap` -- setup swap space
 
 
