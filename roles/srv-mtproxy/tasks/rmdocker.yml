@@ -3,7 +3,7 @@
   apt:
     name: "{{ ansible_python_version.startswith('3') | ternary('python3','python') }}-docker"
 
-- name: remove stale docker container (optional)
+- name: remove stale docker container (optional, so ok to fail)
   docker_container:
     name: mtproxy
     state: absent
