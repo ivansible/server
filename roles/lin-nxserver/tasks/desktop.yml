@@ -6,6 +6,7 @@
     - x11-apps
     - xauth
     - xterm
+    - xfce4-terminal
     - fontconfig
     # note: pulseaudio must be installed before nomachine
     #       (see link below for more information)
