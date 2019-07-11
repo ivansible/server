@@ -13,6 +13,11 @@ None
 
 Available variables are listed below, along with default values.
 
+    allow_reboot: true
+
+If `true`, the script will reboot target host after critical upgrade.
+Otherwise, the script will print a warning message and skip rebooting.
+
     lin_nxserver_deb_url: https://download.nomachine.com/download/6.6/Linux/nomachine_6.6.8_5_amd64.deb
 URL of nxserver package.
 

@@ -31,9 +31,18 @@
 
 - name: reboot after fresh install to work around dbus issues (warnings are ok)
   reboot:
-    pre_reboot_delay: 5
+    pre_reboot_delay: 20
   become: yes
   when: nx_nxserver_packages is changed
         and nx_desktop_packages is changed
+        and allow_reboot |bool
+  tags: nx_reboot
+
+- name: ask user to reboot
+  debug:
+    msg: "please reboot {{ inventory_hostname }} manually"
+  when: nx_nxserver_packages is changed
+        and nx_desktop_packages is changed
+        and not allow_reboot |bool
   tags: nx_reboot
 ...
