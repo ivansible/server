@@ -10,7 +10,7 @@
     src: ~/.ssh/authorized_keys
     dest: ~/.nx/config/authorized.crt
 
-- name: add DISPLAY variable to the user bashrc` file
+- name: add DISPLAY variable to the user's bashrc file
   lineinfile:
     # path file must correspond with role ivansible.dev_user
     # https://github.com/ivansible/dev-user/blob/master/tasks/bashrc.yml

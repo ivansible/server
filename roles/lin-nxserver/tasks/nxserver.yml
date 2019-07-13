@@ -16,6 +16,8 @@
     deb: "{{ lin_nxserver_deb_url }}"
   when: old_ver.stdout != new_ver
   register: nx_nxserver_packages
+  # fix intermittent network errors on .ru boxes
+  until: "'timed out' not in nx_nxserver_packages.msg |default('')"
 
 - name: open nxserver port
   ufw:
