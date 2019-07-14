@@ -22,9 +22,8 @@
       - python{{ python_suffix }}-pymongo
       - python{{ python_suffix }}-pip
 
-- name: upgrade to the latest pymongo to avoid problems with SCRAM-SHA-256
+- name: upgrade to pymongo >3.7 to avoid problems with SCRAM-SHA-256
   # see: https://github.com/ansible/ansible/issues/44970
   pip:
-    name: pymongo
-    state: latest
+    name: pymongo>3.7
 ...

@@ -14,7 +14,7 @@
     group: root
     mode: 0750
     content: |
-      # /bin/bash
+      #!/bin/sh
       # mongodb certificate update hook
       # ansible-managed
       cat "{{ mongodb_ssl_cert }}" "{{ mongodb_ssl_key }}" > "{{ mongodb_ssl_pem_file }}" && \
@@ -23,6 +23,12 @@
       systemctl restart mongod
   # a change in the script denotes ssl configuration change
   register: cert_script_result
+
+- name: directory for letsencrypt post-renewal hooks
+  file:
+    path: /etc/letsencrypt/renewal-hooks/post
+    state: directory
+  when: mongodb_ssl_cert.find('/letsencrypt/') != -1
 
 - name: link a letsencrypt post-renewal hook for mongodb
   file:
