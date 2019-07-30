@@ -69,5 +69,6 @@
     rule: allow
     port: "{{ ziproxy_port }}"
     proto: tcp
+  no_log: true
   tags: lin_ziproxy_firewall
 ...
