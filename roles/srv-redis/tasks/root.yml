@@ -103,5 +103,6 @@
     rule: allow
     port: "{{ item }}"
     proto: tcp
+  no_log: true
   loop: "{{ redis_open_ports }}"
 ...
