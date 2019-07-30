@@ -30,14 +30,16 @@
   apt:
     deb: "{{ dante_deb_url }}"
   when: "ansible_distribution_release == 'xenial'"
-  register: install_xenial
+  register: dante_install_xenial_result
+  # workaround for network problems on a cheap VPS with low memory
+  until: "'timed out' not in dante_install_xenial_result.msg |default('')"
   tags: dante_install
 
 - name: install dante server (ubuntu bionic)
   apt:
     name: dante-server
   when: "ansible_distribution_release == 'bionic'"
-  register: install_bionic
+  register: dante_install_bionic_result
   tags: dante_install
 
 
@@ -49,7 +51,7 @@
     state: stopped
     enabled: no
     daemon_reload: yes
-  when: install_xenial is changed or install_bionic is changed
+  when: dante_install_xenial_result is changed or dante_install_bionic_result is changed
   tags: dante_service
 
 - name: enable dante service
