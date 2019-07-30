@@ -118,6 +118,7 @@
     rule: allow
     port: "{{ srv_pg_port }}"
     proto: tcp
+  no_log: true
   tags: srv_postgres_firewall
 
 
