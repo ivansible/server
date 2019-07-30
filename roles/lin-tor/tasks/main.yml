@@ -1,6 +1,10 @@
 ---
 - name: install tor
   include_tasks: "install-{{ ansible_lsb.codename }}.yml"
+  args:
+    apply:
+      become: yes
+      tags: lin_tor_install
   tags: lin_tor_install
 
 - name: activate tor service

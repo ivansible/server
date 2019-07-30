@@ -1,19 +1,34 @@
 ---
-- name: add tor-project repository
+# see https://2019.www.torproject.org/docs/debian.html.en
+
+- name: add torproject signing key
+  apt_key:
+    url: https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc
+
+- name: add torproject repository
   apt_repository:
     repo: deb https://deb.torproject.org/torproject.org xenial main
     filename: tor-project
     mode: 0644
-  become: yes
   register: tor_repo_result
+  until: tor_repo_result is successful
 
-- name: install tor package from torproject.org
+- name: install apt transport https and update apt cache
   apt:
-    name:
-      - tor
-      - deb.torproject.org-keyring
-    state: present
-    update_cache: "{{ tor_repo_result is changed }}"
-    allow_unauthenticated: yes
-  become: yes
+    name: apt-transport-https
+    update_cache: yes
+  register: update_apt_result
+  until: update_apt_result is successful
+
+- name: install keyring from torproject
+  apt:
+    name: deb.torproject.org-keyring
+  register: tor_keyring_result
+  until: tor_keyring_result is successful
+
+- name: install tor package from torproject
+  apt:
+    name: tor
+  register: tor_package_result
+  until: tor_package_result is successful
 ...

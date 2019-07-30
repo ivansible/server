@@ -1,8 +1,6 @@
 ---
 - name: install tor package from universe
   apt:
-    name:
-      - tor
+    name: tor
     state: present
-  become: yes
 ...
