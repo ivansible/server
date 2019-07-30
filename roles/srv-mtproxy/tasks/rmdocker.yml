@@ -8,4 +8,5 @@
     name: mtproxy
     state: absent
   ignore_errors: yes
+  no_log: true
 ...

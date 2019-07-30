@@ -1,7 +1,7 @@
 ---
 - name: remove stale docker container
   include_tasks: rmdocker.yml
-  when: mtproxy_rmdocker | bool == true
+  when: mtproxy_rmdocker |bool
   tags: mtproxy_rmdocker
 
 
@@ -55,5 +55,6 @@
   ufw:
     rule: allow
     port: "{{ mtproxy_port }}"
+  no_log: true
   tags: mtproxy_firewall
 ...
