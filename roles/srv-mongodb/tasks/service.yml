@@ -24,4 +24,5 @@
     rule: allow
     port: "{{ mongodb_port }}"
     proto: tcp
+  no_log: true
 ...
