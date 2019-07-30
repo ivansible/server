@@ -22,4 +22,5 @@
     port: "{{ lin_nxserver_port }}"
     # allow both tcp (main) and udp (multimedia)
     #proto: tcp
+  no_log: true
 ...
