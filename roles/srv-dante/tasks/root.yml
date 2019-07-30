@@ -65,6 +65,7 @@
   ufw:
     rule: allow
     port: "{{ dante_port }}"
+  no_log: true
   tags: dante_firewall
 
 - meta: flush_handlers
