@@ -15,10 +15,15 @@ On _ubuntu 16.04 xenial_, the [bionic .deb file](https://lug.mtu.edu/ubuntu/pool
 Available variables are listed below, along with default values.
 
     dante_port: 1080
-    dante_user: socks5
+    dante_direct: yes
+If direct is true, the port will be enabled in ubuntu firewall.
+If not, you should configure another service to enable indirect access to this port.
+
+    dante_user: dante_socks
+Note: dante username must start with 'dante_' because it's a global linux user
+
     dante_pass: secret
     dante_salt: `random_string`
-
 
 ## Tags
 
@@ -27,6 +32,7 @@ Available variables are listed below, along with default values.
 - `dante_install`
 - `dante_service`
 - `dante_firewall`
+- `dante_all`
 
 
 ## Dependencies

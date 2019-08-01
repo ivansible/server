@@ -1,4 +1,10 @@
 ---
+- name: assert that dante user name starts with dante_
+  assert:
+    that: dante_user.startswith('dante_')
+    fail_msg: "dante username '{{ dante_user }}' must start with 'dante_'"
+  tags: dante_user
+
 - name: create dante proxy user
   # see: https://docs.ansible.com/ansible/latest/modules/user_module.html#user-module
   user:
@@ -63,10 +69,10 @@
   tags: dante_service
 
 
-- name: open dante port
+- name: open dante port, if allowed
   ufw:
-    rule: allow
-    port: "{{ dante_port }}"
+    rule: "{{ dante_direct |ternary('allow','deny') }}"
+    port: "{{ dante_port |string }}"
   no_log: true
   tags: dante_firewall
 
