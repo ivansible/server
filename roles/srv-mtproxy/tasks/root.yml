@@ -4,6 +4,11 @@
   when: mtproxy_rmdocker |bool
   tags: mtproxy_rmdocker
 
+- name: create group for proxy processes
+  group:
+    name: proxy
+    gid: 13
+
 
 - name: detect latest mtg release
   uri:
@@ -14,12 +19,14 @@
   when: mtproxy_release == 'latest'
   tags: mtproxy_install
 
-- set_fact:
+- name: extract mtg version from github page
+  set_fact:
     mtproxy_release: "{{ latest_mtg_release.url | basename }}"
   when: latest_mtg_release.url is defined
   tags: mtproxy_install
 
-- debug:
+- name: print mtg version
+  debug:
     msg: "latest mtg release: {{ mtproxy_release }}"
   run_once: true
   when: latest_mtg_release.url is defined
@@ -34,27 +41,37 @@
   tags: mtproxy_install
 
 
+- name: configure mtproxy service
+  template:
+    src: mtproxy.defaults
+    dest: /etc/default/mtproxy
+    owner: root
+    group: proxy
+    mode: 0640
+  notify: restart mtproxy service
+  tags: mtproxy_service
+
 - name: setup mtproxy service unit
   template:
-    src: mtproxy.service.j2
+    src: mtproxy.service
     dest: /etc/systemd/system/mtproxy.service
     mode: 0644
-  register: unit_result
+  notify: restart mtproxy service
   tags: mtproxy_service
 
 - name: start mtproxy system service
   systemd:
     name: mtproxy
-    daemon_reload: yes
+    state: started
     enabled: yes
-    state: "{{ unit_result is changed | ternary('restarted', 'started') }}"
+    daemon_reload: yes
   tags: mtproxy_service
 
 
-- name: open mtproxy port
+- name: open mtproxy port, if allowed
   ufw:
-    rule: allow
-    port: "{{ mtproxy_port }}"
+    rule: "{{ mtproxy_direct |ternary('allow','deny') }}"
+    port: "{{ mtproxy_port |string }}"
   no_log: true
   tags: mtproxy_firewall
 ...

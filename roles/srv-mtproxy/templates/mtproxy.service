@@ -1,0 +1,13 @@
+# ansible-managed
+[Unit]
+Description=mtg mtproto proxy server
+
+[Service]
+{# set group to "proxy" to activate sslh iptables fix #}
+Group=proxy
+EnvironmentFile=/etc/default/mtproxy
+ExecStart={{ mtproxy_bin_file }} {% if mtproxy_secure |bool %}-s {% endif %}$MTG_SECRET
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

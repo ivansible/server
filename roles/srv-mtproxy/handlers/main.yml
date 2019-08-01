@@ -1,2 +1,10 @@
 ---
 # handlers file for ivansible.lin_mtproxy
+
+- name: restart mtproxy service
+  systemd:
+    name: mtproxy
+    state: restarted
+    daemon_reload: yes
+  become: yes
+...
