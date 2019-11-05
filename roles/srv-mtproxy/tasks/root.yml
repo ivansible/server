@@ -38,6 +38,7 @@
     dest: "{{ mtproxy_bin_file }}"
     mode: 0755
     force: "{{ mtproxy_reinstall | bool }}"
+  when: mtproxy_release != 'latest'
   tags: mtproxy_install
 
 
