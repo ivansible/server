@@ -29,7 +29,7 @@
   # see: https://launchpad.net/ubuntu/bionic/amd64/dante-server/1.4.2+dfsg-2build1
   apt:
     deb: "{{ dante_deb_url }}"
-  when: "ansible_distribution_release == 'xenial'"
+  when: ansible_lsb.codename == 'xenial'
   register: dante_install_xenial_result
   # workaround for network problems on a cheap VPS with low memory
   until: "'timed out' not in dante_install_xenial_result.msg |default('')"
@@ -38,7 +38,7 @@
 - name: install dante server (ubuntu bionic)
   apt:
     name: dante-server
-  when: "ansible_distribution_release == 'bionic'"
+  when: ansible_lsb.codename == 'bionic'
   register: dante_install_bionic_result
   tags: dante_install
 
