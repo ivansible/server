@@ -50,13 +50,13 @@ srv_pg_parameters:
   lc_time: "'{{ srv_pg_locale }}'"
 
 srv_pg_kernel_params:
-    # Controls the default maxmimum size of a message queue
-    kernel.msgmnb: 65536
-    # Controls the maximum size of a message, in bytes
-    kernel.msgmax: 65536
-    # Controls the maximum shared segment size, in bytes
-    # DANGER!!! I suspect too high value here can crash system
-    #~kernel.shmmax = 68719476736
-    # More conservative value is 512mb which is 50% of 1GB VPS RAM
-    kernel.shmmax: 536870912
+  # Controls the default maxmimum size of a message queue
+  kernel.msgmnb: 65536
+  # Controls the maximum size of a message, in bytes
+  kernel.msgmax: 65536
+  # Controls the maximum shared segment size, in bytes
+  # DANGER!!! I suspect too high value here can crash system
+  #~kernel.shmmax = 68719476736
+  # More conservative value is 512mb which is 50% of 1GB VPS RAM
+  kernel.shmmax: 536870912
 ...
