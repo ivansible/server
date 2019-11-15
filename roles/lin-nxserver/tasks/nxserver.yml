@@ -1,7 +1,8 @@
 ---
 - name: gather installed nxserver version
-  # should ignore ansible-galaxy warning about pipefail here
-  # as it's perfectly valid to fail if package is not installed
+  # should ignore linter warning about pipefail here
+  # it's perfectly valid to fail if package is not installed
+  # noqa 306
   shell: dpkg --list nomachine | awk '/^ii / {print $3}'
   changed_when: false
   register: old_ver

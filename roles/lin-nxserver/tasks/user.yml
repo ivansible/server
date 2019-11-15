@@ -17,5 +17,5 @@
     path: ~/.local/bashrc/1env.sh
     line: "export DISPLAY=:{{ lin_nxserver_display }}"
     create: yes
-  when: lin_nxserver_display != ''
+  when: lin_nxserver_display != '' # noqa 602
 ...
