@@ -1,11 +1,11 @@
 ---
 - name: create swap file
   command: >
-    dd if=/dev/zero of="{{ lin_swap_file }}"
+    dd if=/dev/zero "of={{ lin_swap_file }}"
        bs=1M count={{ lin_swap_mb }}
   args:
     creates: "{{ lin_swap_file }}"
-  register: swap_status
+  register: swap_status_result
 
 - name: set swap file permissions
   file:
@@ -14,7 +14,7 @@
 
 - name: format swap file
   command: mkswap "{{ lin_swap_file }}"
-  when: swap_status is changed
+  when: swap_status_result is changed
 
 - name: add swap to fstab
   lineinfile:
@@ -24,5 +24,5 @@
 
 - name: activate swap
   command: swapon -a
-  when: swap_status is changed
+  when: swap_status_result is changed
 ...

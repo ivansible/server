@@ -26,4 +26,5 @@
     # allow both tcp (main) and udp (multimedia)
     #proto: tcp
   no_log: true
+  when: lin_use_firewall |bool
 ...
