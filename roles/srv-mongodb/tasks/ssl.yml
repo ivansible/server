@@ -22,7 +22,7 @@
       chmod 0640 "{{ mongodb_ssl_pem_file }}" && \
       systemctl restart mongod
   # a change in the script denotes ssl configuration change
-  register: cert_script_result
+  register: mongodb_cert_script_result
 
 - name: directory for letsencrypt post-renewal hooks
   file:
@@ -42,5 +42,5 @@
     cat "{{ mongodb_ssl_cert }}" "{{ mongodb_ssl_key }}" > "{{ mongodb_ssl_pem_file }}" && \
     chown root:mongodb "{{ mongodb_ssl_pem_file }}" && \
     chmod 0640 "{{ mongodb_ssl_pem_file }}"
-  when: cert_script_result is changed
+  when: mongodb_cert_script_result is changed
 ...

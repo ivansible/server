@@ -55,17 +55,17 @@ See:
 
 ## Tags
 
-- `mongodb_all` -- all actions
-- `mongodb_install` -- install mongodb server and client packages,
-                       and ansible python bindings
-- `mongodb_service` -- set systemd cpu and memory quotas for mongod service,
-                       open mongodb port in ubuntu firewall
-- `mongodb_ssl` -- concatenate ssl certificate and private key into combined
-                   mongod pem file, and optionally activate a letsencrypt
-                   post-renewal hook script
-                   `/etc/letsencrypt/renewal-hooks/post/mongodb`.
-- `mongodb_password` -- reset mongodb administrator password (can temporarily
-                        suspend authentication)
+- `srv_mongodb_all` -- all actions
+- `srv_mongodb_install` -- install mongodb server and client packages,
+                           and ansible python bindings
+- `srv_mongodb_service` -- set systemd cpu and memory quotas for mongod service,
+                           open mongodb port in ubuntu firewall
+- `srv_mongodb_ssl` -- concatenate ssl certificate and private key into combined
+                       mongod pem file, and optionally activate a letsencrypt
+                       post-renewal hook script
+                       `/etc/letsencrypt/renewal-hooks/post/mongodb`.
+- `srv_mongodb_password` -- reset mongodb administrator password
+                            (temporarily suspends authentication)
 
 
 ## Dependencies
@@ -89,4 +89,4 @@ MIT
 
 ## Author Information
 
-Created in 2018 by [IvanSible](https://github.com/ivansible)
+Created in 2018-2020 by [IvanSible](https://github.com/ivansible)

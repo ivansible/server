@@ -2,5 +2,5 @@
 - name: become root and install mongodb
   import_tasks: root.yml
   become: true
-  tags: mongodb_all
+  tags: srv_mongodb_all
 ...

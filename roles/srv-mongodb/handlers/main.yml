@@ -1,5 +1,5 @@
 ---
-# handlers file for ivansible.srv_mongodb
+# handlers for ivansible.srv_mongodb
 
 # inherited from lin_base:
 # - reload systemd daemon
@@ -17,5 +17,4 @@
     name: mongod
     state: restarted
   become: yes
-
 ...
