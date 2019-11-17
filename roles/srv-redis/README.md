@@ -50,7 +50,7 @@ This will not need to tweak this dictionary for a standard install.
 
 ## Tags
 
-- `redis_all` -- all actions
+- `srv_redis_all` -- all actions
 
 
 ## Dependencies
@@ -72,4 +72,4 @@ MIT
 
 ## Author Information
 
-Created in 2018 by [IvanSible](https://github.com/ivansible)
+Created in 2018-2020 by [IvanSible](https://github.com/ivansible)

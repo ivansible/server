@@ -8,11 +8,7 @@ After=network.target
 [Service]
 Type=simple
 User=nobody
-{% if "/letsencrypt/" in redis_ssl_key %}
-Group={{ certbot_group | default("ssl-cert") }}
-{% else %}
-Group=ssl-cert
-{% endif %}
+Group={{ certbot_group |default("ssl-cert") }}
 ExecStart=/usr/bin/stunnel4 /etc/redis/stunnel.conf
 Restart=always
 

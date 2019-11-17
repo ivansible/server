@@ -2,8 +2,8 @@
 - name: become root and install redis with ssl support
   import_tasks: root.yml
   become: true
-  tags: redis_all
+  tags: srv_redis_all
 
 - meta: flush_handlers
-  tags: redis_all
+  tags: srv_redis_all
 ...

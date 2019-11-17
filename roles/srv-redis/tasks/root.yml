@@ -73,6 +73,21 @@
     - "{{ redis_ssl_cert }}"
     - "{{ redis_ssl_key }}"
 
+- name: ensure that private key is readable by redis stunnel not world
+  file:
+    path: "{{ redis_ssl_key }}"
+    state: file
+    group: "{{ certbot_group |default('ssl-cert') }}"
+    mode: "o="
+
+- name: ensure that redis stunnel can accces private key directory
+  file:
+    path: "{{ redis_ssl_key |dirname }}"
+    state: directory
+    group: "{{ certbot_group |default('ssl-cert') }}"
+    mode: g+rx
+
+
 - name: configure stunnel for redis server
   template:
     src: redis-stunnel.conf
@@ -105,4 +120,5 @@
     proto: tcp
   no_log: true
   loop: "{{ redis_open_ports }}"
+  when: lin_use_firewall |bool
 ...
