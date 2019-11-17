@@ -1,11 +1,11 @@
 ---
-# handlers file for ivansible.srv_postgres
+# handlers for ivansible.srv_postgres
 
 - name: restart postgres service
   systemd:
     name: "{{ srv_pg_service }}"
     state: restarted
-  become: yes
+  become: true
 
 
 # this is a multi-task handler
@@ -21,14 +21,17 @@
 
 - name: alter postgres admin password
   listen: reset postgres admin password
-  no_log: "{{ hide_secrets }}"
+  no_log: "{{ hide_secrets |bool }}"
   command:
     argv:
       - psql
+      - --user=postgres
       - --port={{ srv_pg_port }}
       - --no-password
       - --command
       - "ALTER ROLE postgres ENCRYPTED PASSWORD '{{ srv_pg_admin_password }}';"
-  become: yes
-  become_user: postgres
+  become: true
+  # becoming non-root triggers error in docker:
+  # Failed to set permissions on the temporary files Ansible needs to create when becoming an unprivileged user
+  #become_user: postgres
 ...

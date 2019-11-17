@@ -29,6 +29,7 @@
   with_dict: "{{ srv_pg_kernel_params }}"
   loop_control:
     label: "{{ item.key }}"
+  when: allow_sysctl |bool
   notify:
     - restart postgres service
   tags: srv_postgres_sysctl
@@ -51,12 +52,20 @@
   tags: srv_postgres_ssl
 
 # postgresql-10 server refuses to use world-readable private keys
-- name: check that postgres ssl private key exists and is not world-readable
+- name: check that ssl private key exists and is not world-readable
   file:
     path: "{{ srv_pg_ssl_key }}"
     state: file
     group: "{{ certbot_group |default('ssl-cert') }}"
     mode: 'o='
+  tags: srv_postgres_ssl
+
+- name: ensure that ssl unix group can accces private key directory
+  file:
+    path: "{{ srv_pg_ssl_key |dirname }}"
+    state: directory
+    group: "{{ certbot_group |default('ssl-cert') }}"
+    mode: g+rx
   tags: srv_postgres_ssl
 
 
@@ -99,6 +108,21 @@
     owner: postgres
     group: postgres
     mode: 0640
+  notify:
+    - restart postgres service
+    - reset postgres admin password
+  tags: srv_postgres_config
+
+- name: allow root to login as postgres locally
+  lineinfile:
+    path: "{{ srv_pg_conf_dir }}/pg_ident.conf"
+    line: "root_postgres\t{{ item }}\t\tpostgres"
+    owner: postgres
+    group: postgres
+    mode: 0640
+  loop:
+    - "root\t"
+    - "postgres"
   notify:
     - restart postgres service
     - reset postgres admin password

@@ -2,4 +2,5 @@
 - name: become root and install postgres
   import_tasks: root.yml
   become: true
+  tags: srv_postgres_all
 ...
