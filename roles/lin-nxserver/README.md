@@ -39,11 +39,12 @@ Swap file size in megabytes,
 
 ## Tags
 
-- `nx_server` -- install nxserver package and open ports
-- `nx_user` -- authorize user
-- `nx_desktop` -- install `xfce4` desktop environment
-- `nx_audio` -- enable audio interface in nxserver
-- `nx_swap` -- setup swap space
+- `lin_nx_server` -- install nxserver package and open ports
+- `lin_nx_user` -- authorize user
+- `lin_nx_desktop` -- install `xfce4` desktop environment
+- `lin_nx_audio` -- enable audio interface in nxserver
+- `lin_nx_swap` -- setup swap space
+- `lin_nx_all` -- all of above
 
 
 ## Dependencies
