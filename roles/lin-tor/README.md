@@ -22,6 +22,7 @@ None
 - `lin_tor_service` -- activate tor daemon
 - `lin_tor_config`  -- configure tor socks port and exit nodes
 - `lin_tor_privoxy` -- configure local privoxy forwarding
+- `lin_tor_all` -- all of the above
 
 
 ## Dependencies
