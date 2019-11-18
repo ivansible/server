@@ -27,4 +27,7 @@
     #proto: tcp
   no_log: true
   when: lin_use_firewall |bool
+  # workaround for ufw failures on xenial on github runners
+  register: ufw_result
+  until: ufw_result is successful
 ...
