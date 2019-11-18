@@ -25,4 +25,5 @@
     port: "{{ mongodb_port }}"
     proto: tcp
   no_log: true
+  when: lin_use_firewall |bool
 ...
