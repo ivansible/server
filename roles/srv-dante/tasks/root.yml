@@ -74,6 +74,7 @@
     rule: "{{ dante_direct |ternary('allow','deny') }}"
     port: "{{ dante_port |string }}"
   no_log: true
+  when: lin_use_firewall |bool
   tags: lin_dante_firewall
 
 - meta: flush_handlers
