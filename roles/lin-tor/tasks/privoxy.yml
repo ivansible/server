@@ -1,5 +1,26 @@
 ---
-- name: install privoxy package
+- name: install privoxy package (changes might be hidden)
+  apt:
+    name: privoxy
+    state: present
+  register: apt_privoxy_result
+  # default privoxy configuration on bionic fails without ipv6 loopback
+  ignore_errors: "{{ ansible_lsb.codename == 'bionic' and ansible_lo.ipv6 is not defined }}"
+  # silence verbose error message
+  no_log: "{{ hide_secrets |bool }}"
+  # workaround for idempotence - setup is not complete if post-install actions failed
+  changed_when: apt_privoxy_result is changed
+                and (ansible_lsb.codename != 'bionic' or ansible_lo.ipv6 is defined)
+
+- name: disable listener on ipv6 loopback (fails on travis)
+  lineinfile:
+    path: /etc/privoxy/config
+    regexp: '^(listen-address\s+\[::1\]:.*)'
+    line: '#\1'
+    backrefs: true
+  notify: restart privoxy service
+
+- name: finish privoxy installation after fixing listener (for idempotence)
   apt:
     name: privoxy
     state: present
@@ -12,7 +33,7 @@
     #  listen-address  [::1]:8118
     # we want to skip the second line and avoid service error
     regexp: '^#?listen-address(?!\s+\[::1\])'
-    line: 'listen-address {{ tor_privoxy_bindip }}:{{ tor_privoxy_port }}'
+    line: 'listen-address  {{ tor_privoxy_bindip }}:{{ tor_privoxy_port }}'
     state: present
   notify: restart privoxy service
 
