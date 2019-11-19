@@ -26,6 +26,7 @@ Colon-separated `user:password` pair. Leave empty for no authentication.
 - `lin_ziproxy_config`
 - `lin_ziproxy_service`
 - `lin_ziproxy_firewall`
+- `lin_ziproxy_all`
 
 
 ## Dependencies

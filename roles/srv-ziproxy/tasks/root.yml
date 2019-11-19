@@ -70,6 +70,7 @@
     port: "{{ ziproxy_port }}"
     proto: tcp
   no_log: true
+  when: lin_use_firewall |bool
   tags: lin_ziproxy_firewall
 
 - meta: flush_handlers
