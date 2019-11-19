@@ -62,5 +62,6 @@
     rule: "{{ mtproxy_direct |ternary('allow','deny') }}"
     port: "{{ mtproxy_port |string }}"
   no_log: true
+  when: lin_use_firewall |bool
   tags: lin_mtproxy_firewall
 ...

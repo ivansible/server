@@ -6,7 +6,7 @@ Description=mtg mtproto proxy server
 {# set group to "proxy" to activate sslh iptables fix #}
 Group=proxy
 EnvironmentFile=/etc/default/mtproxy
-ExecStart={{ mtproxy_bin_file }} {% if mtproxy_secure |bool %}-s {% endif %}$MTG_SECRET
+ExecStart={{ mtproxy_bin_file }} run $MTG_SECRET
 Restart=always
 
 [Install]
