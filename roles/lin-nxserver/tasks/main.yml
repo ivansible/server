@@ -1,8 +1,4 @@
 ---
-- name: refresh facts as non root
-  setup:
-  become: false
-
 - name: most steps require elevated privileges
   block:
     - name: install desktop environment (should come before nomachine)
