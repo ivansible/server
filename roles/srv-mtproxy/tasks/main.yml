@@ -1,12 +1,6 @@
 ---
-- name: refresh host facts as non-root
-  setup:
-  become: no
-  tags: mtproxy_all
-
-# use import to become root globally
-- name: become root
+- name: use import to become root globally
   import_tasks: root.yml
-  become: yes
+  become: true
   tags: mtproxy_all
 ...
