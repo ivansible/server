@@ -2,7 +2,7 @@
 - name: remove stale docker container
   include_tasks: rmdocker.yml
   when: mtproxy_rmdocker |bool
-  tags: mtproxy_rmdocker
+  tags: lin_mtproxy_rmdocker
 
 - name: create group for proxy processes
   group:
@@ -17,20 +17,20 @@
     creates: "{{ mtproxy_reinstall | bool | ternary(omit, mtproxy_bin_file) }}"
   register: latest_mtg_release
   when: mtproxy_release == 'latest'
-  tags: mtproxy_install
+  tags: lin_mtproxy_install
 
 - name: extract mtg version from github page
   set_fact:
     mtproxy_release: "{{ latest_mtg_release.url | basename }}"
   when: latest_mtg_release.url is defined
-  tags: mtproxy_install
+  tags: lin_mtproxy_install
 
 - name: print mtg version
   debug:
     msg: "latest mtg release: {{ mtproxy_release }}"
   run_once: true
   when: latest_mtg_release.url is defined
-  tags: mtproxy_install
+  tags: lin_mtproxy_install
 
 - name: download mtproxy
   get_url:
@@ -39,7 +39,7 @@
     mode: 0755
     force: "{{ mtproxy_reinstall | bool }}"
   when: mtproxy_release != 'latest'
-  tags: mtproxy_install
+  tags: lin_mtproxy_install
 
 
 - name: configure mtproxy service
@@ -50,7 +50,7 @@
     group: proxy
     mode: 0640
   notify: restart mtproxy service
-  tags: mtproxy_service
+  tags: lin_mtproxy_service
 
 - name: setup mtproxy service unit
   template:
@@ -58,7 +58,7 @@
     dest: /etc/systemd/system/mtproxy.service
     mode: 0644
   notify: restart mtproxy service
-  tags: mtproxy_service
+  tags: lin_mtproxy_service
 
 - name: start mtproxy system service
   systemd:
@@ -66,7 +66,7 @@
     state: started
     enabled: yes
     daemon_reload: yes
-  tags: mtproxy_service
+  tags: lin_mtproxy_service
 
 
 - name: open mtproxy port, if allowed
@@ -74,5 +74,5 @@
     rule: "{{ mtproxy_direct |ternary('allow','deny') }}"
     port: "{{ mtproxy_port |string }}"
   no_log: true
-  tags: mtproxy_firewall
+  tags: lin_mtproxy_firewall
 ...

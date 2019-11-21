@@ -25,10 +25,11 @@ Available variables are listed below, along with default values.
 
 ## Tags
 
-- `mtproxy_rmdocker`
-- `mtproxy_install`
-- `mtproxy_service`
-- `mtproxy_firewall`
+- `lin_mtproxy_rmdocker`
+- `lin_mtproxy_install`
+- `lin_mtproxy_service`
+- `lin_mtproxy_firewall`
+- `lin_mtproxy_all`
 
 
 ## Dependencies
