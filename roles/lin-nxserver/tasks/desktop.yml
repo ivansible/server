@@ -14,5 +14,7 @@
       - pulseaudio
       # pavucontrol is required by xfce volume control applet
       - pavucontrol
+    # avoid apport (breaks idempotency on bionic)
+    install_recommends: false
   register: nx_desktop_packages
 ...
