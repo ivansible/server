@@ -27,12 +27,12 @@ Note: dante username must start with 'dante_' because it's a global linux user
 
 ## Tags
 
-- `dante_user`
-- `dante_conf`
-- `dante_install`
-- `dante_service`
-- `dante_firewall`
-- `dante_all`
+- `lin_dante_user`
+- `lin_dante_conf`
+- `lin_dante_install`
+- `lin_dante_service`
+- `lin_dante_firewall`
+- `lin_dante_all`
 
 
 ## Dependencies

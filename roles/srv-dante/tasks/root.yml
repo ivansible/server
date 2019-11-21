@@ -3,7 +3,7 @@
   assert:
     that: dante_user.startswith('dante_')
     fail_msg: "dante username '{{ dante_user }}' must start with 'dante_'"
-  tags: dante_user
+  tags: lin_dante_user
 
 - name: create dante proxy user
   # see: https://docs.ansible.com/ansible/latest/modules/user_module.html#user-module
@@ -19,7 +19,7 @@
     create_home: no
     generate_ssh_key: no
   notify: restart dante service
-  tags: dante_user
+  tags: lin_dante_user
 
 
 - name: configure dante server
@@ -28,7 +28,7 @@
     dest: /etc/danted.conf
     mode: 0644
   notify: restart dante service
-  tags: dante_conf
+  tags: lin_dante_conf
 
 
 - name: install dante server (ubuntu xenial)
@@ -39,14 +39,14 @@
   register: dante_install_xenial_result
   # workaround for network problems on a cheap VPS with low memory
   until: "'timed out' not in dante_install_xenial_result.msg |default('')"
-  tags: dante_install
+  tags: lin_dante_install
 
 - name: install dante server (ubuntu bionic)
   apt:
     name: dante-server
   when: ansible_lsb.codename == 'bionic'
   register: dante_install_bionic_result
-  tags: dante_install
+  tags: lin_dante_install
 
 
 - name: temporarily stop dante service after fresh install
@@ -58,7 +58,7 @@
     enabled: no
     daemon_reload: yes
   when: dante_install_xenial_result is changed or dante_install_bionic_result is changed
-  tags: dante_service
+  tags: lin_dante_service
 
 - name: enable dante service
   systemd:
@@ -66,7 +66,7 @@
     state: started
     enabled: yes
     daemon_reload: yes
-  tags: dante_service
+  tags: lin_dante_service
 
 
 - name: open dante port, if allowed
@@ -74,7 +74,7 @@
     rule: "{{ dante_direct |ternary('allow','deny') }}"
     port: "{{ dante_port |string }}"
   no_log: true
-  tags: dante_firewall
+  tags: lin_dante_firewall
 
 - meta: flush_handlers
 ...
