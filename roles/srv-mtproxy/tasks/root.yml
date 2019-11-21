@@ -1,7 +1,7 @@
 ---
 - name: remove stale docker container
   include_tasks: rmdocker.yml
-  when: mtproxy_rmdocker |bool
+  when: mtproxy_rmdocker |bool and lin_use_docker |bool
   tags: lin_mtproxy_rmdocker
 
 - name: create group for proxy processes

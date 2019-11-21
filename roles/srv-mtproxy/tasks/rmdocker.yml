@@ -1,7 +1,9 @@
 ---
 - name: install ansible docker bindings (optional)
   apt:
-    name: "{{ ansible_python_version.startswith('3') | ternary('python3','python') }}-docker"
+    name:
+      - python-docker
+      - python3-docker
 
 - name: remove stale docker container (optional, so ok to fail)
   docker_container:
