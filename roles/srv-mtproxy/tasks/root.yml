@@ -11,34 +11,22 @@
 
 
 - name: detect latest mtg release
-  uri:
-    url: https://github.com/9seconds/mtg/releases/latest
-    method: HEAD
-    creates: "{{ mtproxy_reinstall | bool | ternary(omit, mtproxy_bin_file) }}"
+  github_release:
+    repository: 9seconds/mtg
+    release: "{{ mtproxy_release }}"
+    template: "{download_url}/mtg-linux-amd64"
+    creates: "{{ mtproxy_bin_file }}"
+    reinstall: "{{ mtproxy_reinstall |bool }}"
   register: latest_mtg_release
-  when: mtproxy_release == 'latest'
-  tags: lin_mtproxy_install
-
-- name: extract mtg version from github page
-  set_fact:
-    mtproxy_release: "{{ latest_mtg_release.url | basename }}"
-  when: latest_mtg_release.url is defined
-  tags: lin_mtproxy_install
-
-- name: print mtg version
-  debug:
-    msg: "latest mtg release: {{ mtproxy_release }}"
-  run_once: true
-  when: latest_mtg_release.url is defined
   tags: lin_mtproxy_install
 
 - name: download mtproxy
   get_url:
-    url: https://github.com/9seconds/mtg/releases/download/{{ mtproxy_release }}/mtg-linux-amd64
+    url: "{{ latest_mtg_release.url }}"
     dest: "{{ mtproxy_bin_file }}"
     mode: 0755
-    force: "{{ mtproxy_reinstall | bool }}"
-  when: mtproxy_release != 'latest'
+    force: "{{ mtproxy_reinstall |bool }}"
+  when: latest_mtg_release is changed
   tags: lin_mtproxy_install
 
 
