@@ -9,6 +9,6 @@
   docker_container:
     name: mtproxy
     state: absent
-  ignore_errors: yes
-  no_log: true
+  ignore_errors: true
+  no_log: "{{ hide_secrets |bool }}"
 ...

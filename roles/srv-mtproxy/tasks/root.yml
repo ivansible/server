@@ -2,7 +2,7 @@
 - name: remove stale docker container
   include_tasks: rmdocker.yml
   when: mtproxy_rmdocker |bool and lin_use_docker |bool
-  tags: lin_mtproxy_rmdocker
+  tags: srv_mtproxy_rmdocker
 
 - name: create group for proxy processes
   group:
@@ -18,7 +18,7 @@
     creates: "{{ mtproxy_bin_file }}"
     reinstall: "{{ mtproxy_reinstall |bool }}"
   register: latest_mtg_release
-  tags: lin_mtproxy_install
+  tags: srv_mtproxy_install
 
 - name: download mtproxy
   get_url:
@@ -27,7 +27,7 @@
     mode: 0755
     force: "{{ mtproxy_reinstall |bool }}"
   when: latest_mtg_release is changed
-  tags: lin_mtproxy_install
+  tags: srv_mtproxy_install
 
 
 - name: configure mtproxy service
@@ -38,7 +38,7 @@
     group: proxy
     mode: 0640
   notify: restart mtproxy service
-  tags: lin_mtproxy_service
+  tags: srv_mtproxy_service
 
 - name: setup mtproxy service unit
   template:
@@ -46,15 +46,15 @@
     dest: /etc/systemd/system/mtproxy.service
     mode: 0644
   notify: restart mtproxy service
-  tags: lin_mtproxy_service
+  tags: srv_mtproxy_service
 
 - name: start mtproxy system service
   systemd:
     name: mtproxy
     state: started
-    enabled: yes
-    daemon_reload: yes
-  tags: lin_mtproxy_service
+    enabled: true
+    daemon_reload: true
+  tags: srv_mtproxy_service
 
 
 - name: open (or block) mtproxy port in ufw
@@ -64,7 +64,7 @@
   no_log: "{{ hide_secrets |bool }}"
   when: lin_firewall == 'ufw'
   tags:
-    - lin_mtproxy_firewall
+    - srv_mtproxy_firewall
 
 - name: open (or block) mtproxy port in ferm
   ferm_port:
@@ -75,5 +75,5 @@
   when: lin_firewall == 'ferm'
   tags:
     - skip_ansible_lint
-    - lin_mtproxy_firewall
+    - srv_mtproxy_firewall
 ...

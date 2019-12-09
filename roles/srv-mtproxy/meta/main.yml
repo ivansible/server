@@ -3,7 +3,7 @@ dependencies:
   - ivansible.lin_base  # for lin_use_docker and firewall flag/module
 
 galaxy_info:
-  role_name: lin_mtproxy
+  role_name: srv_mtproxy
   author: "Ivan Andreev"
   description: "install mtg mtproto proxy on linux"
   company: "IvanSible"
