@@ -3,7 +3,7 @@ dependencies:
   - ivansible.nginx_base  # for default ssl certificate and ferm_port module
 
 galaxy_info:
-  role_name: srv_redis_ssl
+  role_name: srv_redis
   author: "Ivan Andreev"
   description: "install redis server with ssl support on linux"
   company: "IvanSible"

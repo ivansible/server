@@ -1,6 +1,6 @@
-# ivansible.srv_redis_ssl
+# ivansible.srv_redis
 
-This role installs redis server on a linux host and enables SSL access to redis
+This role installs redis server on a linux host and enables SSL access for redis
 by running a stunnel service in front.
 
 Redis systemd service is named `redis-server` and stunnel service providing
@@ -62,8 +62,8 @@ Default certificate and private key are inherited from `ivansible.nginx_base`.
 
     - hosts: db-host
       roles:
-         - role: ivansible.srv_redis_ssl
-           redis_password: super-secret
+         - role: ivansible.srv_redis
+           redis_password: supersecret
 
 
 ## License

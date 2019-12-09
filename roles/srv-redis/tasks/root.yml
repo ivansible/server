@@ -4,7 +4,7 @@
     repo: ppa:chris-lea/redis-server
     codename: "{{ ansible_lsb.codename }}"
     filename: redis
-    update_cache: yes
+    update_cache: true
 
 - name: install redis and stunnel packages
   apt:
@@ -47,7 +47,7 @@
   when: redis_password is defined
         and redis_password is not none
         and redis_password != ''  # noqa 602
-  no_log: yes
+  no_log: "{{ hide_secrets |bool }}"
   notify: restart redis service
 
 - name: disable redis password
@@ -107,8 +107,8 @@
   systemd:
     name: "{{ item }}"
     state: started
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true
   loop:
     - redis-server
     - redis-stunnel

@@ -1,5 +1,5 @@
 ---
-# defaults file for ivansible.srv_redis_ssl
+# defaults for ivansible.srv_redis
 
 redis_port_tcp: 6379
 redis_port_ssl: 7379
