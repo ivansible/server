@@ -1,4 +1,4 @@
-# ivansible.lin_ziproxy
+# ivansible.srv_ziproxy
 
 This role installs ziproxy on linux.
 
@@ -20,17 +20,17 @@ If true, ports will be open for all. If false, ports will be blocked
 from external networks.
 
     ziproxy_userpass: ""
-Colon-separated `user:password` pair. Leave empty for no authentication.
+Colon-separated `user:password` tuple. Leave empty for no authentication.
 
 
 ## Tags
 
-- `lin_ziproxy_install`
-- `lin_ziproxy_config`
-- `lin_ziproxy_config`
-- `lin_ziproxy_service`
-- `lin_ziproxy_firewall`
-- `lin_ziproxy_all`
+- `srv_ziproxy_install`
+- `srv_ziproxy_config`
+- `srv_ziproxy_config`
+- `srv_ziproxy_service`
+- `srv_ziproxy_firewall`
+- `srv_ziproxy_all`
 
 
 ## Dependencies
@@ -42,7 +42,7 @@ None
 
     - hosts: myproxy
       roles:
-         - role: ivansible.lin_ziproxy
+         - role: ivansible.srv_ziproxy
            ziproxy_port: 8086
 
 
@@ -52,4 +52,4 @@ MIT
 
 ## Author Information
 
-Created in 2018 by [IvanSible](https://github.com/ivansible)
+Created in 2018-2020 by [IvanSible](https://github.com/ivansible)

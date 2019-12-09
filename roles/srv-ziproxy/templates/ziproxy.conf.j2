@@ -272,7 +272,7 @@ URLDeny = "/etc/ziproxy/deny.list"
 
 ## Custom HTTP Error Messages
 {% for errcode in [ 400, 403, 404, 407, 408, 409, 500, 503 ] %}
-CustomError{{errcode}}="/usr/share/ziproxy/error/{{errcode}}.html"
+CustomError{{ errcode }}="/usr/share/ziproxy/error/{{ errcode }}.html"
 {% endfor %}
 
 {# end #}

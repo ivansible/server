@@ -3,7 +3,7 @@ dependencies:
   - ivansible.lin_base  # for lin_firewall and ferm_port module
 
 galaxy_info:
-  role_name: lin_ziproxy
+  role_name: srv_ziproxy
   author: "Ivan Andreev"
   description: "install ziproxy on linux"
   company: "IvanSible"
