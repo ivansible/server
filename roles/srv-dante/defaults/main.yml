@@ -1,8 +1,8 @@
 ---
-# defaults file for ivansible.lin_dante_auth
+# defaults for ivansible.srv_dante
 
 dante_port: 1080
-dante_direct: yes
+dante_direct: true
 # dante username must start with 'dante_' because it's a global linux user
 dante_user: dante_socks
 dante_pass: secret

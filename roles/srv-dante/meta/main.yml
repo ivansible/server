@@ -3,7 +3,7 @@ dependencies:
   - ivansible.lin_base  # for lin_firewall and ferm_port module
 
 galaxy_info:
-  role_name: lin_dante_auth
+  role_name: srv_dante
   author: "Ivan Andreev"
   description: "install dante proxy server with authentication"
   company: "IvanSible"

@@ -2,5 +2,5 @@
 - name: become root and deploy dante
   import_tasks: root.yml
   become: true
-  tags: lin_dante_all
+  tags: srv_dante_all
 ...

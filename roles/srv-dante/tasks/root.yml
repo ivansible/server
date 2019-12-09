@@ -3,7 +3,7 @@
   assert:
     that: dante_user.startswith('dante_')
     fail_msg: "dante username '{{ dante_user }}' must start with 'dante_'"
-  tags: lin_dante_user
+  tags: srv_dante_user
 
 - name: create dante proxy user
   # see: https://docs.ansible.com/ansible/latest/modules/user_module.html#user-module
@@ -16,10 +16,10 @@
     group: users
     shell: /usr/sbin/nologin
     home: /usr/sbin
-    create_home: no
-    generate_ssh_key: no
+    create_home: false
+    generate_ssh_key: false
   notify: restart dante service
-  tags: lin_dante_user
+  tags: srv_dante_user
 
 
 - name: configure dante server
@@ -28,7 +28,7 @@
     dest: /etc/danted.conf
     mode: 0644
   notify: restart dante service
-  tags: lin_dante_conf
+  tags: srv_dante_conf
 
 
 - name: install foreign dante package on xenial (with workarounds)
@@ -73,14 +73,14 @@
       register: dante_install_xenial_result
       until: dante_install_xenial_result is successful
   when: ansible_lsb.codename == 'xenial'
-  tags: lin_dante_install
+  tags: srv_dante_install
 
 - name: install dante server (ubuntu bionic)
   apt:
     name: dante-server
   when: ansible_lsb.codename == 'bionic'
   register: dante_install_bionic_result
-  tags: lin_dante_install
+  tags: srv_dante_install
 
 
 - name: temporarily stop dante service after fresh install
@@ -89,18 +89,18 @@
   systemd:
     name: danted
     state: stopped
-    enabled: no
-    daemon_reload: yes
+    enabled: false
+    daemon_reload: true
   when: dante_install_xenial_result is changed or dante_install_bionic_result is changed
-  tags: lin_dante_service
+  tags: srv_dante_service
 
 - name: enable dante service
   systemd:
     name: danted
     state: started
-    enabled: yes
-    daemon_reload: yes
-  tags: lin_dante_service
+    enabled: true
+    daemon_reload: true
+  tags: srv_dante_service
 
 
 - name: open (or block) dante port in ufw
@@ -110,7 +110,7 @@
   no_log: "{{ hide_secrets |bool }}"
   when: lin_firewall == 'ufw'
   tags:
-    - lin_dante_firewall
+    - srv_dante_firewall
 
 - name: open (or block) dante port in ferm
   ferm_port:
@@ -122,7 +122,7 @@
   when: lin_firewall == 'ferm'
   tags:
     - skip_ansible_lint
-    - lin_dante_firewall
+    - srv_dante_firewall
 
 - name: flush handlers
   meta: flush_handlers

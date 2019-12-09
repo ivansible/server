@@ -1,9 +1,9 @@
 ---
-# handlers file for ivansible.lin_dante_auth
+# handlers for ivansible.srv_dante
 
 - name: restart dante service
   systemd:
     name: danted
     state: restarted
-  become: yes
+  become: true
 ...
