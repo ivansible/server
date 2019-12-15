@@ -13,9 +13,10 @@ mongodb_ssl_mode: preferSSL
 mongodb_ssl_cert: "{{ nginx_ssl_cert }}"
 mongodb_ssl_key: "{{ nginx_ssl_key }}"
 
-mongodb_cpu_quota: unlimited  # e.g. 50%
-mongodb_mem_quota: unlimited  # e.g. 512M
-mongodb_oom_killer: no
+mongodb_cpu_quota: unlimited  # eg. 50%
+mongodb_mem_quota: "{{ mongodb_mem_quota_old }}"  # eg. 512M or 25%
+mongodb_mem_quota_old: unlimited  # systemd before 231 (ubuntu before 16.10) didn't accept % of RAM
+mongodb_oom_killer: false
 
 # you need not change these
 mongodb_ssl_pem_file: /var/lib/mongodb/mongod.pem
