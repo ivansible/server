@@ -5,8 +5,4 @@ lin_nxserver_deb_url: https://download.nomachine.com/download/6.6/Linux/nomachin
 
 lin_nxserver_display: 1001
 lin_nxserver_port: "4000"
-
-lin_swap_enable: no
-lin_swap_file: /swap
-lin_swap_mb: 1024
 ...

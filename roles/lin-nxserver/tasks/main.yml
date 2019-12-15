@@ -12,11 +12,6 @@
     - name: enable audio in nxserver
       import_tasks: audio.yml
       tags: lin_nx_audio
-
-    - name: setup swap space
-      import_tasks: swap.yml
-      when: lin_swap_enable |bool
-      tags: lin_nx_swap
   become: true
   tags:
     - lin_nx_root
