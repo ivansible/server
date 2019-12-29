@@ -57,11 +57,23 @@
   tags: lin_mtproxy_service
 
 
-- name: open mtproxy port, if allowed
+- name: open (or block) mtproxy port in ufw
   ufw:
-    rule: "{{ mtproxy_direct |ternary('allow','deny') }}"
     port: "{{ mtproxy_port |string }}"
-  no_log: true
-  when: lin_use_firewall |bool
-  tags: lin_mtproxy_firewall
+    rule: "{{ mtproxy_direct |bool |ternary('allow','deny') }}"
+  no_log: "{{ hide_secrets |bool }}"
+  when: lin_firewall == 'ufw'
+  tags:
+    - lin_mtproxy_firewall
+
+- name: open (or block) mtproxy port in ferm
+  ferm_port:
+    port: "{{ mtproxy_port }}"
+    domain: "{{ mtproxy_direct |bool |ternary('external','internal') }}"
+    exclusive: true
+    comment: mtproxy
+  when: lin_firewall == 'ferm'
+  tags:
+    - skip_ansible_lint
+    - lin_mtproxy_firewall
 ...

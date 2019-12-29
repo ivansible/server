@@ -39,7 +39,7 @@ docker (optional)
 
 ## Example Playbook
 
-    - hosts: vag1
+    - hosts: myproxy
       roles:
          - role: ivansible.lin_mtproxy
            mtproxy_port: 13128

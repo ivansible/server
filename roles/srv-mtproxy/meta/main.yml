@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - ivansible.lin_base  # for lin_use_firewall, lin_use_docker
+  - ivansible.lin_base  # for lin_use_docker and firewall flag/module
 
 galaxy_info:
   role_name: lin_mtproxy
@@ -19,6 +19,7 @@ galaxy_info:
   galaxy_tags:
     - linux
     - proxy
+    - mtproto
 
   github_branch: master
 ...
