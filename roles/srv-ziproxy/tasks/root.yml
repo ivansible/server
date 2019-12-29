@@ -64,14 +64,28 @@
   tags: lin_ziproxy_service
 
 
-- name: open ziproxy port
+- name: open ziproxy port in ufw
   ufw:
+    port: "{{ ziproxy_port |string }}"
+    proto: tcp
     rule: allow
+  no_log: "{{ hide_secrets |bool }}"
+  when: lin_firewall == 'ufw'
+  tags:
+    - lin_ziproxy_firewall
+
+- name: open ziproxy port for exteranl/internal hosts in ferm
+  ferm_port:
     port: "{{ ziproxy_port }}"
     proto: tcp
-  no_log: true
-  when: lin_use_firewall |bool
-  tags: lin_ziproxy_firewall
+    domain: "{{ ziproxy_direct |bool |ternary('external','internal') }}"
+    exclusive: true
+    comment: ziproxy
+  when: lin_firewall == 'ferm'
+  tags:
+    - skip_ansible_lint
+    - lin_ziproxy_firewall
 
-- meta: flush_handlers
+- name: flush handlers
+  meta: flush_handlers
 ...

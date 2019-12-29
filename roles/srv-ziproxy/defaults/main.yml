@@ -3,6 +3,8 @@
 
 ziproxy_port: 3168
 
+ziproxy_direct: true
+
 # colon-separated user:password pair
 # leave empty for no authentication
 ziproxy_userpass: ""

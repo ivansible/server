@@ -15,6 +15,10 @@ Available variables are listed below, along with default values.
     ziproxy_port: 3168
 Port
 
+    ziproxy_direct: true
+If true, ports will be open for all. If false, ports will be blocked
+from external networks.
+
     ziproxy_userpass: ""
 Colon-separated `user:password` pair. Leave empty for no authentication.
 
@@ -36,7 +40,7 @@ None
 
 ## Example Playbook
 
-    - hosts: vag1
+    - hosts: myproxy
       roles:
          - role: ivansible.lin_ziproxy
            ziproxy_port: 8086
