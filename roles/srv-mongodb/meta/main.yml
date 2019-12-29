@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - ivansible.nginx_base  # for default ssl certificate/key file paths
+  - ivansible.nginx_base  # for file path to default ssl certificate
 
 galaxy_info:
   role_name: srv_mongodb

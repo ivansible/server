@@ -43,8 +43,8 @@ Memory quota can be `unlimited` (or empty string) or a numeric value in
 megabytes with suffix `M`, e.g. `512M`. It limits **physical** memory (RSS).
 If exceeded, forces swapout.
 
-    mongodb_oom_killer: no
-This `yes` / `no` option activates OOM killer when memory quota is exceeded.
+    mongodb_oom_killer: false
+This boolean option activates OOM killer when memory quota is exceeded.
 See:
 - [Systemd Memory Limit (freesktop)](https://www.freedesktop.org/software/systemd/man/systemd.resource-control.html#MemoryLimit=bytes)
 - [Systemd OOMScoreAdjust (freedesktop)](https://www.freedesktop.org/software/systemd/man/systemd.exec.html#OOMScoreAdjust=)

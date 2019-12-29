@@ -16,14 +16,23 @@
   systemd:
     name: mongod
     state: started
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true
 
-- name: open mongodb port in firewall
+
+- name: open mongodb port in ufw
   ufw:
     rule: allow
+    port: "{{ mongodb_port |string }}"
+    proto: tcp
+  no_log: "{{ hide_secrets |bool }}"
+  when: lin_firewall == 'ufw'
+
+- name: open mongodb port in ferm
+  ferm_port:
     port: "{{ mongodb_port }}"
     proto: tcp
-  no_log: true
-  when: lin_use_firewall |bool
+    comment: mongodb
+  tags: skip_ansible_lint
+  when: lin_firewall == 'ferm'
 ...

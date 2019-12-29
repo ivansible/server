@@ -9,12 +9,12 @@
     path: /etc/mongod.conf
     regexp: '^(\s+)authorization:'
     line: '\g<1>authorization: enabled'
-    backrefs: yes
-  become: yes
+    backrefs: true
+  become: true
 
 - name: restart mongodb service
   systemd:
     name: mongod
     state: restarted
-  become: yes
+  become: true
 ...

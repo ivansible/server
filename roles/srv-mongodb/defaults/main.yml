@@ -1,5 +1,5 @@
 ---
-# defaults file for ivansible.srv_mongodb
+# defaults for ivansible.srv_mongodb
 
 mongodb_port: 27017
 
