@@ -103,13 +103,27 @@
   tags: lin_dante_service
 
 
-- name: open dante port, if allowed
+- name: open (or block) dante port in ufw
   ufw:
-    rule: "{{ dante_direct |ternary('allow','deny') }}"
     port: "{{ dante_port |string }}"
-  no_log: true
-  when: lin_use_firewall |bool
-  tags: lin_dante_firewall
+    rule: "{{ dante_direct |bool |ternary('allow','deny') }}"
+  no_log: "{{ hide_secrets |bool }}"
+  when: lin_firewall == 'ufw'
+  tags:
+    - lin_dante_firewall
 
-- meta: flush_handlers
+- name: open (or block) dante port in ferm
+  ferm_port:
+    port: "{{ dante_port }}"
+    proto: tcp
+    domain: "{{ dante_direct |bool |ternary('external','internal') }}"
+    exclusive: true
+    comment: dante
+  when: lin_firewall == 'ferm'
+  tags:
+    - skip_ansible_lint
+    - lin_dante_firewall
+
+- name: flush handlers
+  meta: flush_handlers
 ...

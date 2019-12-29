@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - ivansible.lin_base  # for lin_use_firewall
+  - ivansible.lin_base  # for lin_firewall and ferm_port module
 
 galaxy_info:
   role_name: lin_dante_auth
@@ -19,6 +19,7 @@ galaxy_info:
   galaxy_tags:
     - linux
     - proxy
+    - dante
 
   github_branch: master
 ...
