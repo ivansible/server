@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - ivansible.nginx_base  # for default ssl certificate/key file paths
+  - ivansible.nginx_base  # for default ssl certificate and ferm_port module
 
 galaxy_info:
   role_name: srv_redis_ssl

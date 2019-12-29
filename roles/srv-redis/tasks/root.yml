@@ -46,7 +46,7 @@
     mode: 0640
   when: redis_password is defined
         and redis_password is not none
-        and redis_password != ''
+        and redis_password != ''  # noqa 602
   no_log: yes
   notify: restart redis service
 
@@ -60,8 +60,8 @@
     mode: 0640
   when: redis_password is not defined
         or redis_password is none
-        or redis_password == ''
-  no_log: yes
+        or redis_password == ''  # noqa 602
+  no_log: true
   notify: restart redis service
 
 
@@ -78,7 +78,7 @@
     path: "{{ redis_ssl_key }}"
     state: file
     group: "{{ certbot_group |default('ssl-cert') }}"
-    mode: "o="
+    mode: 'o='
 
 - name: ensure that redis stunnel can accces private key directory
   file:
@@ -113,12 +113,21 @@
     - redis-server
     - redis-stunnel
 
-- name: open redis ports in ubuntu firewall
+
+- name: open redis ports in ufw
   ufw:
     rule: allow
-    port: "{{ item }}"
+    port: "{{ item |string }}"
     proto: tcp
-  no_log: true
+  no_log: "{{ hide_secrets |bool }}"
   loop: "{{ redis_open_ports }}"
-  when: lin_use_firewall |bool
+  when: lin_firewall == 'ufw'
+
+- name: open redis ports in ferm
+  ferm_port:
+    port: "{{ redis_open_ports }}"
+    proto: tcp
+    comment: redis
+  tags: skip_ansible_lint
+  when: lin_firewall == 'ferm'
 ...
