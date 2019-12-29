@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - ivansible.nginx_base  # for default ssl certificate/key file paths
+  - ivansible.nginx_base  # for common defaults, eg. path of ssl certificate
 
 galaxy_info:
   role_name: srv_postgres

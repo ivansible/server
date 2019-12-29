@@ -8,7 +8,7 @@
   apt_repository:
     repo: deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_lsb.codename }}-pgdg main
     filename: pgdg
-    update_cache: yes
+    update_cache: true
   tags: srv_postgres_install
 
 - name: install postgresql-{{ srv_pg_release }} server package
@@ -23,7 +23,7 @@
 - name: tune kernel for postgresql server
   sysctl:
     name: net.core.somaxconn
-    value: 1024
+    value: '1024'
     state: present
     sysctl_file: /etc/sysctl.d/77-postgres.conf
   with_dict: "{{ srv_pg_kernel_params }}"
@@ -38,7 +38,7 @@
   user:
     name: postgres
     groups: "{{ certbot_group }}"
-    append: yes
+    append: true
   when: certbot_group is defined
   notify:
     - restart postgres service
@@ -55,8 +55,8 @@
   file:
     path: "{{ srv_pg_ssl_key }}"
     state: file
-    group: "{{ certbot_group | default('ssl-cert') }}"
-    mode: "o="
+    group: "{{ certbot_group |default('ssl-cert') }}"
+    mode: 'o='
   tags: srv_postgres_ssl
 
 
@@ -87,7 +87,7 @@
 - name: ansible-managed header in postgresql.conf
   lineinfile:
     path: "{{ srv_pg_conf_dir }}/postgresql.conf"
-    line: "# ansible-managed"
+    line: '# ansible-managed'
     insertbefore: BOF
   tags: srv_postgres_config
 
@@ -109,17 +109,29 @@
   systemd:
     name: "{{ srv_pg_service }}"
     state: started
-    enabled: yes
-    daemon_reload: yes
+    enabled: true
+    daemon_reload: true
   tags: srv_postgres_service
 
-- name: open postgres port
+- name: open postgres port in ufw
   ufw:
     rule: allow
+    port: "{{ srv_pg_port |string }}"
+    proto: tcp
+  no_log: "{{ hide_secrets |bool }}"
+  when: lin_firewall == 'ufw'
+  tags:
+    - srv_postgres_firewall
+
+- name: open postgres port in ferm
+  ferm_port:
     port: "{{ srv_pg_port }}"
     proto: tcp
-  no_log: true
-  tags: srv_postgres_firewall
+    comment: postgres
+  when: lin_firewall == 'ferm'
+  tags:
+    - skip_ansible_lint
+    - srv_postgres_firewall
 
 
 - name: notify postgres handlers now

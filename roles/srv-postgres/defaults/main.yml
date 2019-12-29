@@ -1,5 +1,5 @@
 ---
-# defaults file for ivansible.srv_postgres
+# defaults for ivansible.srv_postgres
 
 srv_pg_release: 10
 srv_pg_service: postgresql@{{ srv_pg_release }}-main
@@ -26,23 +26,23 @@ srv_pg_parameters:
   listen_addresses: "'*'"
   port: "{{ srv_pg_port }}"
   max_connections: 20
-  ssl: "on"
+  ssl: 'on'
   ssl_ciphers: "'HIGH:MEDIUM:+3DES:!aNULL'"
-  ssl_prefer_server_ciphers: "on"
+  ssl_prefer_server_ciphers: 'on'
   ssl_cert_file: "'{{ srv_pg_ssl_cert }}'"
   ssl_key_file: "'{{ srv_pg_ssl_key }}'"
-  shared_buffers: "32MB"
-  temp_buffers: "16MB"
+  shared_buffers: '32MB'
+  temp_buffers: '16MB'
   max_prepared_transactions: 0
-  work_mem: "12MB"
-  maintenance_work_mem: "32MB"
-  max_stack_depth: "1MB"
+  work_mem: '12MB'
+  maintenance_work_mem: '32MB'
+  max_stack_depth: '1MB'
   vacuum_cost_delay: 0
   commit_delay: 10000
-  checkpoint_timeout: "5min"
-  random_page_cost: "2.0"
-  track_activities: "on"
-  track_counts: "on"
+  checkpoint_timeout: '5min'
+  random_page_cost: '2.0'
+  track_activities: 'on'
+  track_counts: 'on'
   timezone: "'{{ srv_pg_timezone }}'"
   log_timezone: "'{{ srv_pg_timezone }}'"
   lc_messages: "'{{ srv_pg_locale }}'"

@@ -70,7 +70,8 @@ I suspect that too big `shmmax` can crash system.
 ## Dependencies
 
 - [ivansible.nginx_base](https://github.com/ivansible/nginx-base#variables)
-  -- for default ssl certificate/key file paths
+  -- for file path to default ssl certificate
+  -- for common defaults, handlers and custom modules
 
 
 ## TODO
