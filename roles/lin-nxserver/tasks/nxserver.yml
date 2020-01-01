@@ -18,16 +18,4 @@
   register: nx_nxserver_packages
   # fix intermittent network errors on .ru boxes
   until: "'timed out' not in nx_nxserver_packages.msg |default('')"
-
-- name: open nxserver port
-  ufw:
-    rule: allow
-    port: "{{ lin_nxserver_port }}"
-    # allow both tcp (main) and udp (multimedia)
-    #proto: tcp
-  no_log: true
-  when: lin_use_firewall |bool
-  # workaround for ufw failures on xenial on github runners
-  register: ufw_result
-  until: ufw_result is successful
 ...

@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - ivansible.lin_base
+  - ivansible.lin_base  # for common defaults, handlers, modules
 
 galaxy_info:
   role_name: lin_nxserver
@@ -19,6 +19,8 @@ galaxy_info:
   galaxy_tags:
     - linux
     - ansible
+    - nomachine
+    - nxserver
 
   github_branch: master
 ...

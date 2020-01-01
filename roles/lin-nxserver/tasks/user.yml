@@ -16,6 +16,6 @@
     # https://github.com/ivansible/dev-user/blob/master/tasks/bashrc.yml
     path: ~/.local/bashrc/1env.sh
     line: "export DISPLAY=:{{ lin_nxserver_display }}"
-    create: yes
+    create: true
   when: lin_nxserver_display != '' # noqa 602
 ...

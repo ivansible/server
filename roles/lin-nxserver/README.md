@@ -24,14 +24,19 @@ URL of nxserver package.
     lin_nxserver_display: 1001
 The role will add this `DISPLAY` variable to the user `bashrc` file.
 
-    lin_nxserver_port: 4000
-You should not usually change this.
+    lin_nxserver_ports: [4000, 5353]
+You will not usually change this.
+
+    lin_nxserver_direct: true
+If true, ports will be open for all. If false, ports will be blocked
+from external networks.
 
 
 ## Tags
 
 - `lin_nx_server` -- install nxserver package and open ports
 - `lin_nx_user` -- authorize user
+- `lin_nx_firewall` -- configure firewall for nxserver
 - `lin_nx_desktop` -- install `xfce4` desktop environment
 - `lin_nx_audio` -- enable audio interface in nxserver
 - `lin_nx_all` -- all of above

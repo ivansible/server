@@ -9,6 +9,10 @@
       import_tasks: nxserver.yml
       tags: lin_nx_server
 
+    - name: configure firewall for nxserver
+      import_tasks: firewall.yml
+      tags: lin_nx_firewall
+
     - name: enable audio in nxserver
       import_tasks: audio.yml
       tags: lin_nx_audio
