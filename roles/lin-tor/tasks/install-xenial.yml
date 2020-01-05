@@ -16,7 +16,7 @@
 - name: install apt transport https and update apt cache
   apt:
     name: apt-transport-https
-    update_cache: yes
+    update_cache: true
   register: update_apt_result
   until: update_apt_result is successful
 

@@ -12,7 +12,7 @@
       systemd:
         name: tor
         state: started
-        enabled: yes
+        enabled: true
       tags: lin_tor_service
 
     - name: configure tor
@@ -20,9 +20,10 @@
       tags: lin_tor_config
 
     - name: setup privoxy
-      when: tor_privoxy_enable |bool
       import_tasks: privoxy.yml
+      when: tor_privoxy_enable |bool
       tags: lin_tor_privoxy
+
   become: true
   tags: lin_tor_all
 

@@ -1,15 +1,15 @@
 ---
-# handlers file for ivansible.lin_tor
+# handlers for ivansible.lin_tor
 
 - name: restart tor service
   systemd:
     name: tor
     state: restarted
-  become: yes
+  become: true
 
 - name: restart privoxy service
   systemd:
     name: privoxy
     state: restarted
-  become: yes
+  become: true
 ...

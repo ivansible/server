@@ -4,7 +4,7 @@ dependencies: []
 galaxy_info:
   role_name: lin_tor
   author: "Ivan Andreev"
-  description: "install tor with privoxy on linux"
+  description: "install Tor with privoxy on linux"
   company: "IvanSible"
   license: MIT
   min_ansible_version: 2.5
@@ -18,6 +18,8 @@ galaxy_info:
   galaxy_tags:
     - linux
     - proxy
+    - tor
+    - privoxy
 
   github_branch: master
 ...
