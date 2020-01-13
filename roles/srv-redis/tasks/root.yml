@@ -127,6 +127,16 @@
   ferm_port:
     port: "{{ redis_open_ports }}"
     proto: tcp
+    domain: external
+    comment: redis
+  tags: skip_ansible_lint
+  when: lin_firewall == 'ferm'
+
+- name: open redis insecure port internally in ferm
+  ferm_port:
+    port: "{{ redis_port_tcp }}"
+    proto: tcp
+    domain: internal
     comment: redis
   tags: skip_ansible_lint
   when: lin_firewall == 'ferm'
