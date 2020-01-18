@@ -3,9 +3,15 @@
 
 dante_port: 1080
 dante_direct: true
+
 # dante username must start with 'dante_' because it's a global linux user
 dante_user: dante_socks
 dante_pass: secret
+
+dante_noauth_listen_addresses:
+  - 127.0.0.0/24
+dante_noauth_client_addresses:
+  - 127.0.0.0/24
 
 # see: https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#hash-filters
 dante_salt: "{{ 32100 |random(seed=inventory_hostname) |string }}"
