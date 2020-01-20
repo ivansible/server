@@ -12,24 +12,27 @@
   until: ufw_result is successful
   when: lin_firewall == 'ufw'
 
-- name: open nxserver ports for internal/external hosts in ferm
+- name: open nxserver ports for all in ferm
   ferm_port:
     port: "{{ lin_nxserver_ports }}"
-    domain: "{{ lin_nxserver_direct |bool |ternary('external','internal') }}"
+    domain: external
     exclusive: true
     comment: nxserver
   tags: skip_ansible_lint
   when: lin_firewall == 'ferm'
+        and lin_nxserver_direct |bool
 
 - name: block nxserver from external ferm hosts but open for internals
   ## Adding port in two domains at once and removing from external.
   ## The solo flag can't do that so use loop as a workaround.
   ferm_port:
     port: "{{ lin_nxserver_ports }}"
-    domain: blocked
-    state: "{{ lin_nxserver_direct |bool |ternary('absent','present') }}"
+    domain: "{{ item }}"
+    state: "{{ 'absent' if item == 'external' else 'present' }}"
     exclusive: false
     comment: nxserver
+  loop: [internal, blocked, external]
   tags: skip_ansible_lint
   when: lin_firewall == 'ferm'
+        and not lin_nxserver_direct |bool
 ...
