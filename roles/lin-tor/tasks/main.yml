@@ -25,6 +25,7 @@
       tags: lin_tor_privoxy
 
   become: true
+  when: tor_enable |bool
   tags: lin_tor_all
 
 - meta: flush_handlers

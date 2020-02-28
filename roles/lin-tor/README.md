@@ -10,6 +10,8 @@ None
 
 ## Variables
 
+    tor_enable: true
+
     tor_socks_port: 9050
 
     tor_privoxy_enable: true
