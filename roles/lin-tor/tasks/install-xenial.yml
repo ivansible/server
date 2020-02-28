@@ -13,12 +13,16 @@
   register: tor_repo_result
   until: tor_repo_result is successful
 
-- name: install apt transport https and update apt cache
+- name: update apt cache for torproject repository
+  apt:
+    update_cache: true
+  when: tor_repo_result is changed
+
+- name: install apt transport https for torproject install
   apt:
     name: apt-transport-https
-    update_cache: true
-  register: update_apt_result
-  until: update_apt_result is successful
+  register: apt_https_result
+  until: apt_https_result is successful
 
 - name: install keyring from torproject
   apt:
