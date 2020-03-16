@@ -16,7 +16,7 @@
   ferm_port:
     port: "{{ lin_nxserver_ports }}"
     domain: external
-    exclusive: true
+    solo: true
     comment: nxserver
   tags: skip_ansible_lint
   when: lin_firewall == 'ferm'
@@ -29,7 +29,7 @@
     port: "{{ lin_nxserver_ports }}"
     domain: "{{ item }}"
     state: "{{ 'absent' if item == 'external' else 'present' }}"
-    exclusive: false
+    solo: false
     comment: nxserver
   loop: [internal, blocked, external]
   tags: skip_ansible_lint
