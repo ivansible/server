@@ -117,7 +117,7 @@
     port: "{{ dante_port }}"
     proto: tcp
     domain: "{{ dante_direct |bool |ternary('external','internal') }}"
-    exclusive: true
+    solo: true
     comment: dante
   when: lin_firewall == 'ferm'
   tags:
