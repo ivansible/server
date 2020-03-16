@@ -70,7 +70,7 @@
   ferm_port:
     port: "{{ mtproxy_port }}"
     domain: "{{ mtproxy_direct |bool |ternary('external','internal') }}"
-    exclusive: true
+    solo: true
     comment: mtproxy
   when: lin_firewall == 'ferm'
   tags:
