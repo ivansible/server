@@ -1,5 +1,54 @@
 ---
-- name: root task1
-  debug:
-    msg: task1
+- name: allow sshtun user to create ssh tunnels
+  blockinfile:
+    path: /etc/ssh/sshd_config
+    block: |
+      Match User {{ srv_sshtun_ssh_user }}
+          # forward ports and setup {{ srv_sshtun_tun_device }}
+          PermitTunnel yes
+          AllowTcpForwarding yes
+    marker: "# {mark} SSHTUN"
+    insertafter: EOF
+  notify: restart ssh service
+
+- name: authorize ssh key with sshtun user
+  authorized_key:
+    user: "{{ srv_sshtun_ssh_user }}"
+    key: "{{ lookup('pipe', keygen_cmd) }}"
+    comment: "{{ keyfile |basename |regex_replace('[.]key$') }}"
+  vars:
+    # use '&&' in the pipe to fail on chmod errors
+    keygen_cmd: 'chmod 600 "{{ keyfile }}" && ssh-keygen -y -f "{{ keyfile }}"'
+    keyfile: "{{ srv_sshtun_ssh_key }}"
+  when: srv_sshtun_ssh_key |default('')
+
+
+- name: upload sshtun script
+  copy:
+    src: sshtun-serv.sh
+    dest: "{{ srv_sshtun_command_path }}"
+    mode: 0754
+    force: true
+  notify: restart sshtun service
+
+- name: configure sshtun service
+  template:
+    src: sshtun.conf
+    dest: /etc/default/sshtun-serv
+    mode: 0640
+  notify: restart sshtun service
+
+- name: setup sshtun service
+  template:
+    src: sshtun.service
+    dest: /etc/systemd/system/sshtun-serv.service
+  register: sshtun_service_result
+  notify: restart sshtun service
+
+- name: enable sshtun service
+  systemd:
+    name: sshtun-serv
+    state: started
+    enabled: true
+    daemon_reload: "{{ sshtun_service_result is changed }}"
 ...

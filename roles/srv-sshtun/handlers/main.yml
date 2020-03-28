@@ -1,3 +1,12 @@
 ---
 # handlers for ivansible.srv_sshtun
+# note: "restart ssh service" is inherited from role lin-base
+
+- name: restart sshtun service
+  systemd:
+    name: sshtun-serv
+    state: restarted
+    enabled: true
+    daemon_reload: true
+  become: true
 ...

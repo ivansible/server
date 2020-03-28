@@ -1,0 +1,18 @@
+# sshtun helper service
+# ansible-managed
+
+[Unit]
+Description=sshtun helper
+After=network-online.target
+Wants=sshd.service
+Before=sshd.service
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/default/sshtun-serv
+ExecStartPre={{ srv_sshtun_command_path }} boot
+ExecStart={{ srv_sshtun_command_path }} watch
+ExecStop={{ srv_sshtun_command_path }} down
+
+[Install]
+WantedBy=multi-user.target
