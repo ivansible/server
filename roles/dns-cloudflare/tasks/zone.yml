@@ -1,0 +1,109 @@
+---
+- name: setup special records in cloudflare zone '{{ zname }}'
+  cloudflare_dns:
+    account_email: "{{ dns_cloudflare_email }}"
+    account_api_token: "{{ dns_cloudflare_token }}"
+    zone: "{{ zname }}"
+    record: "{{ rname }}"
+    type: "{{ item.type }}"
+    value: "{{ value }}"
+    priority: "{{ item.priority |default(omit) }}"
+  vars:
+    rname: "{{ item.name }}"
+    value: "{{ zname if item.value == '@' else item.value }}"
+  delegate_to: localhost
+  register: cf_special_result
+  until: cf_special_result is successful
+  loop: "{{ zone.special }}"
+  loop_control:
+    label: "{{ zname }}/{{ rname }} {{ item.type }}"
+  when: zone.special is defined
+
+- name: setup direct aliases in cloudflare zone '{{ zname }}'
+  cloudflare_dns:
+    account_email: "{{ dns_cloudflare_email }}"
+    account_api_token: "{{ dns_cloudflare_token }}"
+    zone: "{{ zname }}"
+    record: "{{ rname }}"
+    type: CNAME
+    value: "{{ zname if value == '@' else value }}"
+    proxied: false
+  delegate_to: localhost
+  vars:
+    rname: "{{ cname.key }}"
+    value: "{{ cname.value if (cname.value is string) else (cname.value |join(', ')) }}"
+  register: cf_direct_alias_result
+  until: cf_direct_alias_result is successful
+  loop: "{{ zone.direct
+          | default({})
+          | dict2items
+          | sort(attribute='key') }}"
+  loop_control:
+    loop_var: cname
+    label: "{{ zname }}/{{ rname }} => {{ value }} [direct]"
+  when: zone.direct is defined and cname.value is string
+
+- name: setup proxied aliases in cloudflare zone '{{ zname }}'
+  cloudflare_dns:
+    account_email: "{{ dns_cloudflare_email }}"
+    account_api_token: "{{ dns_cloudflare_token }}"
+    zone: "{{ zname }}"
+    record: "{{ rname }}"
+    type: CNAME
+    value: "{{ zname if value == '@' else value }}"
+    proxied: true
+  delegate_to: localhost
+  vars:
+    rname: "{{ cname.key }}"
+    value: "{{ cname.value if (cname.value is string) else (cname.value |join(', ')) }}"
+  register: cf_proxied_alias_result
+  until: cf_proxied_alias_result is successful
+  loop: "{{ zone.proxied
+          | default({})
+          | dict2items
+          | sort(attribute='key') }}"
+  loop_control:
+    loop_var: cname
+    label: "{{ zname }}/{{ rname }} => {{ value }} [proxied]"
+  when: zone.proxied is defined and cname.value is string
+
+- name: setup direct records in cloudflare zone '{{ zname }}'
+  include_tasks: record.yml
+  args:
+    apply:
+      tags: dns_cloudflare_all
+      delegate_to: localhost
+  vars:
+    rname: "{{ ritem.key }}"
+    rvals: "{{ ritem.value }}"
+    rvals_str: "{{ rvals if (rvals is string) else (rvals |join(', ')) }}"
+    proxied: false
+  loop: "{{ zone.direct
+          | default({})
+          | dict2items
+          | sort(attribute='key') }}"
+  loop_control:
+    loop_var: ritem
+    label: "{{ zname }}/{{ rname }} -> {{ rvals_str }} [direct]"
+  when: zone.direct is defined and rvals is not string
+
+- name: setup proxied records in cloudflare zone '{{ zname }}'
+  include_tasks: record.yml
+  args:
+    apply:
+      tags: dns_cloudflare_all
+      delegate_to: localhost
+  vars:
+    rname: "{{ ritem.key }}"
+    rvals: "{{ ritem.value }}"
+    rvals_str: "{{ rvals if (rvals is string) else (rvals |join(', ')) }}"
+    proxied: true
+  loop: "{{ zone.proxied
+          | default({})
+          | dict2items
+          | sort(attribute='key') }}"
+  loop_control:
+    loop_var: ritem
+    label: "{{ zname }}/{{ rname }} -> {{ rvals_str }} [proxied]"
+  when: zone.proxied is defined and rvals is not string
+...

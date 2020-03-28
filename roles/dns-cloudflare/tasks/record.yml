@@ -1,0 +1,21 @@
+---
+- name: setup cloudflare record '{{ rname }}' in zone '{{ zname }}'
+  cloudflare_dns:
+    account_email: "{{ dns_cloudflare_email }}"
+    account_api_token: "{{ dns_cloudflare_token }}"
+    zone: "{{ zname }}"
+    record: "{{ rname }}"
+    type: "{{ rtype }}"
+    value: "{{ zname if value == '@' else value }}"
+    proxied: "{{ proxied }}"
+  delegate_to: localhost
+  vars:
+    rtype: "{{ 'AAAA' if ':' in value else 'A' }}"
+    proxy_label: "{{ proxied |ternary('proxied','direct') }}"
+  register: cf_addr_record_result
+  until: cf_addr_record_result is successful
+  loop: "{{ rvals }}"
+  loop_control:
+    loop_var: value
+    label: "{{ zname }}/{{ rname }} = {{ value }} ({{ rtype }}) [{{ proxy_label }}]"
+...

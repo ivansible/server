@@ -1,6 +1,24 @@
 ---
-- name: become root and install role
-  import_tasks: root.yml
-  become: true
-  tags: role_all
+- name: setup cloudflare zone
+  include_tasks: zone.yml
+  args:
+    apply:
+      tags: dns_cloudflare_all
+      delegate_to: localhost
+  vars:
+    zname: "{{ zitem.key }}"
+    zone: "{{ zitem.value }}"
+  loop: "{{ dns_cloudflare_zones
+          | default({})
+          | dict2items
+          | sort(attribute='key') }}"
+  loop_control:
+    loop_var: zitem
+  when: dns_cloudflare_zones is defined
+        and dns_cloudflare_email is defined
+        and dns_cloudflare_token is defined
+        and dns_cloudflare_token
+        and (dns_cloudflare_only_zone is not defined
+             or zname == dns_cloudflare_only_zone)
+  tags: dns_cloudflare_all
 ...
