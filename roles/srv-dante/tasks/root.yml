@@ -40,7 +40,7 @@
     # some problems first manifested itself when run with mitogen
     #
     # the bionic .deb package has xz-compressed control file
-    # xz-utils can be installed by lin-system as part of python-apt (or herein as a fallback)
+    # xz-utils can be installed by lin-core as part of python-apt (or herein as a fallback)
     # fixed error: "Unable to install package: There is no member named 'control'"
     # see: https://github.com/geerlingguy/docker-ubuntu1804-ansible/issues/7#issuecomment-450792375
     #
