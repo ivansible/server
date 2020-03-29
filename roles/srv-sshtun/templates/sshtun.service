@@ -3,7 +3,7 @@
 
 [Unit]
 Description=sshtun helper
-After=network-online.target
+After=network.target
 Wants=sshd.service
 Before=sshd.service
 

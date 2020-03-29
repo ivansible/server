@@ -61,23 +61,24 @@ up()
         ip -6 route replace "$net" dev "$device" metric "$metric"
     done
 
-    logger -t 'sshtun' -i 'ssh tun up'
+    logger -t 'sshtun' -i 'sshtun up'
 }
 
 down()
 {
     local pids
 
-    pids=$(ss --listening --tcp --numeric --processes |
-           awk "\$4 ~ /:${socks_port}\$/ && \$6 ~ /sshd/ { match(\$6, /pid=([0-9]+)/, m); print m[1]; }" |
+    # grep hides ss's warning on openvz
+    pids=$(ss --listening --tcp --numeric --processes 2> >(grep -Fv 'Cannot open netlink socket' >&2) |
+           awk "\$4 ~ /:${socks_port}\$/ && \$6 ~ /sshd/ { match(\$6,/pid=[0-9]+/); if(RSTART) print(substr(\$6,RSTART+4,RLENGTH-4)) }" |
            sort -u)
 
     if [ -n "$pids" ]; then
-        logger -t 'sshtun' -i 'ssh tun down'
+        logger -t 'sshtun' -i 'sshtun down'
         for signal in TERM TERM KILL; do
             # shellcheck disable=SC2086
             kill -s "$signal" $pids 2>/dev/null
-            sleep 0.6
+            sleep 1
         done
     fi
 
