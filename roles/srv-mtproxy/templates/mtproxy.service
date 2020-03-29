@@ -1,6 +1,7 @@
 # ansible-managed
 [Unit]
 Description=mtg mtproto proxy server
+After=network.target
 
 [Service]
 {# set group to "proxy" to activate sslh iptables fix #}
