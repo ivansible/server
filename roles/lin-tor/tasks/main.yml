@@ -1,32 +1,10 @@
 ---
-- block:
-    - name: install tor
-      include_tasks: "install-{{ ansible_lsb.codename }}.yml"
-      args:
-        apply:
-          become: true
-          tags: lin_tor_install
-      tags: lin_tor_install
-
-    - name: activate tor service
-      systemd:
-        name: tor
-        state: started
-        enabled: true
-      tags: lin_tor_service
-
-    - name: configure tor
-      import_tasks: config.yml
-      tags: lin_tor_config
-
-    - name: setup privoxy
-      import_tasks: privoxy.yml
-      when: tor_privoxy_enable |bool
-      tags: lin_tor_privoxy
-
+- name: become root and setup tor
+  import_tasks: root.yml
   become: true
   when: tor_enable |bool
   tags: lin_tor_all
 
 - meta: flush_handlers
+  tags: lin_tor_all
 ...

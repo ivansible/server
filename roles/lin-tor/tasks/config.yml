@@ -14,4 +14,14 @@
     line: "ExcludeNodes {ru},{ua},{by}"
     state: present
   notify: restart tor service
+
+- name: configure tor log compression
+  replace:
+    path: /etc/logrotate.d/tor
+    regexp: "{{ lookbehind }}(compress|delaycompress)"
+    replace: "{{ commentout }}\\1"
+  vars:
+    lookbehind: "{{ lin_compress_logs |bool |ternary('(?:#\\s*)','(?<!#)') }}"
+    commentout: "{{ lin_compress_logs |bool |ternary('','#') }}"
+  when: lin_compress_logs is not none
 ...

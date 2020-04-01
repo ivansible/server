@@ -30,7 +30,8 @@ None
 
 ## Dependencies
 
-None
+[ivansible.lin_base](https://github.com/ivansible/lin-base):
+  - global flag `lin_compress_logs` enables compression of rotated logs
 
 
 ## Example Playbook
