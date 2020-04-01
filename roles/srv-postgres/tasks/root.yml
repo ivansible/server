@@ -158,6 +158,18 @@
     - srv_postgres_firewall
 
 
+- name: enable/disable postgres log compression
+  replace:
+    path: /etc/logrotate.d/postgresql-common
+    regexp: "{{ lookbehind }}(compress|delaycompress)"
+    replace: "{{ commentout }}\\1"
+  vars:
+    lookbehind: "{{ lin_compress_logs |bool |ternary('(?:#\\s*)','(?<!#)') }}"
+    commentout: "{{ lin_compress_logs |bool |ternary('','#') }}"
+  when: lin_compress_logs is not none
+  tags: srv_postgres_logs
+
+
 - name: notify postgres handlers now
   meta: flush_handlers
   tags: srv_postgres_service

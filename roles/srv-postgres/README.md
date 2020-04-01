@@ -65,13 +65,17 @@ I suspect that too big `shmmax` can crash system.
 - `srv_postgres_config` -- configure postgres parameters and authentication
 - `srv_postgres_service` -- enable/restart postgres service, set admin password
 - `srv_postgres_firewall` -- open postgres port in linux firewall
+- `srv_postgres_logs` -- enable/disable postgres log compression
+- `srv_postgres_all` -- all tasks
 
 
 ## Dependencies
 
 - [ivansible.nginx_base](https://github.com/ivansible/nginx-base#variables)
-  -- for file path to default ssl certificate
-  -- for common defaults, handlers and custom modules
+  - for file path to default ssl certificate
+  - for common defaults, handlers and custom modules
+- [ivansible.lin_base](https://github.com/ivansible/lin-base):
+  - global flag `lin_compress_logs` enables compression of rotated logs
 
 
 ## TODO
@@ -81,7 +85,7 @@ See: http://unix.stackexchange.com/questions/220362/systemd-postgresql-start-scr
 
 ## Example Playbook
 
-    - hosts: database-host
+    - hosts: dbserver
       roles:
          - role: ivansible.srv_postgres
            srv_pg_timezone: W-SU
