@@ -140,4 +140,18 @@
     comment: redis
   tags: skip_ansible_lint
   when: lin_firewall == 'ferm'
+
+
+- name: enable/disable compression of redis/stunnel logs
+  replace:
+    path: "/etc/logrotate.d/{{ item }}"
+    regexp: "{{ lookbehind }}(compress|delaycompress)"
+    replace: "{{ commentout }}\\1"
+  vars:
+    lookbehind: "{{ lin_compress_logs |bool |ternary('(?:#\\s*)','(?<!#)') }}"
+    commentout: "{{ lin_compress_logs |bool |ternary('','#') }}"
+  loop:
+    - redis-server
+    - stunnel4
+  when: lin_compress_logs is not none
 ...
