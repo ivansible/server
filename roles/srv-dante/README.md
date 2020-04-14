@@ -19,11 +19,18 @@ Available variables are listed below, along with default values.
 If direct is true, the port will be enabled in ubuntu firewall.
 If not, you should configure another service to enable indirect access to this port.
 
+    dante_external_addr: ...
+The address to be used for outgoing connections.
+Can be set as either an IP address or an interface name.
+By default this is `ansible_default_ipv4.address`, but you can
+set it as `ansible_default_ipv4.interface` (eg. `eth0`) or whatever you like.
+
     dante_user: dante_socks
 Note: dante username must start with 'dante_' because it's a global linux user
 
     dante_pass: secret
     dante_salt: `random_string`
+Password and salt.
 
 ## Tags
 
