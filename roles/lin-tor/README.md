@@ -18,6 +18,7 @@ None
     tor_privoxy_bindip: 127.0.0.1
     tor_privoxy_port: 8118
 
+    tor_exclude_nodes: [...]
 
 ## Tags
 

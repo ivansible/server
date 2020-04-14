@@ -11,7 +11,7 @@
   lineinfile:
     path: /etc/tor/torrc
     regexp: "^#?ExcludeNodes"
-    line: "ExcludeNodes {ru},{ua},{by}"
+    line: "ExcludeNodes {{ tor_exclude_nodes |map('regex_replace','(.*)','{\\1}') |join(',') }}"
     state: present
   notify: restart tor service
 
