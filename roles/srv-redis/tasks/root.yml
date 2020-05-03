@@ -127,7 +127,7 @@
   ferm_port:
     port: "{{ redis_open_ports }}"
     proto: tcp
-    domain: external
+    zone: external
     comment: redis
   tags: skip_ansible_lint
   when: lin_firewall == 'ferm'
@@ -136,7 +136,7 @@
   ferm_port:
     port: "{{ redis_port_tcp }}"
     proto: tcp
-    domain: internal
+    zone: internal
     comment: redis
   tags: skip_ansible_lint
   when: lin_firewall == 'ferm'
