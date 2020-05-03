@@ -15,8 +15,8 @@
 - name: open nxserver ports for all in ferm
   ferm_port:
     port: "{{ lin_nxserver_ports }}"
-    domain: external
-    solo: true
+    zone: external
+    solo_zone: true
     comment: nxserver
   tags: skip_ansible_lint
   when: lin_firewall == 'ferm'
@@ -27,9 +27,9 @@
   ## The solo flag can't do that so use loop as a workaround.
   ferm_port:
     port: "{{ lin_nxserver_ports }}"
-    domain: "{{ item }}"
+    zone: "{{ item }}"
+    solo_zone: false
     state: "{{ 'absent' if item == 'external' else 'present' }}"
-    solo: false
     comment: nxserver
   loop: [internal, blocked, external]
   tags: skip_ansible_lint
