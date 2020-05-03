@@ -69,8 +69,8 @@
 - name: open (or block) mtproxy port in ferm
   ferm_port:
     port: "{{ mtproxy_port }}"
-    domain: "{{ mtproxy_direct |bool |ternary('external','internal') }}"
-    solo: true
+    zone: "{{ mtproxy_direct |bool |ternary('external','internal') }}"
+    solo_zone: true
     comment: mtproxy
   when: lin_firewall == 'ferm'
   tags:
