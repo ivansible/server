@@ -78,8 +78,8 @@
   ferm_port:
     port: "{{ ziproxy_port }}"
     proto: tcp
-    domain: "{{ ziproxy_direct |bool |ternary('external','internal') }}"
-    solo: true
+    zone: "{{ ziproxy_direct |bool |ternary('external','internal') }}"
+    solo_zone: true
     comment: ziproxy
   when: lin_firewall == 'ferm'
   tags:
