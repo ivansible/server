@@ -116,8 +116,8 @@
   ferm_port:
     port: "{{ dante_port }}"
     proto: tcp
-    domain: "{{ dante_direct |bool |ternary('external','internal') }}"
-    solo: true
+    zone: "{{ dante_direct |bool |ternary('external','internal') }}"
+    solo_zone: true
     comment: dante
   when: lin_firewall == 'ferm'
   tags:
