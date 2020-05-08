@@ -1,10 +1,12 @@
 ---
 - name: install tor
-  include_tasks: "install-{{ ansible_lsb.codename }}.yml"
+  include_tasks: "install-{{ method }}.yml"
   args:
     apply:
       become: true
       tags: lin_tor_install
+  vars:
+    method: "{{ 'xenial' if ansible_lsb.codename == 'xenial' else 'bionic' }}"
   tags: lin_tor_install
 
 - name: activate tor service
