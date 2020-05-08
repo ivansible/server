@@ -65,20 +65,20 @@
     - name: restart mitogen runner to reset apt state
       meta: reset_connection
 
-    - name: install dante server
+    - name: install dante server on ubuntu xenial
       apt:
         deb: "{{ dante_deb_url }}"
         force: true
         force_apt_get: true
       register: dante_install_xenial_result
       until: dante_install_xenial_result is successful
-  when: ansible_lsb.codename == 'xenial'
+  when: ansible_lsb.codename in ['xenial']
   tags: srv_dante_install
 
-- name: install dante server (ubuntu bionic)
+- name: install dante server on ubuntu bionic+
   apt:
     name: dante-server
-  when: ansible_lsb.codename == 'bionic'
+  when: ansible_lsb.codename not in ['xenial']
   register: dante_install_bionic_result
   tags: srv_dante_install
 
