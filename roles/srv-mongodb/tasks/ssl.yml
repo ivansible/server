@@ -6,6 +6,8 @@
   loop:
     - "{{ mongodb_ssl_cert }}"
     - "{{ mongodb_ssl_key }}"
+  loop_control:
+    label: "{{ item |basename }}"
 
 - name: create a script for updating ssl certificate in mongodb
   copy:
@@ -44,6 +46,8 @@
     - "{{ mongodb_ssl_pem_file }}"
     - "{{ mongodb_ssl_cert }}"
     - "{{ mongodb_ssl_key }}"
+  loop_control:
+    label: "{{ item |basename }}"
   register: stat_mongodb_ssl_files
 
 - name: update mongodb pem file if it's stale

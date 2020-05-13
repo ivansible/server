@@ -1,6 +1,6 @@
 # ivansible.srv_mongodb
 
-This role installs mongodb-org 4.0.x server and client on a linux host and:
+This role installs mongodb.org 4.x server and client on a linux host and:
 - enables SSL, optionally configuring letsencrypt post-renewal hook;
 - resets administrator password
 - optionally sets systemd cpu and memory quotas.

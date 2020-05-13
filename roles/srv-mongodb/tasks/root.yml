@@ -1,5 +1,5 @@
 ---
-- name: install mongodb 4.0
+- name: install mongodb
   import_tasks: install.yml
   tags: srv_mongodb_install
 

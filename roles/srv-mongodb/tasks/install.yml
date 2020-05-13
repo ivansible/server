@@ -1,30 +1,34 @@
 ---
-- name: add mongodb 4.0 signing key
+- name: add mongodb 4.x signing key
   apt_key:
-    url: https://www.mongodb.org/static/pgp/server-4.0.asc
+    url: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version }}.asc"
 
-- name: add mongodb 4.0 repository
+- name: add mongodb 4.x repository
   apt_repository:
-    repo: deb [arch=amd64] https://repo.mongodb.org/apt/ubuntu {{ ansible_lsb.codename }}/mongodb-org/4.0 multiverse
+    repo: "deb [arch=amd64] https://repo.mongodb.org/apt/ubuntu {{ repodir }} multiverse"
     filename: mongodb
+  vars:
+    repodir: "{{ codename }}/mongodb-org/{{ mongodb_version }}"
+    ## workaround for mongodb 4.x repo not yet ready on focal
+    codename: "{{ 'bionic' if _codename == 'focal' and mongodb_focal_fix |bool else _codename }}"
+    _codename: "{{ ansible_lsb.codename }}"
 
 - name: install mongodb packages
   apt:
-    name:
-      - mongodb-org
-      - ssl-cert  # for snakeoil certificate
-      # for parsing json
-      - jq
-      # for ansible
-      - python-pymongo
-      - python-pip
-      - python3-pymongo
-      - python3-pip
+    name: "{{ pkg_mongodb }},{{ pkg_pymongo }},{{ pkg_helpers }}"
+  vars:
+    pkg_mongodb: mongodb-org
+    pkg_pymongo: "{{ lin_use_python2 |bool |ternary(pkg_pymongo_all, pkg_pymongo_py3) }}"
+    pkg_pymongo_all: python3-pymongo,python3-pip,python-pymongo,python-pip
+    pkg_pymongo_py3: python3-pymongo,python3-pip
+    ## ssl-cert for snakeoil certificate
+    ## jq for parsing json
+    pkg_helpers: ssl-cert,jq
 
 - name: upgrade to pymongo >3.7 to avoid problems with SCRAM-SHA-256
   # see: https://github.com/ansible/ansible/issues/44970
   pip:
     name: pymongo>3.7
     executable: "{{ item }}"
-  loop: [pip, pip3]
+  loop: "{{ lin_use_python2 |bool |ternary(['pip','pip3'], ['pip3']) }}"
 ...
