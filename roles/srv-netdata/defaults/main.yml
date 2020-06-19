@@ -12,4 +12,15 @@ srv_netdata_lecert_key_path: /etc/letsencrypt/live/%s/privkey.pem
 
 srv_netdata_alarms: {}
 srv_netdata_reset_alarms: false
+
+srv_netdata_tools: false
+srv_netdata_tools_packages:
+  - htop
+  - nethogs
+  - iptraf
+  - net-tools
+  - ethtool
+  - lshw
+
+srv_netdata_entropy: false
 ...

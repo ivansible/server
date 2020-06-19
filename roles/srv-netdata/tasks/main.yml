@@ -5,6 +5,19 @@
   when: srv_netdata_enable |bool
   tags: srv_netdata_all
 
+- name: install monitoring tools
+  apt:
+    name: "{{ srv_netdata_tools_packages}}"
+  become: true
+  when: srv_netdata_tools |bool
+  tags: srv_netdata_tools
+
+- name: setup haveged (entropy daemon)
+  import_tasks: entropy.yml
+  become: true
+  when: srv_netdata_entropy |bool
+  tags: [srv_netdata_entropy, srv_netdata_haveged]
+
 - name: apply postponed changes now
   meta: flush_handlers
   tags: srv_netdata_all

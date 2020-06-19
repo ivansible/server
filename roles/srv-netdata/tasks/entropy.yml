@@ -1,0 +1,12 @@
+---
+- name: install haveged (entropy service)
+  apt:
+    name: haveged,rng-tools
+
+- name: enable entropy services
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  loop: [haveged, rng-tools]
+...
