@@ -1,0 +1,30 @@
+---
+- name: install and configure netdata
+  import_tasks: setup.yml
+  tags: srv_netdata_setup
+
+- name: setup netdata site in nginx
+  template:
+    src: nginx/netdata.conf
+    dest: "{{ nginx_site_dir }}/netdata.conf"
+  notify: reload nginx service
+  vars:
+    ssl_port: "{{ nginx_ssl_port_internal |default(0) |int }}"
+    ssl_host_port: "{{ ':%s' % ssl_port if ssl_port |int else '' }}"
+  when: srv_netdata_nginx_site |default('')
+  tags: srv_netdata_nginx
+
+- name: register with netdata api server
+  command:
+    cmd: netdata-claim.sh -token={{ token }} -rooms={{ rooms }} -url={{ url }}
+    creates: /var/lib/netdata/cloud.d/claimed_id
+  notify: restart netdata service
+  vars:
+    token: "{{ srv_netdata_token |default('') }}"
+    rooms: "{{ srv_netdata_rooms |default('') }}"
+    url: https://app.netdata.cloud
+  when:
+    - token |default('')
+    - rooms |default('')
+  tags: srv_netdata_claim
+...

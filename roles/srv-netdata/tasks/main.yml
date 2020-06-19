@@ -1,6 +1,11 @@
 ---
-- name: become root and install role
-  import_tasks: root.yml
+- name: setup netdata
+  import_tasks: netdata.yml
   become: true
-  tags: role_all
+  when: srv_netdata_enable |bool
+  tags: srv_netdata_all
+
+- name: apply postponed changes now
+  meta: flush_handlers
+  tags: srv_netdata_all
 ...

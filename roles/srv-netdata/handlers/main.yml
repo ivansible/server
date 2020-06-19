@@ -1,3 +1,10 @@
 ---
 # handlers for ivansible.srv_netdata
+
+- name: restart netdata service
+  systemd:
+    name: netdata
+    state: restarted
+    enabled: true
+  become: true
 ...

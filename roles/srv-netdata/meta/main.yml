@@ -1,5 +1,7 @@
 ---
-dependencies: []
+dependencies:
+  - ivansible.lin_base    # for firewall type
+  - ivansible.nginx_base  # for internal nginx ports
 
 galaxy_info:
   role_name: srv_netdata
@@ -17,7 +19,8 @@ galaxy_info:
 
   galaxy_tags:
     - linux
-    - ansible
+    - monitoring
+    - netdata
 
   github_branch: master
 ...

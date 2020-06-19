@@ -1,0 +1,42 @@
+---
+- name: add package cloud signing key
+  apt_key:
+    url: https://packagecloud.io/netdata/netdata/gpgkey
+
+- name: add package cloud repository
+  apt_repository:
+    repo: "deb {{ url }} {{ codename }} main"
+    filename: netdata
+    mode: 0644
+  vars:
+    url: https://packagecloud.io/netdata/netdata/ubuntu/
+    codename: "{{ ansible_lsb.codename }}"
+
+- name: install netdata
+  apt:
+    name: netdata
+
+- name: configure netdata
+  template:
+    src: netdata/netdata.conf
+    dest: /etc/netdata/netdata.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart netdata service
+
+- name: enable netdata service
+  systemd:
+    name: netdata
+    state: started
+    enabled: true
+
+- name: open netdata port in ferm
+  ferm_port:
+    port: 19999
+    proto: tcp
+    zone: internal
+    comment: netdata
+  tags: skip_ansible_lint
+  when: lin_firewall == 'ferm'
+...
