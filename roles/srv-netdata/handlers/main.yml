@@ -7,4 +7,8 @@
     state: restarted
     enabled: true
   become: true
+
+- name: reload netdata alarms
+  command: killall -USR2 netdata
+  become: true
 ...

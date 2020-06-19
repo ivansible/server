@@ -3,6 +3,11 @@
   import_tasks: setup.yml
   tags: srv_netdata_setup
 
+- name: customize netdata alarms
+  import_tasks: alarms.yml
+  when: srv_netdata_alarms |default({})
+  tags: srv_netdata_alarms
+
 - name: setup netdata site in nginx
   template:
     src: nginx/netdata.conf

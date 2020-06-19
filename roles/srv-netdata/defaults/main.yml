@@ -9,4 +9,7 @@ srv_netdata_nginx_site: ~
 srv_netdata_nginx_lecert: ~
 srv_netdata_lecert_crt_path: /etc/letsencrypt/live/%s/fullchain.pem
 srv_netdata_lecert_key_path: /etc/letsencrypt/live/%s/privkey.pem
+
+srv_netdata_alarms: {}
+srv_netdata_reset_alarms: false
 ...
