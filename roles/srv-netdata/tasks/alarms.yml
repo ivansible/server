@@ -1,57 +1,38 @@
 ---
 - name: prepare netdata alarm templates
   copy:
-    src: "/usr/lib/netdata/conf.d/health.d/{{ filename }}.conf"
+    src: "/usr/lib/netdata/conf.d/health.d/{{ file }}.conf"
     dest: /etc/netdata/health.d/
     remote_src: true
     force: "{{ reset_file or global_reset }}"
   vars:
-    filename: "{{ item.0 |regex_replace('^_','') }}"
-    reset_file: "{{ item.0.startswith('_') }}"
+    file: "{{ item |regex_replace('^_') }}"
+    reset_file: "{{ item.startswith('_') }}"
     global_reset: "{{ srv_netdata_reset_alarms |default(false) |bool }}"
-  loop: "{{ srv_netdata_alarms |dictsort }}"
+  loop: "{{ srv_netdata_alarms.keys() |map('regex_replace','[.].*$') |unique |sort }}"
   loop_control:
-    label: "{{ item.0 }}"
+    label: "{{ file }}.conf"
 
 - name: customize netdata alarms
   ## use a special version of lineinfile module, which
   ## honors `regexp`, `backrefs`, and `insertafter` together.
   lineinfile_netdata:
-    path: "/etc/netdata/health.d/{{ item.file }}.conf"
-    regexp: '^(\s*)({{ item.key }}):'
-    line: '\1{{ item.key }}: {{ item.val }}'
+    path: "/etc/netdata/health.d/{{ file }}.conf"
+    regexp: '^(\s*)({{ key }}):'
+    line: '\1{{ key }}: {{ val }}'
     backrefs: true
-    insertafter: '^\s*(alarm|template): {{ item.alarm }}\s*$'
+    insertafter: '^\s*(alarm|template): {{ alarm }}\s*$'
     firstmatch: true
-  notify: reload netdata alarms
-  loop: "{{ items }}"
-  loop_control:
-    label: "{{ item.file }}.{{ item.alarm }}.{{ item.key }}"
-  when:
-    - item.val |default('')
-    - not item.key.startswith('_')
-  vars:
-    ## unwrap nested dictionaries into ordinary list:
-    ## srv_netdata_alarms:  -->  items:
-    ##   file1:                     - file: file1
-    ##     alarm1:                    alarm: alarm1
-    ##       key1: val1               key: key1
-    ##       ...                      val: val1
-    ##   ...                        - ...
-    items: >-
-      {% set items = [] -%}
-      {% set all_alarms = srv_netdata_alarms |default({}) -%}
-      {% for file in all_alarms |sort -%}
-        {% set file_alarms = all_alarms[file] |default({}) -%}
-        {% for alarm in file_alarms.keys() |sort -%}
-          {% set alarm_group = file_alarms[alarm] -%}
-          {% for key in alarm_group |sort -%}
-            {% set val = alarm_group[key] |string -%}
-            {% set item = dict(file=file, alarm=alarm, key=key, val=val) -%}
-            {% set items = items.extend([item]) -%}
-          {% endfor -%}
-        {% endfor -%}
-      {% endfor -%}
-      {{ items }}
   tags: skip_ansible_lint
+  notify: reload netdata alarms
+  loop: "{{ srv_netdata_alarms |dictsort }}"
+  loop_control:
+    label: "{{ file }}.{{ alarm }}.{{ key }}"
+  when: val |default('')
+  vars:
+    desc: "{{ item.0.split('.') }}"
+    file: "{{ desc.0 |regex_replace('^_') }}"
+    alarm: "{{ desc.1 }}"
+    key: "{{ desc.2 }}"
+    val: "{{ item.1 }}"
 ...
