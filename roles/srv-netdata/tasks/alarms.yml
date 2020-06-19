@@ -14,7 +14,9 @@
     label: "{{ item.0 }}"
 
 - name: customize netdata alarms
-  lineinfile:
+  ## use a special version of lineinfile module, which
+  ## honors `regexp`, `backrefs`, and `insertafter` together.
+  lineinfile_netdata:
     path: "/etc/netdata/health.d/{{ item.file }}.conf"
     regexp: '^(\s*)({{ item.key }}):'
     line: '\1{{ item.key }}: {{ item.val }}'
