@@ -8,4 +8,10 @@
 - src: https://github.com/ivansible/lin-ferm
   name: ivansible.lin_ferm
   scm: git
+- src: https://github.com/ivansible/nginx-base
+  name: ivansible.nginx_base
+  scm: git
+- src: https://github.com/ivansible/lin-nginx
+  name: ivansible.lin_nginx
+  scm: git
 ...
