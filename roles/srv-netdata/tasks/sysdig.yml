@@ -1,0 +1,19 @@
+---
+- name: trust the draios gpg key
+  apt_key:
+    url: https://s3.amazonaws.com/download.draios.com/DRAIOS-GPG-KEY.public
+
+- name: add the draios apt repository
+  apt_repository:
+    repo: 'deb http://download.sysdig.com/stable/deb stable-$(ARCH)/'
+    filename: draios
+    mode: 0644
+
+- name: install linux headers
+  apt:
+    name: linux-headers-{{ ansible_kernel }}
+
+- name: install sysdig
+  apt:
+    name: sysdig
+...

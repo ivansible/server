@@ -23,4 +23,5 @@ srv_netdata_tools_packages:
   - lshw
 
 srv_netdata_entropy: false
+srv_netdata_sysdig: false
 ...

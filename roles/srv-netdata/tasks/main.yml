@@ -18,6 +18,12 @@
   when: srv_netdata_entropy |bool
   tags: [srv_netdata_entropy, srv_netdata_haveged]
 
+- name: install sysdig
+  import_tasks: sysdig.yml
+  become: true
+  when: srv_netdata_sysdig |bool
+  tags: srv_netdata_sysdig
+
 - name: apply postponed changes now
   meta: flush_handlers
   tags: srv_netdata_all
