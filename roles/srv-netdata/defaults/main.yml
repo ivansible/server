@@ -24,4 +24,9 @@ srv_netdata_tools_packages:
 
 srv_netdata_entropy: false
 srv_netdata_sysdig: false
+
+srv_netdata_cockpit: false
+srv_netdata_cockpit_site: ~
+srv_netdata_cockpit_lecert: ~
+srv_netdata_cockpit_bind_ip: ~
 ...

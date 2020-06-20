@@ -10,7 +10,7 @@
 
 - name: setup netdata site in nginx
   template:
-    src: nginx/netdata.conf
+    src: netdata/nginx.conf
     dest: "{{ nginx_site_dir }}/netdata.conf"
   notify: reload nginx service
   vars:

@@ -1,0 +1,38 @@
+---
+- name: install cockpit
+  apt:
+    name: cockpit
+
+- name: open internal cockpit port in ferm
+  ferm_port:
+    port: 9090
+    proto: tcp
+    zone: internal
+    comment: cockpit
+  tags: skip_ansible_lint
+  when: lin_firewall == 'ferm'
+
+- name: configure cockpit
+  template:
+    src: cockpit/cockpit.conf
+    dest: /etc/cockpit/cockpit.conf
+  vars:
+    origins_str: "{{ origins_lst |select |join(' ') }}"
+    origins_lst:
+      - "{{ 'http://%s:9090' % bind_ip if bind_ip else '' }}"
+      - "{{ 'http://%s:9090' % site_url if site_url else '' }}"
+      - "{{ 'https://%s:%s' % (site_url, ssl_port) if site_url and ssl_port else '' }}"
+    bind_ip: "{{ srv_netdata_cockpit_bind_ip |default('') }}"
+    site_url: "{{ srv_netdata_cockpit_site |default('') }}"
+    ssl_port: "{{ nginx_ssl_port_internal |default(0) |int }}"
+
+- name: setup cockpit site in nginx
+  template:
+    src: cockpit/nginx.conf
+    dest: "{{ nginx_site_dir }}/cockpit.conf"
+  notify: reload nginx service
+  vars:
+    ssl_port: "{{ nginx_ssl_port_internal |default(0) |int }}"
+    ssl_host_port: "{{ ':%s' % ssl_port if ssl_port |int else '' }}"
+  when: srv_netdata_cockpit_site |default('')
+...

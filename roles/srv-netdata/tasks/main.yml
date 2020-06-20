@@ -24,6 +24,12 @@
   when: srv_netdata_sysdig |bool
   tags: srv_netdata_sysdig
 
+- name: install cockpit
+  import_tasks: cockpit.yml
+  become: true
+  when: srv_netdata_cockpit |bool
+  tags: srv_netdata_cockpit
+
 - name: apply postponed changes now
   meta: flush_handlers
   tags: srv_netdata_all

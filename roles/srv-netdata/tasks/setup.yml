@@ -31,7 +31,7 @@
     state: started
     enabled: true
 
-- name: open netdata port in ferm
+- name: open internal netdata port in ferm
   ferm_port:
     port: 19999
     proto: tcp
