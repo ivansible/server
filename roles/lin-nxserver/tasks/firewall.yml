@@ -10,7 +10,8 @@
   ## workaround for ufw failures on xenial github runners
   register: ufw_result
   until: ufw_result is successful
-  when: lin_firewall == 'ufw'
+  when:
+    - lin_firewall == 'ufw'
 
 - name: open nxserver ports for all in ferm
   ferm_port:
@@ -19,8 +20,9 @@
     solo_zone: true
     comment: nxserver
   tags: skip_ansible_lint
-  when: lin_firewall == 'ferm'
-        and lin_nxserver_direct |bool
+  when:
+    - lin_firewall == 'ferm'
+    - lin_nxserver_direct |bool
 
 - name: block nxserver from external ferm hosts but open for internals
   ## Adding port in two domains at once and removing from external.
@@ -33,6 +35,7 @@
     comment: nxserver
   loop: [internal, blocked, external]
   tags: skip_ansible_lint
-  when: lin_firewall == 'ferm'
-        and not lin_nxserver_direct |bool
+  when:
+    - lin_firewall == 'ferm'
+    - not lin_nxserver_direct |bool
 ...

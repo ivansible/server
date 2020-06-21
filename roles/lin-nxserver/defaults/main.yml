@@ -1,10 +1,28 @@
 ---
 allow_reboot: true
 
-lin_nxserver_deb_url: https://download.nomachine.com/download/6.6/Linux/nomachine_6.6.8_5_amd64.deb
+lin_nxserver_deb_url: https://download.nomachine.com/download/6.11/Linux/nomachine_6.11.2_1_amd64.deb
 
 lin_nxserver_display: 1001
 
 lin_nxserver_ports: [4000, 5353]
 lin_nxserver_direct: true
+
+lin_nxserver_desktop_packages:
+  - xfce4
+  - xfce4-goodies
+  - xfce4-terminal
+  - x11-apps
+  - xauth
+  - xterm
+  - fontconfig
+  ## note: pulseaudio must be installed before nomachine
+  ##       (see link below for more information)
+  ## https://www.vultr.com/docs/setup-nomachine-nx-on-ubuntu
+  - pulseaudio
+  ## pavucontrol is required by xfce volume control applet
+  - pavucontrol
+  ## avoid apport (breaks idempotency on bionic)
+  - firefox
+  - chromium-browser
 ...

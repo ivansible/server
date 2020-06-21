@@ -9,7 +9,9 @@
 
 - name: derive new nxserver version
   set_fact:
-    new_ver: "{{ lin_nxserver_deb_url | regex_replace('^.*?_([\\d\\._]{3,})_.*$', '\\1') | replace('_', '-') }}"
+    new_ver: "{{ lin_nxserver_deb_url
+               | regex_replace('^.*?_([\\d\\._]{3,})_.*$', '\\1')
+               | replace('_', '-') }}"
 
 - name: install nxserver package
   apt:
@@ -17,5 +19,5 @@
   when: old_ver.stdout != new_ver
   register: nx_nxserver_packages
   # fix intermittent network errors on .ru boxes
-  until: "'timed out' not in nx_nxserver_packages.msg |default('')"
+  until: nx_nxserver_packages.msg |default('') is not search('timed out')
 ...
