@@ -24,6 +24,14 @@
     group: root
     mode: 0644
   notify: restart netdata service
+  vars:
+    plugin_core: 'yes'
+    plugin_extra: "{{ srv_netdata_extra_plugins |default(false) |bool |ternary('no','yes') }}"
+    plugin_big: "{{ srv_netdata_lowmem |default(false) |bool |ternary('no','yes') }}"
+    plugin_dir: "{{ have_dirs |ternary('yes','no') }}"
+    have_dirs: "{{ have_disk_dirs or have_rclone_dirs }}"
+    have_disk_dirs: "{{ srv_netdata_disk_dirs |default([]) |length > 0 }}"
+    have_rclone_dirs: "{{ srv_netdata_rclone_dirs |default([]) |length > 0 }}"
 
 - name: enable netdata service
   systemd:

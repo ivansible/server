@@ -1,19 +1,31 @@
 ---
 srv_netdata_enable: true
+srv_netdata_tools: false
+srv_netdata_entropy: false
+srv_netdata_sysdig: false
+srv_netdata_cockpit: false
 srv_netdata_lowmem: false
+srv_netdata_extra_plugins: false
 
 srv_netdata_token: ~
 srv_netdata_rooms: ~
 
-srv_netdata_nginx_site: ~
-srv_netdata_nginx_lecert: ~
-srv_netdata_lecert_crt_path: /etc/letsencrypt/live/%s/fullchain.pem
-srv_netdata_lecert_key_path: /etc/letsencrypt/live/%s/privkey.pem
-
 srv_netdata_alarms: {}
 srv_netdata_reset_alarms: false
 
-srv_netdata_tools: false
+srv_netdata_disk_dirs: {}
+srv_netdata_update_dirs_every: 60
+
+srv_netdata_nginx_site: ~
+srv_netdata_nginx_lecert: ~
+
+srv_netdata_cockpit_site: ~
+srv_netdata_cockpit_lecert: ~
+srv_netdata_cockpit_bind_ip: ~
+
+srv_netdata_lecert_crt_path: /etc/letsencrypt/live/%s/fullchain.pem
+srv_netdata_lecert_key_path: /etc/letsencrypt/live/%s/privkey.pem
+
 srv_netdata_tools_packages:
   - htop
   - nethogs
@@ -21,12 +33,4 @@ srv_netdata_tools_packages:
   - net-tools
   - ethtool
   - lshw
-
-srv_netdata_entropy: false
-srv_netdata_sysdig: false
-
-srv_netdata_cockpit: false
-srv_netdata_cockpit_site: ~
-srv_netdata_cockpit_lecert: ~
-srv_netdata_cockpit_bind_ip: ~
 ...

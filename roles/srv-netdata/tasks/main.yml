@@ -7,7 +7,7 @@
 
 - name: install monitoring tools
   apt:
-    name: "{{ srv_netdata_tools_packages}}"
+    name: "{{ srv_netdata_tools_packages }}"
   become: true
   when: srv_netdata_tools |bool
   tags: srv_netdata_tools

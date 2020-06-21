@@ -3,6 +3,24 @@
   import_tasks: setup.yml
   tags: srv_netdata_setup
 
+- name: monitor some directory sizes
+  template:
+    src: dirmon/dirmon.chart.sh
+    dest: /usr/libexec/netdata/charts.d/dirmon.chart.sh
+  notify: restart netdata service
+  vars:
+    update_every: "{{ srv_netdata_update_dirs_every }}"
+    chart_priority: 90000
+    disk_dirs: "{{ _disk_dirs_list |join(',') }}"
+    _disk_dirs_tuples: "{{ srv_netdata_disk_dirs |default({},true) |dictsort }}"
+    _disk_dirs_list: >
+      {% set items = [] -%}
+      {% for name, path in _disk_dirs_tuples -%}
+        {% set items = items.extend(['%s(%s)' % (path, name)]) -%}
+      {% endfor -%}
+      {{ items }}
+  tags: srv_netdata_dirs
+
 - name: customize netdata alarms
   import_tasks: alarms.yml
   when: srv_netdata_alarms |default({})
