@@ -88,6 +88,7 @@
     - skip_ansible_lint
     - srv_dante_firewall
 
+
 - name: configure dante logging
   import_tasks: syslog.yml
   when: lin_use_rsyslog |bool

@@ -24,6 +24,7 @@ The address to be used for outgoing connections.
 Can be set as either an IP address or an interface name.
 By default this is `ansible_default_ipv4.address`, but you can
 set it as `ansible_default_ipv4.interface` (eg. `eth0`) or whatever you like.
+This can be a string or list of strings.
 
     dante_user: dante_socks
 Note: dante username must start with 'dante_' because it's a global linux user

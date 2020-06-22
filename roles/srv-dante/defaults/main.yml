@@ -13,8 +13,10 @@ dante_noauth_listen_addresses:
 dante_noauth_client_addresses:
   - 127.0.0.0/24
 
-dante_external_addr: "{{ ansible_default_ipv4.address }}"
-# dante_external_addr: "{{ ansible_default_ipv4.interface }}"
+dante_external_addr:
+  # - dante_external_addr: "{{ ansible_default_ipv4.interface }}"
+  - "{{ ansible_default_ipv4.address |default('') }}"
+  - "{{ ansible_default_ipv6.address |default('') }}"
 
 ## see: https://www.inet.no/dante/doc/1.4.x/config/logging.html
 dante_verbose_log: false
