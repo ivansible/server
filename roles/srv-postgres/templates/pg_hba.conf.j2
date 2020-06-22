@@ -14,6 +14,7 @@ host    all             all             {{ subnet.ljust(22) }}  md5
 hostssl all             all             0.0.0.0/0               md5
 # IPv6 connections:
 host    all             all             ::1/128                 md5
+hostssl all             all             ::/0                    md5
 # Replication connections:
 #local  replication     postgres                                peer
 #host   replication     postgres        127.0.0.1/32            md5
