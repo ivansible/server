@@ -3,4 +3,8 @@
   import_tasks: root.yml
   become: true
   tags: srv_dante_all
+
+- name: flush handlers
+  meta: flush_handlers
+  tags: srv_dante_all
 ...

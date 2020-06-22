@@ -16,6 +16,9 @@ dante_noauth_client_addresses:
 dante_external_addr: "{{ ansible_default_ipv4.address }}"
 # dante_external_addr: "{{ ansible_default_ipv4.interface }}"
 
+## see: https://www.inet.no/dante/doc/1.4.x/config/logging.html
+dante_verbose_log: false
+
 ## see: https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#hash-filters
 dante_salt: "{{ 32100 |random(seed=inventory_hostname) |string }}"
 

@@ -6,11 +6,11 @@
   tags: srv_dante_user
 
 - name: create dante proxy user
-  # see: https://docs.ansible.com/ansible/latest/modules/user_module.html#user-module
+  ## see: https://docs.ansible.com/ansible/latest/modules/user_module.html#user-module
   user:
     name: "{{ dante_user }}"
     state: present
-    # see: https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#hash-filters
+    ## see: https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#hash-filters
     password: "{{ dante_pass | password_hash('sha512', dante_salt) }}"
     update_password: always
     group: users
@@ -27,51 +27,15 @@
     src: danted.conf
     dest: /etc/danted.conf
     mode: 0644
+  vars:
+    ## see: https://www.inet.no/dante/doc/1.4.x/config/logging.html
+    log_what: "{{ dante_verbose_log |bool |ternary('error connect disconnect', 'error') }}"
   notify: restart dante service
   tags: srv_dante_conf
 
 
 - name: install foreign dante package on xenial (with workarounds)
-  block:
-    # dante package for xenial lacks required features (user-based access control?)
-    # see: https://launchpad.net/ubuntu/bionic/amd64/dante-server/1.4.2+dfsg-2build1
-    #
-    # accept pains and install foreign package from bionic
-    # some problems first manifested itself when run with mitogen
-    #
-    # the bionic .deb package has xz-compressed control file
-    # xz-utils can be installed by lin-core as part of python-apt (or herein as a fallback)
-    # fixed error: "Unable to install package: There is no member named 'control'"
-    # see: https://github.com/geerlingguy/docker-ubuntu1804-ansible/issues/7#issuecomment-450792375
-    #
-    # retries:
-    # - additionally help to fix the "no member named 'control'" issue
-    # - overcome network problems on a cheap VPS with low memory
-    #   ("timed out" in error message)
-    #
-    # commented out 'force' option once used to fix python-apt issues with foreign deb
-    # fixed error: "Failed to satisfy all dependencies (broken cache)"
-    #
-    # reset_connection restarts mitogen runner to reset (broken) apt state
-    # see: https://github.com/dw/mitogen/issues/407#issuecomment-433453574
-    #
-    - name: fix for xz-compressed control in foreign dante deb
-      apt:
-        name:
-          - python-apt
-          - python3-apt
-        state: present
-
-    - name: restart mitogen runner to reset apt state
-      meta: reset_connection
-
-    - name: install dante server on ubuntu xenial
-      apt:
-        deb: "{{ dante_deb_url }}"
-        force: true
-        force_apt_get: true
-      register: dante_install_xenial_result
-      until: dante_install_xenial_result is successful
+  import_tasks: install-xenial.yml
   when: ansible_lsb.codename in ['xenial']
   tags: srv_dante_install
 
@@ -84,8 +48,8 @@
 
 
 - name: temporarily stop dante service after fresh install
-  # note: this step is a workaround.
-  #       without this "recycling" the service might end up disabled.
+  ## note: this step is a workaround.
+  ##       without this "recycling" the service might end up disabled.
   systemd:
     name: danted
     state: stopped
@@ -103,7 +67,7 @@
   tags: srv_dante_service
 
 
-- name: open (or block) dante port in ufw
+- name: open/block dante port in ufw
   ufw:
     port: "{{ dante_port |string }}"
     rule: "{{ dante_direct |bool |ternary('allow','deny') }}"
@@ -112,7 +76,7 @@
   tags:
     - srv_dante_firewall
 
-- name: open (or block) dante port in ferm
+- name: open/block dante port in ferm
   ferm_port:
     port: "{{ dante_port }}"
     proto: tcp
@@ -124,7 +88,8 @@
     - skip_ansible_lint
     - srv_dante_firewall
 
-
-- name: flush handlers
-  meta: flush_handlers
+- name: configure dante logging
+  import_tasks: syslog.yml
+  when: lin_use_rsyslog |bool
+  tags: srv_dante_syslog
 ...

@@ -1,0 +1,43 @@
+---
+##
+## dante package for xenial lacks required features (user-based access control?)
+## see: https://launchpad.net/ubuntu/bionic/amd64/dante-server/1.4.2+dfsg-2build1
+##
+## accept pains and install foreign package from bionic
+## some problems first manifested itself when run with mitogen
+##
+## the bionic .deb package has xz-compressed control file
+## xz-utils can be installed by lin-core as part of python-apt (or herein as a fallback)
+##
+## error fixed: "Unable to install package: There is no member named 'control'"
+## see: https://github.com/geerlingguy/docker-ubuntu1804-ansible/issues/7#issuecomment-450792375
+##
+## the retries (see `until` below):
+## - additionally help to fix the "no member named 'control'" issue
+## - overcome network problems on a cheap VPS with low memory
+##   ("timed out" in error message)
+##
+## commented out 'force' option once used to fix python-apt issues with foreign deb
+## error fixed: "Failed to satisfy all dependencies (broken cache)"
+##
+## reset_connection restarts mitogen runner to reset (broken) apt state
+## see: https://github.com/dw/mitogen/issues/407#issuecomment-433453574
+##
+- name: fix for xz-compressed control in foreign dante deb
+  apt:
+    name:
+      - python-apt
+      - python3-apt
+    state: present
+
+- name: restart mitogen runner to reset apt state
+  meta: reset_connection
+
+- name: install dante server on ubuntu xenial
+  apt:
+    deb: "{{ dante_deb_url }}"
+    force: true
+    force_apt_get: true
+  register: dante_install_xenial_result
+  until: dante_install_xenial_result is successful
+...

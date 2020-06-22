@@ -32,6 +32,10 @@ Note: dante username must start with 'dante_' because it's a global linux user
     dante_salt: `random_string`
 Password and salt.
 
+    dante_verbose_log: false
+Enables verbose logging (see https://www.inet.no/dante/doc/1.4.x/config/logging.html).
+
+
 ## Tags
 
 - `srv_dante_user`
@@ -39,6 +43,7 @@ Password and salt.
 - `srv_dante_install`
 - `srv_dante_service`
 - `srv_dante_firewall`
+- `srv_dante_syslog`
 - `srv_dante_all`
 
 

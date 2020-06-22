@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - ivansible.lin_base  # for lin_firewall and ferm_port module
+  - ivansible.lin_base  # for lin_firewall, ferm_port module, rsyslog handler
 
 galaxy_info:
   role_name: srv_dante
