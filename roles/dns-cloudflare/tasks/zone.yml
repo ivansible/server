@@ -31,7 +31,7 @@
   delegate_to: localhost
   vars:
     rname: "{{ cname.key }}"
-    value: "{{ cname.value if (cname.value is string) else (cname.value |join(', ')) }}"
+    value: "{{ [cname.value] |flatten |join(', ') }}"
   register: cf_direct_alias_result
   until: cf_direct_alias_result is successful
   loop: "{{ zone.direct
@@ -41,7 +41,9 @@
   loop_control:
     loop_var: cname
     label: "{{ zname }}/{{ rname }} => {{ value }} [direct]"
-  when: zone.direct is defined and cname.value is string
+  when:
+    - zone.direct is defined
+    - cname.value is string
 
 - name: setup proxied aliases in cloudflare zone '{{ zname }}'
   cloudflare_dns:
@@ -55,7 +57,7 @@
   delegate_to: localhost
   vars:
     rname: "{{ cname.key }}"
-    value: "{{ cname.value if (cname.value is string) else (cname.value |join(', ')) }}"
+    value: "{{ [cname.value] |flatten |join(', ')) }}"
   register: cf_proxied_alias_result
   until: cf_proxied_alias_result is successful
   loop: "{{ zone.proxied
@@ -65,7 +67,9 @@
   loop_control:
     loop_var: cname
     label: "{{ zname }}/{{ rname }} => {{ value }} [proxied]"
-  when: zone.proxied is defined and cname.value is string
+  when:
+    - zone.proxied is defined
+    - cname.value is string
 
 - name: setup direct records in cloudflare zone '{{ zname }}'
   include_tasks: record.yml
@@ -76,7 +80,7 @@
   vars:
     rname: "{{ ritem.key }}"
     rvals: "{{ ritem.value }}"
-    rvals_str: "{{ rvals if (rvals is string) else (rvals |join(', ')) }}"
+    rvals_str: "{{ [rvals] |flatten |join(', ')) }}"
     proxied: false
   loop: "{{ zone.direct
           | default({})
@@ -85,7 +89,9 @@
   loop_control:
     loop_var: ritem
     label: "{{ zname }}/{{ rname }} -> {{ rvals_str }} [direct]"
-  when: zone.direct is defined and rvals is not string
+  when:
+    - zone.direct is defined
+    - rvals is not string
 
 - name: setup proxied records in cloudflare zone '{{ zname }}'
   include_tasks: record.yml
@@ -96,7 +102,7 @@
   vars:
     rname: "{{ ritem.key }}"
     rvals: "{{ ritem.value }}"
-    rvals_str: "{{ rvals if (rvals is string) else (rvals |join(', ')) }}"
+    rvals_str: "{{ [rvals] |flatten |join(', ') }}"
     proxied: true
   loop: "{{ zone.proxied
           | default({})
@@ -105,5 +111,7 @@
   loop_control:
     loop_var: ritem
     label: "{{ zname }}/{{ rname }} -> {{ rvals_str }} [proxied]"
-  when: zone.proxied is defined and rvals is not string
+  when:
+    - zone.proxied is defined
+    - rvals is not string
 ...
