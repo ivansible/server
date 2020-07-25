@@ -9,11 +9,12 @@
     filename: draios
     mode: 0644
 
-- name: install linux headers
+- name: install sysdig packages
   apt:
-    name: linux-headers-{{ ansible_kernel }}
-
-- name: install sysdig
-  apt:
-    name: sysdig
+    name:
+      - sysdig
+      ## install linux headers for dkms
+      - linux-headers-generic
+      - linux-headers-{{ ansible_kernel }}
+    state: present
 ...
