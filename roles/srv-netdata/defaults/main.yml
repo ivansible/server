@@ -1,11 +1,18 @@
 ---
 srv_netdata_enable: true
+srv_netdata_upgrade: false
 srv_netdata_tools: false
 srv_netdata_entropy: false
 srv_netdata_sysdig: false
 srv_netdata_cockpit: false
 srv_netdata_lowmem: false
 srv_netdata_extra_plugins: false
+
+## the default database size is 1 hour
+srv_netdata_update_every: 2
+srv_netdata_history_secs: 3600
+srv_netdata_disk_history_mb: 256
+srv_netdata_cache_size_mb: 16
 
 srv_netdata_token: ~
 srv_netdata_rooms: ~

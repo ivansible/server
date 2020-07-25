@@ -12,9 +12,11 @@
     url: https://packagecloud.io/netdata/netdata/ubuntu/
     codename: "{{ ansible_lsb.codename }}"
 
-- name: install netdata
+- name: install netdata package
   apt:
     name: netdata
+    state: "{{ srv_netdata_upgrade |bool |ternary('latest', 'present') }}"
+  notify: restart netdata service
 
 - name: configure netdata
   template:
