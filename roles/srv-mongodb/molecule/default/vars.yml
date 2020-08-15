@@ -1,3 +1,7 @@
 ---
 is_permitted: false
+lin_firewall: 'none'
+## run test on internal port with random password
+mongodb_port: 55517
+mongodb_admin_password: "{{ lookup('password', '/tmp/testpass chars=ascii_letters') }}"
 ...
