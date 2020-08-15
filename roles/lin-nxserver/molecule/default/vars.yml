@@ -1,0 +1,5 @@
+---
+is_permitted: false
+lin_ferm: 'none'
+allow_reboot: false
+...
