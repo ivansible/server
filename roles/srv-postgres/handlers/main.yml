@@ -1,5 +1,5 @@
 ---
-# handlers for ivansible.srv_postgres
+## handlers for ivansible.srv_postgres
 
 - name: restart postgres service
   systemd:
@@ -7,9 +7,8 @@
     state: restarted
   become: true
 
-
-# this is a multi-task handler
-# see: https://stackoverflow.com/questions/31618967/how-do-i-write-an-ansible-handler-with-multiple-tasks
+## this is a multi-task handler
+## see: https://stackoverflow.com/questions/31618967/how-do-i-write-an-ansible-handler-with-multiple-tasks
 - name: wait for postgres to start
   listen: reset postgres admin password
   wait_for:
@@ -31,7 +30,7 @@
       - --command
       - "ALTER ROLE postgres ENCRYPTED PASSWORD '{{ srv_pg_admin_password }}';"
   become: true
-  # becoming non-root triggers error in docker:
-  # Failed to set permissions on the temporary files Ansible needs to create when becoming an unprivileged user
-  #become_user: postgres
+  ## becoming non-root triggers error in docker:
+  ## Failed to set permissions on the temporary files Ansible needs to create when becoming an unprivileged user
+  # become_user: postgres
 ...
