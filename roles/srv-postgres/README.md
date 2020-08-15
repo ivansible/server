@@ -1,5 +1,9 @@
 # srv_postgres
 
+[![Github Test Status](https://github.com/ivansible/srv-postgres/workflows/Molecule%20test/badge.svg?branch=master)](https://github.com/ivansible/srv-postgres/actions)
+[![Travis Test Status](https://travis-ci.org/ivansible/srv-postgres.svg?branch=master)](https://travis-ci.org/ivansible/srv-postgres)
+[![Ansible Galaxy](https://img.shields.io/badge/galaxy-ivansible.srv__postgres-68a.svg?style=flat)](https://galaxy.ansible.com/ivansible/srv_postgres/)
+
 This role installs postgresql-10 server on linux and also:
  - tunes kernel parameters for postgresql performance;
  - enables ssl;
