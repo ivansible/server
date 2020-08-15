@@ -1,5 +1,9 @@
 # ivansible.srv_redis
 
+[![Github Test Status](https://github.com/ivansible/srv-redis/workflows/Molecule%20test/badge.svg?branch=master)](https://github.com/ivansible/srv-redis/actions)
+[![Travis Test Status](https://travis-ci.org/ivansible/srv-redis.svg?branch=master)](https://travis-ci.org/ivansible/srv-redis)
+[![Ansible Galaxy](https://img.shields.io/badge/galaxy-ivansible.srv__redis-68a.svg?style=flat)](https://galaxy.ansible.com/ivansible/srv_redis/)
+
 This role installs redis server on a linux host and enables SSL access for redis
 by running a stunnel service in front.
 
