@@ -8,6 +8,7 @@
   template:
     src: service-quotas.conf
     dest: /etc/systemd/system/mongod.service.d/quotas.conf
+    mode: 0644
   notify:
     - reload systemd daemon
     - restart mongodb service
