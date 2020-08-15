@@ -1,5 +1,9 @@
 # ivansible.srv_mongodb
 
+[![Github Test Status](https://github.com/ivansible/srv-mongodb/workflows/Molecule%20test/badge.svg?branch=master)](https://github.com/ivansible/srv-mongodb/actions)
+[![Travis Test Status](https://travis-ci.org/ivansible/srv-mongodb.svg?branch=master)](https://travis-ci.org/ivansible/srv-mongodb)
+[![Ansible Galaxy](https://img.shields.io/badge/galaxy-ivansible.srv__mongodb-68a.svg?style=flat)](https://galaxy.ansible.com/ivansible/srv_mongodb/)
+
 This role installs mongodb.org 4.x server and client on a linux host and:
 - enables SSL, optionally configuring letsencrypt post-renewal hook;
 - resets administrator password
