@@ -6,17 +6,26 @@
 
 - name: add postgresql.org apt repository
   apt_repository:
-    repo: deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_lsb.codename }}-pgdg main
+    repo: "deb [arch=amd64] http://apt.postgresql.org/pub/repos/apt/ {{ ansible_lsb.codename }}-pgdg main"
     filename: pgdg
+    mode: 0644
     update_cache: true
   tags: srv_postgres_install
 
-- name: install postgresql-{{ srv_pg_release }} server package
-  apt:
-    name:
+- name: install postgresql packages with retry
+  block:
+    - name: install postgresql server (will retry if fails)
+      apt:
+        name: "{{ packages }}"
+  rescue:
+    - name: install postgresql server (retry)
+      apt:
+        name: "{{ packages }}"
+        update_cache: true
+  vars:
+    packages:
       - postgresql-{{ srv_pg_release }}
       - ssl-cert  # for snakeoil certificate
-    state: present
   tags: srv_postgres_install
 
 
