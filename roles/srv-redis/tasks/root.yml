@@ -4,6 +4,7 @@
     repo: ppa:chris-lea/redis-server
     codename: "{{ codename }}"
     filename: redis
+    mode: 0644
     update_cache: true
   vars:
     ## workaround for redis ppa not yet ready on focal
@@ -20,8 +21,8 @@
 
 
 - name: backup vanilla redis configuration
-  command: cp -a /etc/redis/redis.conf /etc/redis/redis.conf.orig
-  args:
+  command:
+    cmd: cp -a /etc/redis/redis.conf /etc/redis/redis.conf.orig
     creates: /etc/redis/redis.conf.orig
 
 - name: ansible comment in redis.conf
@@ -104,6 +105,10 @@
   template:
     src: redis-stunnel.service
     dest: /etc/systemd/system/redis-stunnel.service
+    owner: root
+    group: root
+    mode: 0644
+  register: _redis_stunnel_systemd_unit
   notify: restart redis stunnel service
 
 
@@ -112,7 +117,7 @@
     name: "{{ item }}"
     state: started
     enabled: true
-    daemon_reload: true
+    daemon_reload: "{{ _redis_stunnel_systemd_unit is changed }}"
   loop:
     - redis-server
     - redis-stunnel

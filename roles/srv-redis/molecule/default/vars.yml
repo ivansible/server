@@ -1,3 +1,7 @@
 ---
 is_permitted: false
+## run test on internal port with random password
+redis_port_tcp: 55379
+redis_port_ssl: 55389
+redis_password: "{{ lookup('password', '/tmp/testpass chars=ascii_letters') }}"
 ...
