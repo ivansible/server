@@ -7,6 +7,7 @@
   template:
     src: dirmon/dirmon.chart.sh
     dest: /usr/libexec/netdata/charts.d/dirmon.chart.sh
+    mode: 0644
   notify: restart netdata service
   vars:
     update_every: "{{ srv_netdata_update_dirs_every }}"
@@ -14,11 +15,11 @@
     disk_dirs: "{{ _disk_dirs_list |join(',') }}"
     _disk_dirs_tuples: "{{ srv_netdata_disk_dirs |default({},true) |dictsort }}"
     _disk_dirs_list: >
-      {% set items = [] -%}
+      {% set ns = namespace(items = []) -%}
       {% for name, path in _disk_dirs_tuples -%}
-        {% set items = items.extend(['%s(%s)' % (path, name)]) -%}
+        {% set ns.items = ns.items + ['%s(%s)' % (path, name)] -%}
       {% endfor -%}
-      {{ items }}
+      {{ ns.items }}
   tags: srv_netdata_dirs
 
 - name: customize netdata alarms
