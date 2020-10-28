@@ -1,7 +1,6 @@
 # ivansible.srv_netdata
 
 [![Github Test Status](https://github.com/ivansible/srv-netdata/workflows/Molecule%20test/badge.svg?branch=master)](https://github.com/ivansible/srv-netdata/actions)
-[![Travis Test Status](https://travis-ci.org/ivansible/srv-netdata.svg?branch=master)](https://travis-ci.org/ivansible/srv-netdata)
 [![Ansible Galaxy](https://img.shields.io/badge/galaxy-ivansible.srv__netdata-68a.svg?style=flat)](https://galaxy.ansible.com/ivansible/srv_netdata/)
 
 This role will:
