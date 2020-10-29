@@ -1,7 +1,7 @@
 ---
 allow_reboot: true
 
-lin_nxserver_deb_url: https://download.nomachine.com/download/6.11/Linux/nomachine_6.11.2_1_amd64.deb
+lin_nxserver_deb_url: https://download.nomachine.com/download/6.12/Linux/nomachine_6.12.3_7_amd64.deb
 
 lin_nxserver_display: 1001
 
