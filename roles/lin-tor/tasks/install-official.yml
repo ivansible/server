@@ -9,9 +9,12 @@
 
 - name: add torproject repository
   apt_repository:
-    repo: deb https://deb.torproject.org/torproject.org xenial main
+    repo: "deb [arch=amd64] {{ url }} {{ codename }} main"
     filename: tor-project
     mode: 0644
+  vars:
+    url: https://deb.torproject.org/torproject.org
+    codename: "{{ ansible_lsb.codename }}"
   register: tor_repo_result
   until: tor_repo_result is successful
 

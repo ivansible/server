@@ -4,6 +4,8 @@
 tor_enable: true
 tor_socks_port: 9050
 
+tor_from_universe: false
+
 tor_privoxy_enable: true
 tor_privoxy_bindip: 127.0.0.1
 tor_privoxy_port: 8118
