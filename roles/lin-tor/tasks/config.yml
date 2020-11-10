@@ -15,6 +15,14 @@
     state: present
   notify: restart tor service
 
+- name: disable hourly "tor has been idle" reports
+  lineinfile:
+    path: /etc/tor/torrc
+    regexp: "^Log\\s"
+    line: "Log warn syslog"
+    state: present
+  notify: restart tor service
+
 - name: configure tor log compression
   replace:
     path: /etc/logrotate.d/tor
