@@ -14,12 +14,8 @@
 
 - name: install netdata package
   apt:
-    name: "netdata{{ version }}"
-    state: "{{ upgrade }}"
-  vars:
-    upgrade: "{{ srv_netdata_upgrade |bool |ternary('latest', 'present') }}"
-    ## netdata 1.24+ fails to install on xenial
-    version: "{{ '=1.23.1' if ansible_lsb.codename=='xenial' else '' }}"
+    name: netdata
+    state: "{{ srv_netdata_upgrade |bool |ternary('latest', 'present') }}"
   notify: restart netdata service
 
 - name: configure netdata
