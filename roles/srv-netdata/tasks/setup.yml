@@ -5,7 +5,7 @@
 
 - name: add package cloud repository
   apt_repository:
-    repo: "deb {{ url }} {{ codename }} main"
+    repo: "deb [arch=amd64] {{ url }} {{ codename }} main"
     filename: netdata
     mode: 0644
   vars:
