@@ -7,7 +7,7 @@ This role installs dante proxy server on linux, configures authentication and IP
 
 Dante supports authentication starting from version `1.4.1` only.
 On _ubuntu 18.04 bionic_ (and later), the [dante-server](https://packages.ubuntu.com/bionic/dante-server) universe package is used.
-On _ubuntu 16.04 xenial_, the [bionic .deb file](https://lug.mtu.edu/ubuntu/pool/universe/d/dante/dante-server_1.4.2+dfsg-2build1_amd64.deb) is installed (through pain and workarounds), since official package is old _1.1.9_.
+On _ubuntu 16.04 xenial_, the [bionic .deb file](https://lug.mtu.edu/ubuntu/pool/universe/d/dante/dante-server_1.4.2+dfsg-2build1_amd64.deb) is installed (through pain and workarounds), since official package is the old _1.1.9_.
 
 
 ## Variables
@@ -35,6 +35,9 @@ Password and salt.
 
     dante_verbose_log: false
 Enables verbose logging (see https://www.inet.no/dante/doc/1.4.x/config/logging.html).
+
+    dante_service_boot_fix: false
+Makes dante service restart after boot problems.
 
 
 ## Tags

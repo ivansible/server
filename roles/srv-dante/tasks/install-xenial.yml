@@ -35,7 +35,7 @@
 
 - name: install dante server on ubuntu xenial
   apt:
-    deb: "{{ dante_deb_url }}"
+    deb: "{{ dante_xenial_deb_url }}"
     force: true
     force_apt_get: true
   register: dante_install_xenial_result

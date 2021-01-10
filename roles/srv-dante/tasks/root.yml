@@ -46,24 +46,11 @@
   register: dante_install_bionic_result
   tags: srv_dante_install
 
-
-- name: temporarily stop dante service after fresh install
-  ## note: this step is a workaround.
-  ##       without this "recycling" the service might end up disabled.
-  systemd:
-    name: danted
-    state: stopped
-    enabled: false
-    daemon_reload: true
-  when: dante_install_xenial_result is changed or dante_install_bionic_result is changed
-  tags: srv_dante_service
-
-- name: enable dante service
-  systemd:
-    name: danted
-    state: started
-    enabled: true
-    daemon_reload: true
+- name: dante service workarounds
+  import_tasks: service.yml
+  vars:
+    _stop_dante: "{{ dante_install_xenial_result is changed
+                  or dante_install_bionic_result is changed }}"
   tags: srv_dante_service
 
 
@@ -73,8 +60,7 @@
     rule: "{{ dante_direct |bool |ternary('allow','deny') }}"
   no_log: "{{ hide_secrets |bool }}"
   when: lin_firewall == 'ufw'
-  tags:
-    - srv_dante_firewall
+  tags: srv_dante_firewall
 
 - name: open/block dante port in ferm
   ferm_port:

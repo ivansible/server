@@ -1,0 +1,42 @@
+---
+- name: temporarily stop dante service after fresh install
+  ## note: this step is a workaround.
+  ##       without this "recycling" the service might end up disabled.
+  systemd:
+    name: danted
+    state: stopped
+    enabled: false
+    daemon_reload: true
+  when: _stop_dante |bool
+
+- name: directory for dante service snapin
+  file:
+    state: directory
+    path: /etc/systemd/system/danted.service.d
+  when: dante_service_boot_fix |bool
+
+- name: make dante service restart after boot problems
+  copy:
+    dest: /etc/systemd/system/danted.service.d/fix.conf
+    content: |
+      # make dante service restart after boot problems
+      [Unit]
+      #After=
+      After=network-online.target
+      StartLimitIntervalSec=60
+      StartLimitBurst=3
+      [Service]
+      RestartSec=2
+      Restart=always
+    mode: 0644
+  when: dante_service_boot_fix |bool
+  register: _dante_service_add_snapin
+  notify: restart dante service
+
+- name: enable dante service
+  systemd:
+    name: danted
+    state: started
+    enabled: true
+    daemon_reload: "{{ _stop_dante or _dante_service_add_snapin is changed }}"
+...
