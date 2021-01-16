@@ -11,8 +11,9 @@
 
 - name: directory for dante service snapin
   file:
-    state: directory
     path: /etc/systemd/system/danted.service.d
+    state: directory
+    mode: 0755
   when: dante_service_boot_fix |bool
 
 - name: make dante service restart after boot problems
@@ -23,12 +24,14 @@
       [Unit]
       #After=
       After=network-online.target
-      StartLimitIntervalSec=60
+      StartLimitInterval{{ xenial_suffix }}=60
       StartLimitBurst=3
       [Service]
       RestartSec=2
       Restart=always
     mode: 0644
+  vars:
+    xenial_suffix: "{{ '' if ansible_lsb.codename == 'xenial' else 'Sec' }}"
   when: dante_service_boot_fix |bool
   register: _dante_service_add_snapin
   notify: restart dante service
