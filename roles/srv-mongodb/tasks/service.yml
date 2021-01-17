@@ -3,7 +3,7 @@
   file:
     path: /etc/systemd/system/mongod.service.d
     state: directory
-    mode: 0644
+    mode: 0755
 
 - name: setup mongodb service quotas
   template:
