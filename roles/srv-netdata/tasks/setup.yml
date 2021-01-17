@@ -18,6 +18,14 @@
     state: "{{ srv_netdata_upgrade |bool |ternary('latest', 'present') }}"
   notify: restart netdata service
 
+- name: silence systemd warning on xenial
+  lineinfile:
+    path: /lib/systemd/system/netdata.service
+    line: ProtectControlGroups=true
+    state: absent
+  notify: reload systemd daemon
+  when: ansible_lsb.codename == 'xenial'
+
 - name: configure netdata
   template:
     src: netdata/netdata.conf
