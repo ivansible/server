@@ -28,16 +28,17 @@
 
 - name: directory for letsencrypt post-renewal hooks
   file:
-    path: /etc/letsencrypt/renewal-hooks/post
+    path: "{{ certbot_post_dir }}"
     state: directory
-  when: mongodb_ssl_cert.find('/letsencrypt/') != -1
+    mode: 0755
+  when: mongodb_ssl_cert is search('/letsencrypt/')
 
 - name: link a letsencrypt post-renewal hook for mongodb
   file:
     state: link
     src: "{{ mongodb_cert_update_script }}"
-    dest: /etc/letsencrypt/renewal-hooks/post/mongodb
-  when: mongodb_ssl_cert.find('/letsencrypt/') != -1
+    dest: "{{ certbot_post_dir }}/mongodb"
+  when: mongodb_ssl_cert is search('/letsencrypt/')
 
 - name: find modification times of mongodb ssl files
   stat:

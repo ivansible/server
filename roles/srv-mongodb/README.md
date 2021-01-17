@@ -77,6 +77,8 @@ See:
 This role inherits default certificate and private key files
 from the role `ivansible.nginx_base`.
 
+Also depends on `ivansible.cert_base` for common certbot settings.
+
 
 ## Example Playbook
 
