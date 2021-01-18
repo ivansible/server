@@ -16,6 +16,7 @@
   template:
     src: cockpit/cockpit.conf
     dest: /etc/cockpit/cockpit.conf
+    mode: 0644
   vars:
     origins_str: "{{ origins_lst |select |join(' ') }}"
     origins_lst:
@@ -30,6 +31,7 @@
   template:
     src: cockpit/nginx.conf
     dest: "{{ nginx_site_dir }}/cockpit.conf"
+    mode: 0644
   notify: reload nginx service
   vars:
     ssl_port: "{{ nginx_ssl_port_internal |default(0) |int }}"

@@ -1,6 +1,6 @@
 # ivansible.srv_netdata
 
-[![Github Test Status](https://github.com/ivansible/srv-netdata/workflows/Molecule%20test/badge.svg?branch=master)](https://github.com/ivansible/srv-netdata/actions)
+[![Github Test Status](https://github.com/ivansible/srv-netdata/workflows/test/badge.svg?branch=master)](https://github.com/ivansible/srv-netdata/actions)
 [![Ansible Galaxy](https://img.shields.io/badge/galaxy-ivansible.srv__netdata-68a.svg?style=flat)](https://galaxy.ansible.com/ivansible/srv_netdata/)
 
 This role will:
@@ -48,4 +48,4 @@ MIT
 
 ## Author Information
 
-Created in 2020 by [IvanSible](https://github.com/ivansible)
+Created in 2020-2021 by [IvanSible](https://github.com/ivansible)

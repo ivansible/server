@@ -5,6 +5,7 @@
     dest: /etc/netdata/health.d/
     remote_src: true
     force: "{{ reset_file or global_reset }}"
+    mode: 0644
   vars:
     file: "{{ item |regex_replace('^_') }}"
     reset_file: "{{ item.startswith('_') }}"

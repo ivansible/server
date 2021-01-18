@@ -31,6 +31,7 @@
   template:
     src: netdata/nginx.conf
     dest: "{{ nginx_site_dir }}/netdata.conf"
+    mode: 0644
   notify: reload nginx service
   vars:
     ssl_port: "{{ nginx_ssl_port_internal |default(0) |int }}"
