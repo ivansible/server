@@ -1,7 +1,6 @@
 # srv_postgres
 
-[![Github Test Status](https://github.com/ivansible/srv-postgres/workflows/Molecule%20test/badge.svg?branch=master)](https://github.com/ivansible/srv-postgres/actions)
-[![Travis Test Status](https://travis-ci.org/ivansible/srv-postgres.svg?branch=master)](https://travis-ci.org/ivansible/srv-postgres)
+[![Github Test Status](https://github.com/ivansible/srv-postgres/workflows/test/badge.svg?branch=master)](https://github.com/ivansible/srv-postgres/actions)
 [![Ansible Galaxy](https://img.shields.io/badge/galaxy-ivansible.srv__postgres-68a.svg?style=flat)](https://galaxy.ansible.com/ivansible/srv_postgres/)
 
 This role installs postgresql-10 server on linux and also:
@@ -80,6 +79,8 @@ I suspect that too big `shmmax` can crash system.
   - for common defaults, handlers and custom modules
 - [ivansible.lin_base](https://github.com/ivansible/lin-base):
   - global flag `lin_compress_logs` enables compression of rotated logs
+- [ivansible.cert_base](https://github.com/ivansible/cert-base):
+  - for common certbot settings
 
 
 ## TODO
@@ -101,4 +102,4 @@ MIT
 
 ## Author Information
 
-Created in 2018-2020 by [IvanSible](https://github.com/ivansible)
+Created in 2018-2021 by [IvanSible](https://github.com/ivansible)

@@ -94,6 +94,7 @@
     section: ""
     option: "{{ item.key }}"
     value: "{{ item.value }}\t\t# [ansible]"
+    mode: 0644
   with_dict: "{{ srv_pg_parameters }}"
   loop_control:
     label: "{{ item.key | replace(\"'\", '') }}"

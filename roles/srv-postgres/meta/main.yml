@@ -1,6 +1,7 @@
 ---
 dependencies:
   - ivansible.nginx_base  # for common defaults, eg. path of ssl certificate
+  - ivansible.cert_base   # for common certbot settings
 
 galaxy_info:
   role_name: srv_postgres
@@ -8,7 +9,7 @@ galaxy_info:
   description: "install postgresql-10 server on linux"
   company: "IvanSible"
   license: MIT
-  min_ansible_version: 2.5
+  min_ansible_version: 2.9
 
   platforms:
     - name: Ubuntu
