@@ -1,6 +1,6 @@
 # ivansible.srv_redis
 
-[![Github Test Status](https://github.com/ivansible/srv-redis/workflows/Molecule%20test/badge.svg?branch=master)](https://github.com/ivansible/srv-redis/actions)
+[![Github Test Status](https://github.com/ivansible/srv-redis/workflows/test/badge.svg?branch=master)](https://github.com/ivansible/srv-redis/actions)
 [![Travis Test Status](https://travis-ci.org/ivansible/srv-redis.svg?branch=master)](https://travis-ci.org/ivansible/srv-redis)
 [![Ansible Galaxy](https://img.shields.io/badge/galaxy-ivansible.srv__redis-68a.svg?style=flat)](https://galaxy.ansible.com/ivansible/srv_redis/)
 
@@ -61,6 +61,8 @@ This will not need to tweak this dictionary for a standard install.
 
 Default certificate and private key are inherited from `ivansible.nginx_base`.
 
+Also depends on `ivansible.cert_base` for default certbot settings.
+
 
 ## Example Playbook
 
@@ -76,4 +78,4 @@ MIT
 
 ## Author Information
 
-Created in 2018-2020 by [IvanSible](https://github.com/ivansible)
+Created in 2018-2021 by [IvanSible](https://github.com/ivansible)

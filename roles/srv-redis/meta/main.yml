@@ -1,7 +1,8 @@
 ---
 dependencies:
-  - ivansible.nginx_base  # for default ssl certificate and ferm_port module
   - ivansible.lin_base    # for lin_compress_logs and more
+  - ivansible.nginx_base  # for default ssl certificate and ferm_port module
+  - ivansible.cert_base   # for default certbot settings
 
 galaxy_info:
   role_name: srv_redis
@@ -9,7 +10,7 @@ galaxy_info:
   description: "install redis server with ssl support on linux"
   company: "IvanSible"
   license: MIT
-  min_ansible_version: 2.5
+  min_ansible_version: 2.9
 
   platforms:
     - name: Ubuntu

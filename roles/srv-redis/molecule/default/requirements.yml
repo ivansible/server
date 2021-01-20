@@ -2,13 +2,16 @@
 - src: https://github.com/ivansible/lin-base
   name: ivansible.lin_base
   scm: git
-- src: https://github.com/ivansible/lin-ferm
-  name: ivansible.lin_ferm
+- src: https://github.com/ivansible/cert-base
+  name: ivansible.cert_base
+  scm: git
+- src: https://github.com/ivansible/nginx-base
+  name: ivansible.nginx_base
   scm: git
 - src: https://github.com/ivansible/lin-core
   name: ivansible.lin_core
   scm: git
-- src: https://github.com/ivansible/nginx-base
-  name: ivansible.nginx_base
+- src: https://github.com/ivansible/lin-ferm
+  name: ivansible.lin_ferm
   scm: git
 ...
