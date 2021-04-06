@@ -27,5 +27,9 @@ dante_salt: "{{ 32100 |random(seed=inventory_hostname) |string }}"
 ## make dante service restart after boot problems
 dante_service_boot_fix: false
 
-dante_xenial_deb_url: https://mirrors.lug.mtu.edu/ubuntu/pool/universe/d/dante/dante-server_1.4.2+dfsg-2build1_amd64.deb
+## we deliberately use bionic package on xenial:
+## https://packages.ubuntu.com/bionic/dante-server
+## http://mirrors.kernel.org/ubuntu/pool/universe/d/dante/dante-server_1.4.2+dfsg-2build1_amd64.deb
+## use a dropbox copy of the package as mirrors are sometimes flaky
+dante_xenial_deb_url: https://www.dropbox.com/s/g9xfvwker5vcjvr/dante-server_1.4.2+dfsg-2build1_amd64.deb?dl=1
 ...
