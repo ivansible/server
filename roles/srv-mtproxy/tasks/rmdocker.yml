@@ -1,12 +1,11 @@
 ---
-- name: install ansible docker bindings (optional)
-  apt:
-    name: "{{ lin_use_python2 |ternary('python-docker,python3-docker', 'python3-docker') }}"
+- name: install ansible docker bindings
+  import_tasks: ansible-docker.yml
 
 - name: remove stale docker container (optional, so ok to fail)
   docker_container:
     name: mtproxy
     state: absent
-  ignore_errors: true
+  failed_when: false
   no_log: "{{ hide_secrets |bool }}"
 ...
