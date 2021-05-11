@@ -16,15 +16,19 @@
 
 - name: install mongodb packages
   apt:
-    name: "{{ pkg_mongodb }},{{ pkg_pymongo }},{{ pkg_helpers }}"
+    name: "{{ pkg_list |select |join(',') }}"
   vars:
-    pkg_mongodb: mongodb-org
-    pkg_pymongo: "{{ lin_use_python2 |bool |ternary(pkg_pymongo_all, pkg_pymongo_py3) }}"
-    pkg_pymongo_all: python3-pymongo,python3-pip,python-pymongo,python-pip
-    pkg_pymongo_py3: python3-pymongo,python3-pip
+    pkg_list: "{{ pkg_mongodb + pkg_pymongo_noxenial + pkg_pip + pkg_helpers }}"
+    pkg_mongodb: ['mongodb-org']
+    use_py2: "{{ lin_use_python2 |bool }}"
+    pkg_pip: "{{ ['python3-pip', ('python-pip' if use_py2 else '')] }}"
+    ## don't install ancient pymongo deb on xenial
+    ## (it will stand in pip3 package imports and fail)
+    pkg_pymongo_noxenial: "{{ [] if ansible_lsb.codename == 'xenial' else pkg_pymongo }}"
+    pkg_pymongo: "{{ ['python3-pymongo', ('python-pymongo' if use_py2 else '')] }}"
     ## ssl-cert for snakeoil certificate
     ## jq for parsing json
-    pkg_helpers: ssl-cert,jq
+    pkg_helpers: [ssl-cert, jq]
 
 - name: upgrade to pymongo >3.7 to avoid problems with SCRAM-SHA-256
   # see: https://github.com/ansible/ansible/issues/44970
