@@ -14,9 +14,9 @@
   github_release:
     repository: 9seconds/mtg
     release: "{{ mtproxy_release }}"
-    template: "{download_url}/mtg-linux-amd64"
+    template: '{download_url}/mtg-linux-amd64'
     creates: "{{ mtproxy_bin_file }}"
-    reinstall: "{{ mtproxy_reinstall |bool }}"
+    reinstall: "{{ mtproxy_upgrade |bool }}"
   register: latest_mtg_release
   tags: srv_mtproxy_install
 
@@ -25,15 +25,15 @@
     url: "{{ latest_mtg_release.url }}"
     dest: "{{ mtproxy_bin_file }}"
     mode: 0755
-    force: "{{ mtproxy_reinstall |bool }}"
+    force: "{{ mtproxy_upgrade |bool }}"
   when: latest_mtg_release is changed
   tags: srv_mtproxy_install
 
 
 - name: configure mtproxy service
   template:
-    src: mtproxy.defaults
-    dest: /etc/default/mtproxy
+    src: mtproxy.toml
+    dest: /etc/mtproxy.toml
     owner: root
     group: proxy
     mode: 0640

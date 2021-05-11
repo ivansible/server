@@ -1,3 +1,0 @@
-# ansible-managed
-MTG_BIND={{ mtproxy_bindip }}:{{ mtproxy_port }}
-MTG_SECRET={% if mtproxy_secure |bool %}dd{% endif %}{{ mtproxy_secret }}

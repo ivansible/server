@@ -15,11 +15,10 @@ Available variables are listed below, along with default values.
     mtproxy_port: 13128
     mtproxy_bindip: 0.0.0.0
     mtproxy_secret: cf18fa8ea0267057e2c61a5f7322a8e7
-    mtproxy_secure: true
     mtproxy_release: latest
 
     mtproxy_rmdocker: false
-    mtproxy_reinstall: false
+    mtproxy_upgrade: false
     mtproxy_bin_file: /usr/local/sbin/mtg
 
 
