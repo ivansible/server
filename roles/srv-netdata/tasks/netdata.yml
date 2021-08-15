@@ -8,12 +8,13 @@
     src: dirmon/dirmon.chart.sh
     dest: /usr/libexec/netdata/charts.d/dirmon.chart.sh
     mode: 0644
+  when: disk_dirs |d('')
   notify: restart netdata service
   vars:
     update_every: "{{ srv_netdata_update_dirs_every }}"
     chart_priority: 90000
     disk_dirs: "{{ _disk_dirs_list |join(',') }}"
-    _disk_dirs_tuples: "{{ srv_netdata_disk_dirs |default({},true) |dictsort }}"
+    _disk_dirs_tuples: "{{ srv_netdata_disk_dirs |d({},true) |dictsort }}"
     _disk_dirs_list: >
       {% set ns = namespace(items = []) -%}
       {% for name, path in _disk_dirs_tuples -%}
@@ -24,7 +25,7 @@
 
 - name: customize netdata alarms
   import_tasks: alarms.yml
-  when: srv_netdata_alarms |default({})
+  when: srv_netdata_alarms |d({})
   tags: srv_netdata_alarms
 
 - name: setup netdata site in nginx
@@ -34,9 +35,9 @@
     mode: 0644
   notify: reload nginx service
   vars:
-    ssl_port: "{{ nginx_ssl_port_internal |default(0) |int }}"
+    ssl_port: "{{ nginx_ssl_port_internal |d(0) |int }}"
     ssl_host_port: "{{ ':%s' % ssl_port if ssl_port |int else '' }}"
-  when: srv_netdata_nginx_site |default('')
+  when: srv_netdata_nginx_site |d('')
   tags: srv_netdata_nginx
 
 - name: register with netdata api server
@@ -45,11 +46,11 @@
     creates: /var/lib/netdata/cloud.d/claimed_id
   notify: restart netdata service
   vars:
-    token: "{{ srv_netdata_token |default('') }}"
-    rooms: "{{ srv_netdata_rooms |default('') }}"
+    token: "{{ srv_netdata_token |d('') }}"
+    rooms: "{{ srv_netdata_rooms |d('') }}"
     url: https://app.netdata.cloud
   when:
-    - token |default('')
-    - rooms |default('')
+    - token |d('')
+    - rooms |d('')
   tags: srv_netdata_claim
 ...
