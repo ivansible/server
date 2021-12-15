@@ -17,7 +17,7 @@ AllowMethodCONNECT = true
 {% if ziproxy_userpass != "" %}
 ## Authentication mode to be used for proxy access: 1=plain text file
 ## Plain text file containing authentication data should contain
-## user:pass pairs, lines no longer than 128 chars. Password is unencrypted.
+## user:pass pairs, lines no longer than 128 chars. Password is not encrypted.
 AuthMode = 1
 AuthPasswdFile = "/etc/ziproxy/http.passwd"
 
