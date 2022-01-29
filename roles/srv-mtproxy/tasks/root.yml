@@ -14,18 +14,26 @@
   github_release:
     repository: 9seconds/mtg
     release: "{{ mtproxy_release }}"
-    template: '{download_url}/mtg-linux-amd64'
+    template: '{download_url}/mtg-{ver}-linux-{goarch}.tar.gz'
     creates: "{{ mtproxy_bin_file }}"
     reinstall: "{{ mtproxy_upgrade |bool }}"
+    strip_v: true
   register: latest_mtg_release
   tags: srv_mtproxy_install
 
-- name: download mtproxy
-  get_url:
-    url: "{{ latest_mtg_release.url }}"
-    dest: "{{ mtproxy_bin_file }}"
+- name: download and unarchive mtproxy tarball
+  unarchive:
+    remote_src: true
+    src: "{{ latest_mtg_release.url }}"
+    dest: "{{ mtproxy_bin_file |dirname }}"
+    extra_opts: --strip-components=1
+    exclude:
+      - LICENSE
+      - README.md
+      - SECURITY.md
+    owner: root
+    group: root
     mode: 0755
-    force: "{{ mtproxy_upgrade |bool }}"
   when: latest_mtg_release is changed
   tags: srv_mtproxy_install
 
