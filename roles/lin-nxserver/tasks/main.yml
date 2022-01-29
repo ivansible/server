@@ -1,21 +1,6 @@
 ---
 - name: most steps require elevated privileges
-  block:
-    - name: install desktop environment (should come before nomachine)
-      import_tasks: desktop.yml
-      tags: lin_nx_desktop
-
-    - name: install nxserver
-      import_tasks: nxserver.yml
-      tags: lin_nx_server
-
-    - name: configure firewall for nxserver
-      import_tasks: firewall.yml
-      tags: lin_nx_firewall
-
-    - name: enable audio in nxserver
-      import_tasks: audio.yml
-      tags: lin_nx_audio
+  import_tasks: root.yml
   become: true
   tags:
     - lin_nx_root
@@ -29,21 +14,11 @@
     - lin_nx_all
 
 - name: reboot to work around dbus issues
-  block:
-    - name: reboot after fresh install (warnings are ok)
-      reboot:
-        pre_reboot_delay: 20
-      when: nx_nxserver_packages is changed
-            and nx_desktop_packages is changed
-            and allow_reboot |bool
-
-    - name: ask user to reboot
-      debug:
-        msg: "please reboot {{ inventory_hostname }} manually"
-      when: nx_nxserver_packages is changed
-            and nx_desktop_packages is changed
-            and not allow_reboot |bool
+  import_tasks: reboot.yml
   become: true
+  when:
+    - nx_nxserver_packages |d({}) is changed
+    - nx_desktop_packages |d({}) is changed
   tags:
     - lin_nx_reboot
     - lin_nx_all

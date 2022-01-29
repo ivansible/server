@@ -5,20 +5,20 @@
   # noqa 306
   shell: dpkg --list nomachine | awk '/^ii / {print $3}'
   changed_when: false
-  register: old_ver
-
-- name: derive new nxserver version
-  set_fact:
-    new_ver: "{{ lin_nxserver_deb_url
-               | regex_replace('^.*?_([\\d\\._]{3,})_.*$', '\\1')
-               | replace('_', '-') }}"
+  register: _nx_dpkg_result
 
 - name: install nxserver package
   apt:
-    deb: "{{ lin_nxserver_deb_url }}"
-  ## stdout is undefined in check mode
-  when: new_ver != old_ver.stdout |d('')
-  register: nx_nxserver_packages
+    deb: "{{ deb_url }}"
+  vars:
+    ## install on amd64 or arm64
+    deb_url: "{{ lin_nxserver_deb_url |replace('ARCH', lin_apt_arch) }}"
+    ## extract new version from url
+    new_ver: "{{ deb_url |regex_replace('^.*?_([\\d\\._]{3,})_.*$', '\\1') | replace('_', '-') }}"
+    ## stdout is undefined in check mode
+    old_ver: "{{ _nx_dpkg_result.stdout |d('') }}"
+  when: new_ver != old_ver
   ## fix intermittent network errors on .ru boxes
-  until: nx_nxserver_packages.msg |default('') is not search('timed out')
+  register: _nx_apt_result
+  until: _nx_apt_result.msg |d('') is not search('timed out')
 ...
