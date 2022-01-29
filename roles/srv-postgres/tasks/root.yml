@@ -6,7 +6,7 @@
 
 - name: add postgresql.org apt repository
   apt_repository:
-    repo: "deb [arch=amd64] http://apt.postgresql.org/pub/repos/apt/ {{ ansible_lsb.codename }}-pgdg main"
+    repo: "deb [arch={{ lin_apt_arch }}] http://apt.postgresql.org/pub/repos/apt/ {{ ansible_lsb.codename }}-pgdg main"
     filename: pgdg
     mode: 0644
     update_cache: true

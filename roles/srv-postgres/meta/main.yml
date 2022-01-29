@@ -1,5 +1,6 @@
 ---
 dependencies:
+  - ivansible.lin_base    # for lin_apt_arch
   - ivansible.nginx_base  # for common defaults, eg. path of ssl certificate
   - ivansible.cert_base   # for common certbot settings
 
