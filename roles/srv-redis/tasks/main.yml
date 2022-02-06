@@ -4,6 +4,7 @@
   become: true
   tags: srv_redis_all
 
-- meta: flush_handlers
+- name: flush handlers
+  meta: flush_handlers
   tags: srv_redis_all
 ...
