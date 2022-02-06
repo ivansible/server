@@ -93,7 +93,7 @@
     path: "{{ srv_pg_conf_dir }}/postgresql.conf"
     section: ""
     option: "{{ item.key }}"
-    value: "{{ item.value }}\t\t# [ansible]"
+    value: "{{ item.value }}\t\t# [ansible]"  # noqa no-tabs
     mode: 0644
   with_dict: "{{ srv_pg_parameters }}"
   loop_control:
@@ -126,7 +126,7 @@
 - name: allow root to login as postgres locally
   lineinfile:
     path: "{{ srv_pg_conf_dir }}/pg_ident.conf"
-    line: "root_postgres\t{{ item }}\t\tpostgres"
+    line: "root_postgres\t{{ item }}\t\tpostgres"  # noqa no-tabs
     owner: postgres
     group: postgres
     mode: 0640
