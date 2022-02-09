@@ -1,7 +1,9 @@
 ---
 allow_reboot: true
 
-lin_nxserver_deb_url: https://download.nomachine.com/download/7.0/Linux/nomachine_7.0.211_4_amd64.deb
+## nxserver is not available on arm64
+lin_nxserver_enabled: "{{ ansible_architecture == 'x86_64' }}"
+lin_nxserver_deb_url: https://download.nomachine.com/download/7.8/Linux/nomachine_7.8.2_1_amd64.deb
 
 lin_nxserver_display: 1001
 

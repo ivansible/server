@@ -5,6 +5,7 @@
 
 - name: install nxserver
   import_tasks: nxserver.yml
+  when: lin_nxserver_enabled |bool
   tags: lin_nx_server
 
 - name: configure firewall for nxserver
@@ -13,5 +14,6 @@
 
 - name: enable audio in nxserver
   import_tasks: audio.yml
+  when: lin_nxserver_enabled |bool
   tags: lin_nx_audio
 ...
