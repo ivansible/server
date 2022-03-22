@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - ivansible.lin_base  # for lin_firewall and ferm_port module
+  - ivansible.base.linux  # for lin_firewall and ferm_port module
 
 galaxy_info:
   role_name: srv_ziproxy

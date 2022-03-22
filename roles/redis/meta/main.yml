@@ -1,8 +1,8 @@
 ---
 dependencies:
-  - ivansible.lin_base    # for lin_compress_logs and more
-  - ivansible.nginx_base  # for default ssl certificate and ferm_port module
-  - ivansible.cert_base   # for default certbot settings
+  - ivansible.base.linux  # for lin_compress_logs and more
+  - ivansible.base.nginx  # for default ssl certificate and ferm_port module
+  - ivansible.base.cert   # for default certbot settings
 
 galaxy_info:
   role_name: srv_redis

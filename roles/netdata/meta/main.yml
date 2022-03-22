@@ -1,7 +1,7 @@
 ---
 dependencies:
-  - ivansible.lin_base    # for firewall type
-  - ivansible.nginx_base  # for internal nginx ports
+  - ivansible.base.linux  # for firewall type
+  - ivansible.base.nginx  # for internal nginx ports
 
 galaxy_info:
   role_name: srv_netdata

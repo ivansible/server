@@ -1,8 +1,8 @@
 ---
 dependencies:
-  - ivansible.lin_base    # for lin_apt_arch
-  - ivansible.nginx_base  # for common defaults, eg. path of ssl certificate
-  - ivansible.cert_base   # for common certbot settings
+  - ivansible.base.linux  # for lin_apt_arch
+  - ivansible.base.nginx  # for common defaults, eg. path of ssl certificate
+  - ivansible.base.cert   # for common certbot settings
 
 galaxy_info:
   role_name: srv_postgres

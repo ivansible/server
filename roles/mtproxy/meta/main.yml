@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - ivansible.lin_base  # for lin_use_docker and firewall flag/module
+  - ivansible.base.linux  # for lin_use_docker and firewall flag/module
 
 galaxy_info:
   role_name: srv_mtproxy
