@@ -14,7 +14,7 @@
     - lin_firewall == 'ufw'
 
 - name: open nxserver ports for all in ferm
-  ferm_port:
+  ivansible.base.ferm_port:
     port: "{{ lin_nxserver_ports }}"
     zone: external
     solo_zone: true
@@ -27,7 +27,7 @@
 - name: block nxserver from external ferm hosts but open for internals
   ## Adding port in two domains at once and removing from external.
   ## The solo flag can't do that so use loop as a workaround.
-  ferm_port:
+  ivansible.base.ferm_port:
     port: "{{ lin_nxserver_ports }}"
     zone: "{{ item }}"
     solo_zone: false

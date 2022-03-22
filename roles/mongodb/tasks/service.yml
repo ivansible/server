@@ -31,7 +31,7 @@
   when: lin_firewall == 'ufw'
 
 - name: open mongodb port in ferm
-  ferm_port:
+  ivansible.base.ferm_port:
     port: "{{ mongodb_port }}"
     proto: tcp
     comment: mongodb

@@ -11,7 +11,7 @@
 
 
 - name: detect latest mtg release
-  github_release:
+  ivansible.base.github_release:
     repository: 9seconds/mtg
     release: "{{ mtproxy_release }}"
     template: '{download_url}/mtg-{ver}-linux-{goarch}.tar.gz'
@@ -75,7 +75,7 @@
     - srv_mtproxy_firewall
 
 - name: open (or block) mtproxy port in ferm
-  ferm_port:
+  ivansible.base.ferm_port:
     port: "{{ mtproxy_port }}"
     zone: "{{ mtproxy_direct |bool |ternary('external','internal') }}"
     solo_zone: true

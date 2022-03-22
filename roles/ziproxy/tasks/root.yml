@@ -75,7 +75,7 @@
     - srv_ziproxy_firewall
 
 - name: open ziproxy port for exteranl/internal hosts in ferm
-  ferm_port:
+  ivansible.base.ferm_port:
     port: "{{ ziproxy_port }}"
     proto: tcp
     zone: "{{ ziproxy_direct |bool |ternary('external','internal') }}"

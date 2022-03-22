@@ -50,7 +50,7 @@
     enabled: true
 
 - name: open internal netdata port in ferm
-  ferm_port:
+  ivansible.base.ferm_port:
     port: 19999
     proto: tcp
     zone: internal

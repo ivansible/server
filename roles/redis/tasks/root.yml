@@ -133,7 +133,7 @@
   when: lin_firewall == 'ufw'
 
 - name: open redis ports in ferm
-  ferm_port:
+  ivansible.base.ferm_port:
     port: "{{ redis_open_ports }}"
     proto: tcp
     zone: external
@@ -142,7 +142,7 @@
   when: lin_firewall == 'ferm'
 
 - name: open redis insecure port internally in ferm
-  ferm_port:
+  ivansible.base.ferm_port:
     port: "{{ redis_port_tcp }}"
     proto: tcp
     zone: internal

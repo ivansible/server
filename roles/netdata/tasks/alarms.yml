@@ -17,7 +17,7 @@
 - name: customize netdata alarms
   ## use a special version of lineinfile module, which
   ## honors `regexp`, `backrefs`, and `insertafter` together.
-  lineinfile_netdata:
+  ivansible.server.lineinfile_netdata:
     path: "/etc/netdata/health.d/{{ file }}.conf"
     regexp: '^(\s*)({{ key }}):'
     line: '\1{{ key }}: {{ val }}'

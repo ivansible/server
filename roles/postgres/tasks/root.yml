@@ -158,7 +158,7 @@
     - srv_postgres_firewall
 
 - name: open postgres port in ferm
-  ferm_port:
+  ivansible.base.ferm_port:
     port: "{{ srv_pg_port }}"
     proto: tcp
     comment: postgres

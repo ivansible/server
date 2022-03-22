@@ -4,7 +4,7 @@
     name: cockpit
 
 - name: open internal cockpit port in ferm
-  ferm_port:
+  ivansible.base.ferm_port:
     port: 9090
     proto: tcp
     zone: internal
