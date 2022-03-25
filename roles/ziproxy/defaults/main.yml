@@ -1,8 +1,6 @@
 ---
-# defaults for ivansible.srv_ziproxy
-
+ziproxy_enable: true
 ziproxy_port: 3168
-
 ziproxy_direct: true
 
 # colon-separated user:password pair

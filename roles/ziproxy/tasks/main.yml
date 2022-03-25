@@ -2,5 +2,6 @@
 - name: become root and install ziproxy
   import_tasks: root.yml
   become: true
+  when: ziproxy_enable |bool
   tags: srv_ziproxy_all
 ...

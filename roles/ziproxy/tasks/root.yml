@@ -26,7 +26,7 @@
     group: ziproxy
     mode: 0640
     backup: false
-  when: ziproxy_userpass != '' # noqa 602
+  when: ziproxy_userpass != ''  # noqa 602
   notify: restart ziproxy service
   tags: srv_ziproxy_config
 
