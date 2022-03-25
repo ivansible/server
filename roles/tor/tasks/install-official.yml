@@ -9,7 +9,7 @@
 
 - name: add torproject repository
   apt_repository:
-    repo: "deb [arch=amd64] {{ url }} {{ codename }} main"
+    repo: "deb [arch={{ lin_apt_arch }}] {{ url }} {{ codename }} main"
     filename: tor-project
     mode: 0644
   vars:

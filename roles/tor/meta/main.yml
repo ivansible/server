@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - ivansible.base.linux  # for hide_secrets
+  - ivansible.base.linux  # for hide_secrets, lin_apt_arch
 
 galaxy_info:
   role_name: lin_tor
