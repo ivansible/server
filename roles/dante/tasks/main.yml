@@ -2,6 +2,7 @@
 - name: become root and deploy dante
   import_tasks: root.yml
   become: true
+  when: dante_enable |bool
   tags: srv_dante_all
 
 - name: flush handlers

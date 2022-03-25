@@ -1,6 +1,7 @@
 ---
 # defaults for ivansible.srv_dante
 
+dante_enable: true
 dante_port: 1080
 dante_direct: true
 
