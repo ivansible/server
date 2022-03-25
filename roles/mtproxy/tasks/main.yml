@@ -2,5 +2,6 @@
 - name: use import to become root globally
   import_tasks: root.yml
   become: true
+  when: mtproxy_enable |bool
   tags: srv_mtproxy_all
 ...

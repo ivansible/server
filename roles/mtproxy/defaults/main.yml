@@ -1,6 +1,8 @@
 ---
 # defaults for ivansible.srv_mtproxy
 
+mtproxy_enable: true
+
 mtproxy_secret: deadbeefdeadbeef0123456789abcdef
 mtproxy_port: 13128
 mtproxy_bindip: 0.0.0.0
