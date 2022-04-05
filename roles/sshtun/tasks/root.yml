@@ -42,6 +42,7 @@
   template:
     src: sshtun.service
     dest: /etc/systemd/system/sshtun-serv.service
+    mode: 0644
   register: sshtun_service_result
   notify: restart sshtun service
 
