@@ -2,14 +2,12 @@
 - name: add redis ppa repository from chris lea
   apt_repository:
     repo: ppa:chris-lea/redis-server
-    codename: "{{ codename }}"
+    codename: "{{ ansible_lsb.codename }}"
     filename: redis
     mode: 0644
     update_cache: true
-  vars:
-    ## workaround for redis ppa not yet ready on focal
-    codename: "{{ 'eoan' if _codename == 'focal' and redis_focal_fix |bool else _codename }}"
-    _codename: "{{ ansible_lsb.codename }}"
+  register: _add_redis_ppa
+  until: _add_redis_ppa is successful
 
 - name: install redis and stunnel packages
   apt:

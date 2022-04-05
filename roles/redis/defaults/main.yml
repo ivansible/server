@@ -1,8 +1,6 @@
 ---
 # defaults for ivansible.srv_redis
 
-redis_focal_fix: true
-
 redis_port_tcp: 6379
 redis_port_ssl: 7379
 
