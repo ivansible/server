@@ -1,0 +1,7 @@
+---
+collections:
+  - git+https://github.com/ivansible/base
+  - git+https://github.com/ivansible/linux
+  ## ivansible.devel.user is required by ivansible.server.nxserver
+  - git+https://github.com/ivansible/devel
+...
