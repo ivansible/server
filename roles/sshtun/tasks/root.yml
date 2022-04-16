@@ -1,6 +1,6 @@
 ---
 - name: allow sshtun user to create ssh tunnels
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: /etc/ssh/sshd_config
     block: |
       Match User {{ srv_sshtun_ssh_user }}
@@ -12,19 +12,19 @@
   notify: restart ssh service
 
 - name: authorize ssh key with sshtun user
-  authorized_key:
+  ansible.posix.authorized_key:
     user: "{{ srv_sshtun_ssh_user }}"
     key: "{{ lookup('pipe', keygen_cmd) }}"
     comment: "{{ keyfile |basename |regex_replace('[.]key$') }}"
   vars:
-    # use '&&' in the pipe to fail on chmod errors
+    ## use '&&' in the pipe to fail on chmod errors
     keygen_cmd: 'chmod 600 "{{ keyfile }}" && ssh-keygen -y -f "{{ keyfile }}"'
     keyfile: "{{ srv_sshtun_ssh_key }}"
   when: srv_sshtun_ssh_key |default('')
 
 
 - name: upload sshtun script
-  copy:
+  ansible.builtin.copy:
     src: sshtun-serv.sh
     dest: "{{ srv_sshtun_command_path }}"
     mode: 0754
@@ -32,14 +32,14 @@
   notify: restart sshtun service
 
 - name: configure sshtun service
-  template:
+  ansible.builtin.template:
     src: sshtun.conf
     dest: /etc/default/sshtun-serv
     mode: 0640
   notify: restart sshtun service
 
 - name: setup sshtun service
-  template:
+  ansible.builtin.template:
     src: sshtun.service
     dest: /etc/systemd/system/sshtun-serv.service
     mode: 0644
@@ -47,7 +47,7 @@
   notify: restart sshtun service
 
 - name: enable sshtun service
-  systemd:
+  ansible.builtin.systemd:
     name: sshtun-serv
     state: started
     enabled: true

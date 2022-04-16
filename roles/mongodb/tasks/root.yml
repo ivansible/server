@@ -1,14 +1,14 @@
 ---
 - name: install mongodb
-  import_tasks: install.yml
+  ansible.builtin.import_tasks: install.yml
   tags: srv_mongodb_install
 
 - name: configure ssl in mongodb
-  import_tasks: ssl.yml
+  ansible.builtin.import_tasks: ssl.yml
   tags: srv_mongodb_ssl
 
 - name: create mongodb configuration file
-  template:
+  ansible.builtin.template:
     src: mongod.conf
     dest: /etc/mongod.conf
     owner: root
@@ -18,14 +18,14 @@
   tags: srv_mongodb_config
 
 - name: setup mongodb service
-  import_tasks: service.yml
+  ansible.builtin.import_tasks: service.yml
   tags: srv_mongodb_service
 
 - name: set mongodb administrator password
-  import_tasks: password.yml
+  ansible.builtin.import_tasks: password.yml
   tags: srv_mongodb_password
 
 - name: apply mongodb changes now
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
   tags: srv_mongodb_password
 ...

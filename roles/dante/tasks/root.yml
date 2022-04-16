@@ -1,13 +1,13 @@
 ---
 - name: assert that dante user name starts with dante_
-  assert:
+  ansible.builtin.assert:
     that: dante_user.startswith('dante_')
     fail_msg: "dante username '{{ dante_user }}' must start with 'dante_'"
   tags: srv_dante_user
 
 - name: create dante proxy user
   ## see: https://docs.ansible.com/ansible/latest/modules/user_module.html#user-module
-  user:
+  ansible.builtin.user:
     name: "{{ dante_user }}"
     state: present
     ## see: https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#hash-filters
@@ -23,7 +23,7 @@
 
 
 - name: configure dante server
-  template:
+  ansible.builtin.template:
     src: danted.conf
     dest: /etc/danted.conf
     mode: 0644
@@ -35,19 +35,19 @@
 
 
 - name: install foreign dante package on xenial (with workarounds)
-  import_tasks: install-xenial.yml
+  ansible.builtin.import_tasks: install-xenial.yml
   when: ansible_lsb.codename in ['xenial']
   tags: srv_dante_install
 
 - name: install dante server on ubuntu bionic+
-  apt:
+  ansible.builtin.apt:
     name: dante-server
   when: ansible_lsb.codename not in ['xenial']
   register: dante_install_bionic_result
   tags: srv_dante_install
 
 - name: dante service workarounds
-  import_tasks: service.yml
+  ansible.builtin.import_tasks: service.yml
   vars:
     _stop_dante: "{{ dante_install_xenial_result is changed
                   or dante_install_bionic_result is changed }}"
@@ -55,7 +55,7 @@
 
 
 - name: open/block dante port in ufw
-  ufw:
+  community.general.ufw:
     port: "{{ dante_port |string }}"
     rule: "{{ dante_direct |bool |ternary('allow','deny') }}"
   no_log: "{{ hide_secrets |bool }}"
@@ -76,7 +76,7 @@
 
 
 - name: configure dante logging
-  import_tasks: syslog.yml
+  ansible.builtin.import_tasks: syslog.yml
   when: lin_use_rsyslog |bool
   tags: srv_dante_syslog
 ...

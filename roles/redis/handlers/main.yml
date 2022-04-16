@@ -1,14 +1,14 @@
 ---
-# handlers for ivansible.srv_redis
+## handlers for ivansible.server.redis
 
 - name: restart redis service
-  systemd:
+  ansible.builtin.systemd:
     name: redis-server
     state: restarted
   become: true
 
 - name: restart redis stunnel service
-  systemd:
+  ansible.builtin.systemd:
     name: redis-stunnel
     state: restarted
   become: true

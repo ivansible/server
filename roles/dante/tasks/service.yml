@@ -1,8 +1,8 @@
 ---
 - name: temporarily stop dante service after fresh install
-  ## note: this step is a workaround.
-  ##       without this "recycling" the service might end up disabled.
-  systemd:
+  ## note: this step is a workaround,
+  ## without such "recycling" the service might end up disabled.
+  ansible.builtin.systemd:
     name: danted
     state: stopped
     enabled: false
@@ -10,14 +10,14 @@
   when: _stop_dante |bool
 
 - name: directory for dante service snapin
-  file:
+  ansible.builtin.file:
     path: /etc/systemd/system/danted.service.d
     state: directory
     mode: 0755
   when: dante_service_boot_fix |bool
 
 - name: make dante service restart after boot problems
-  copy:
+  ansible.builtin.copy:
     dest: /etc/systemd/system/danted.service.d/fix.conf
     content: |
       # make dante service restart after boot problems
@@ -37,7 +37,7 @@
   notify: restart dante service
 
 - name: enable dante service
-  systemd:
+  ansible.builtin.systemd:
     name: danted
     state: started
     enabled: true

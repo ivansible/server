@@ -1,11 +1,11 @@
 ---
 - name: become root and setup tor
-  import_tasks: root.yml
+  ansible.builtin.import_tasks: root.yml
   become: true
   when: tor_enable |bool
   tags: lin_tor_all
 
 - name: apply postponed handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
   tags: lin_tor_all
 ...

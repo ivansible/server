@@ -1,6 +1,6 @@
 ---
 - name: install ziproxy package
-  apt:
+  ansible.builtin.apt:
     name: ziproxy
     state: present
   register: ziproxy_apt_result
@@ -8,7 +8,7 @@
 
 
 - name: create ziproxy configuration
-  template:
+  ansible.builtin.template:
     src: ziproxy.conf.j2
     dest: /etc/ziproxy/ziproxy.conf
     owner: ziproxy
@@ -19,7 +19,7 @@
   tags: srv_ziproxy_config
 
 - name: setup ziproxy authentication
-  copy:
+  ansible.builtin.copy:
     dest: /etc/ziproxy/http.passwd
     content: "{{ ziproxy_userpass }}"
     owner: ziproxy
@@ -31,7 +31,7 @@
   tags: srv_ziproxy_config
 
 - name: upload ziproxy lists
-  copy:
+  ansible.builtin.copy:
     src: "{{ item }}"
     dest: /etc/ziproxy/
     owner: ziproxy
@@ -45,9 +45,9 @@
 
 
 - name: temporarily reset ziproxy service after fresh install
-  # note: this step is a workaround.
-  #       without this reset the service might end up disabled.
-  systemd:
+  ## note: this step is a workaround,
+  ## without such reset the service might end up disabled.
+  ansible.builtin.systemd:
     name: ziproxy
     state: stopped
     enabled: false
@@ -56,7 +56,7 @@
   tags: srv_ziproxy_service
 
 - name: activate ziproxy service
-  systemd:
+  ansible.builtin.systemd:
     name: ziproxy
     state: started
     enabled: true
@@ -65,7 +65,7 @@
 
 
 - name: open ziproxy port in ufw
-  ufw:
+  community.general.ufw:
     port: "{{ ziproxy_port |string }}"
     proto: tcp
     rule: allow
@@ -85,7 +85,4 @@
   tags:
     - skip_ansible_lint
     - srv_ziproxy_firewall
-
-- name: flush handlers
-  meta: flush_handlers
 ...

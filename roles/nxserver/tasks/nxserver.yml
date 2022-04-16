@@ -3,12 +3,13 @@
   ## should ignore linter warning about pipefail here
   ## it's perfectly valid to fail if package is not installed
   # noqa 306
-  shell: dpkg --list nomachine | awk '/^ii / {print $3}'
+  ansible.builtin.shell:
+    cmd: dpkg --list nomachine | awk '/^ii / {print $3}'
   changed_when: false
   register: _nx_dpkg_result
 
 - name: install nxserver package
-  apt:
+  ansible.builtin.apt:
     deb: "{{ deb_url }}"
   vars:
     ## install on amd64 or arm64

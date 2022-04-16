@@ -1,6 +1,6 @@
 ---
 - name: open nxserver ports for all in ufw
-  ufw:
+  community.general.ufw:
     rule: allow
     port: "{{ item |string }}"
     ## allow both tcp (main) and udp (multimedia)

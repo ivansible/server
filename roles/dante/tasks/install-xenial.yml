@@ -24,17 +24,17 @@
 ## see: https://github.com/dw/mitogen/issues/407#issuecomment-433453574
 ##
 - name: fix for xz-compressed control in foreign dante deb
-  apt:
+  ansible.builtin.apt:
     name:
       - python-apt
       - python3-apt
     state: present
 
 - name: restart mitogen runner to reset apt state
-  meta: reset_connection
+  ansible.builtin.meta: reset_connection
 
 - name: install dante server on ubuntu xenial
-  apt:
+  ansible.builtin.apt:
     deb: "{{ dante_xenial_deb_url }}"
     force: true
     force_apt_get: true

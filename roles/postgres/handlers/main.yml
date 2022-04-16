@@ -1,8 +1,8 @@
 ---
-## handlers for ivansible.srv_postgres
+## handlers for ivansible.server.postgres
 
 - name: restart postgres service
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ srv_pg_service }}"
     state: restarted
   become: true
@@ -11,7 +11,7 @@
 ## see: https://stackoverflow.com/questions/31618967/how-do-i-write-an-ansible-handler-with-multiple-tasks
 - name: wait for postgres to start
   listen: reset postgres admin password
-  wait_for:
+  ansible.builtin.wait_for:
     port: "{{ srv_pg_port }}"
     state: started
     host: localhost
@@ -21,7 +21,7 @@
 - name: alter postgres admin password
   listen: reset postgres admin password
   no_log: "{{ hide_secrets |bool }}"
-  command:
+  ansible.builtin.command:
     argv:
       - psql
       - --user=postgres

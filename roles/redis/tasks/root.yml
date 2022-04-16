@@ -1,6 +1,6 @@
 ---
 - name: add redis ppa repository from chris lea
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: ppa:chris-lea/redis-server
     codename: "{{ ansible_lsb.codename }}"
     filename: redis
@@ -10,7 +10,7 @@
   until: _add_redis_ppa is successful
 
 - name: install redis and stunnel packages
-  apt:
+  ansible.builtin.apt:
     name:
       - redis-server
       - redis-tools
@@ -19,18 +19,18 @@
 
 
 - name: backup vanilla redis configuration
-  command:
+  ansible.builtin.command:
     cmd: cp -a /etc/redis/redis.conf /etc/redis/redis.conf.orig
     creates: /etc/redis/redis.conf.orig
 
 - name: ansible comment in redis.conf
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/redis/redis.conf
     line: "# ansible-managed"
     insertbefore: BOF
 
 - name: tweak redis parameters
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/redis/redis.conf
     regexp: '^#?\s*{{ item.key }}\s'
     line: "{{ item.key }} {{ item.value }}"
@@ -40,21 +40,22 @@
   notify: restart redis service
 
 - name: set redis password
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/redis/redis.conf
     regexp: '^#?\s*requirepass\s'
     line: "requirepass {{ redis_password }}"
     owner: redis
     group: redis
     mode: 0640
-  when: redis_password is defined
-        and redis_password is not none
-        and redis_password != ''  # noqa 602
+  when:
+    - redis_password is defined
+    - redis_password is not none
+    - redis_password != ''  # noqa 602
   no_log: "{{ hide_secrets |bool }}"
   notify: restart redis service
 
 - name: disable redis password
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/redis/redis.conf
     regexp: '^#?\s*requirepass\s'
     line: "#requirepass foobar"
@@ -69,7 +70,7 @@
 
 
 - name: verify that redis ssl certificate and key are readable
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: file
   loop:
@@ -77,22 +78,22 @@
     - "{{ redis_ssl_key }}"
 
 - name: ensure that private key is readable by redis stunnel not world
-  file:
+  ansible.builtin.file:
     path: "{{ redis_ssl_key }}"
     state: file
-    group: "{{ certbot_group |default('ssl-cert') }}"
+    group: "{{ certbot_group |d('ssl-cert') }}"
     mode: 'o='
 
 - name: ensure that redis stunnel can accces private key directory
-  file:
+  ansible.builtin.file:
     path: "{{ redis_ssl_key |dirname }}"
     state: directory
-    group: "{{ certbot_group |default('ssl-cert') }}"
+    group: "{{ certbot_group |d('ssl-cert') }}"
     mode: g+rx
 
 
 - name: configure stunnel for redis server
-  template:
+  ansible.builtin.template:
     src: redis-stunnel.conf
     dest: /etc/redis/stunnel.conf
     owner: root
@@ -100,7 +101,7 @@
     mode: 0644
 
 - name: setup stunnel ssl service for redis server
-  template:
+  ansible.builtin.template:
     src: redis-stunnel.service
     dest: /etc/systemd/system/redis-stunnel.service
     owner: root
@@ -111,7 +112,7 @@
 
 
 - name: enable redis and stunnel ssl services
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item }}"
     state: started
     enabled: true
@@ -122,7 +123,7 @@
 
 
 - name: open redis ports in ufw
-  ufw:
+  community.general.ufw:
     rule: allow
     port: "{{ item |string }}"
     proto: tcp
@@ -150,7 +151,7 @@
 
 
 - name: enable/disable compression of redis/stunnel logs
-  replace:
+  ansible.builtin.replace:
     path: "/etc/logrotate.d/{{ item }}"
     regexp: "{{ lookbehind }}(compress|delaycompress)"
     replace: "{{ commentout }}\\1"

@@ -1,20 +1,20 @@
 ---
 - name: most steps require elevated privileges
-  import_tasks: root.yml
+  ansible.builtin.import_tasks: root.yml
   become: true
   tags:
     - lin_nx_root
     - lin_nx_all
 
 - name: authorize user
-  import_tasks: user.yml
+  ansible.builtin.import_tasks: user.yml
   become: false
   tags:
     - lin_nx_user
     - lin_nx_all
 
 - name: reboot to work around dbus issues
-  import_tasks: reboot.yml
+  ansible.builtin.import_tasks: reboot.yml
   become: true
   when:
     - nx_nxserver_packages |d({}) is changed

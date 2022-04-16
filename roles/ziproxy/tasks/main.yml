@@ -1,7 +1,10 @@
 ---
 - name: become root and install ziproxy
-  import_tasks: root.yml
+  ansible.builtin.import_tasks: root.yml
   become: true
   when: ziproxy_enable |bool
   tags: srv_ziproxy_all
+
+- name: flush handlers
+  ansible.builtin.meta: flush_handlers
 ...

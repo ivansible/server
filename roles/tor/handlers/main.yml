@@ -1,14 +1,14 @@
 ---
-# handlers for ivansible.lin_tor
+## handlers for ivansible.server.tor
 
 - name: restart tor service
-  systemd:
+  ansible.builtin.systemd:
     name: tor
     state: restarted
   become: true
 
 - name: restart privoxy service
-  systemd:
+  ansible.builtin.systemd:
     name: privoxy
     state: restarted
   become: true

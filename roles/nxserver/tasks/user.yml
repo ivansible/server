@@ -1,28 +1,28 @@
 ---
 - name: create directory for nx authorized keys
-  file:
+  ansible.builtin.file:
     state: directory
     path: ~/.nx/config
     mode: 0755
 
 - name: create authorized keys stub if none existed
-  copy:
+  ansible.builtin.copy:
     dest: ~/.ssh/authorized_keys
     content: ""
     mode: 0600
     force: false
 
 - name: link ssh authorized keys to nx config
-  file:
+  ansible.builtin.file:
     state: link
     src: ~/.ssh/authorized_keys
     dest: ~/.nx/config/authorized.crt
 
 - name: add DISPLAY variable to the user's bashrc file
-  lineinfile:
-    # path file must correspond with role ivansible.dev_user
-    # https://github.com/ivansible/dev-user/blob/master/tasks/bashrc.yml
-    # noqa 208
+  ansible.builtin.lineinfile:
+    ## the path file must correspond with role ivansible.devel.user
+    ## https://github.com/ivansible/devel/blob/master/roles/user/tasks/bashrc.yml
+    ## noqa 208
     path: ~/.local/bashrc/1env.sh
     line: "export DISPLAY=:{{ lin_nxserver_display }}"
     create: true

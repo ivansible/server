@@ -1,11 +1,13 @@
 ---
 - name: remove stale docker container
-  include_tasks: rmdocker.yml
-  when: mtproxy_rmdocker |bool and lin_use_docker |bool
+  ansible.builtin.include_tasks: rmdocker.yml
+  when:
+    - mtproxy_rmdocker |bool
+    - lin_use_docker |bool
   tags: srv_mtproxy_rmdocker
 
 - name: create group for proxy processes
-  group:
+  ansible.builtin.group:
     name: proxy
     gid: 13
 
@@ -22,7 +24,7 @@
   tags: srv_mtproxy_install
 
 - name: download and unarchive mtproxy tarball
-  unarchive:
+  ansible.builtin.unarchive:
     remote_src: true
     src: "{{ latest_mtg_release.url }}"
     dest: "{{ mtproxy_bin_file |dirname }}"
@@ -39,7 +41,7 @@
 
 
 - name: configure mtproxy service
-  template:
+  ansible.builtin.template:
     src: mtproxy.toml
     dest: /etc/mtproxy.toml
     owner: root
@@ -49,7 +51,7 @@
   tags: srv_mtproxy_service
 
 - name: setup mtproxy service unit
-  template:
+  ansible.builtin.template:
     src: mtproxy.service
     dest: /etc/systemd/system/mtproxy.service
     mode: 0644
@@ -57,7 +59,7 @@
   tags: srv_mtproxy_service
 
 - name: start mtproxy system service
-  systemd:
+  ansible.builtin.systemd:
     name: mtproxy
     state: started
     enabled: true
@@ -66,7 +68,7 @@
 
 
 - name: open (or block) mtproxy port in ufw
-  ufw:
+  community.general.ufw:
     port: "{{ mtproxy_port |string }}"
     rule: "{{ mtproxy_direct |bool |ternary('allow','deny') }}"
   no_log: "{{ hide_secrets |bool }}"

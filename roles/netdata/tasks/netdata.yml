@@ -1,10 +1,10 @@
 ---
 - name: install and configure netdata
-  import_tasks: setup.yml
+  ansible.builtin.import_tasks: setup.yml
   tags: srv_netdata_setup
 
 - name: monitor some directory sizes
-  template:
+  ansible.builtin.template:
     src: dirmon/dirmon.chart.sh
     dest: /usr/libexec/netdata/charts.d/dirmon.chart.sh
     mode: 0644
@@ -24,12 +24,12 @@
   tags: srv_netdata_dirs
 
 - name: customize netdata alarms
-  import_tasks: alarms.yml
+  ansible.builtin.import_tasks: alarms.yml
   when: srv_netdata_alarms |d({})
   tags: srv_netdata_alarms
 
 - name: setup netdata site in nginx
-  template:
+  ansible.builtin.template:
     src: netdata/nginx.conf
     dest: "{{ nginx_site_dir }}/netdata.conf"
     mode: 0644
@@ -41,7 +41,7 @@
   tags: srv_netdata_nginx
 
 - name: register with netdata api server
-  command:
+  ansible.builtin.command:
     cmd: netdata-claim.sh -token={{ token }} -rooms={{ rooms }} -url={{ url }}
     creates: /var/lib/netdata/cloud.d/claimed_id
   notify: restart netdata service

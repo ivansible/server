@@ -1,9 +1,9 @@
 ---
-# handlers for ivansible.srv_sshtun
-# note: "restart ssh service" is inherited from role lin-base
+## handlers for ivansible.server.sshtun
+## note: "restart ssh service" is inherited from role ivansible.base.linux
 
 - name: restart sshtun service
-  systemd:
+  ansible.builtin.systemd:
     name: sshtun-serv
     state: restarted
     enabled: true

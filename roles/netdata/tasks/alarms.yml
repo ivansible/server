@@ -1,6 +1,6 @@
 ---
 - name: prepare netdata alarm templates
-  copy:
+  ansible.builtin.copy:
     src: "/usr/lib/netdata/conf.d/health.d/{{ file }}.conf"
     dest: /etc/netdata/health.d/
     remote_src: true
@@ -9,7 +9,7 @@
   vars:
     file: "{{ item |regex_replace('^_') }}"
     reset_file: "{{ item.startswith('_') }}"
-    global_reset: "{{ srv_netdata_reset_alarms |default(false) |bool }}"
+    global_reset: "{{ srv_netdata_reset_alarms |d(false) |bool }}"
   loop: "{{ srv_netdata_alarms.keys() |map('regex_replace','[.].*$') |unique |sort }}"
   loop_control:
     label: "{{ file }}.conf"
@@ -29,7 +29,7 @@
   loop: "{{ srv_netdata_alarms |dictsort }}"
   loop_control:
     label: "{{ file }}.{{ alarm }}.{{ key }}"
-  when: val |default('')
+  when: val |d('')
   vars:
     desc: "{{ item.0.split('.') }}"
     file: "{{ desc.0 |regex_replace('^_') }}"

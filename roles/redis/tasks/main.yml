@@ -1,10 +1,10 @@
 ---
 - name: become root and install redis with ssl support
-  import_tasks: root.yml
+  ansible.builtin.import_tasks: root.yml
   become: true
   tags: srv_redis_all
 
 - name: flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
   tags: srv_redis_all
 ...

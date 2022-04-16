@@ -1,9 +1,9 @@
 ---
 - name: install ansible docker bindings
-  import_tasks: ansible-docker.yml
+  ansible.builtin.import_tasks: ansible-docker.yml
 
 - name: remove stale docker container (optional, so ok to fail)
-  docker_container:
+  community.docker.docker_container:
     name: mtproxy
     state: absent
   failed_when: false

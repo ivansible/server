@@ -1,12 +1,12 @@
 ---
 - name: directory for mongodb service drop-in
-  file:
+  ansible.builtin.file:
     path: /etc/systemd/system/mongod.service.d
     state: directory
     mode: 0755
 
 - name: setup mongodb service quotas
-  template:
+  ansible.builtin.template:
     src: service-quotas.conf
     dest: /etc/systemd/system/mongod.service.d/quotas.conf
     mode: 0644
@@ -15,7 +15,7 @@
     - restart mongodb service
 
 - name: enable mongodb service
-  systemd:
+  ansible.builtin.systemd:
     name: mongod
     state: started
     enabled: true
@@ -23,7 +23,7 @@
 
 
 - name: open mongodb port in ufw
-  ufw:
+  community.general.ufw:
     rule: allow
     port: "{{ mongodb_port |string }}"
     proto: tcp

@@ -1,20 +1,20 @@
 ---
 - name: set nxserver audio interface to pulseaudio
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /usr/NX/etc/node.cfg
     line: 'AudioInterface pulseaudio'
     regexp: '^#?AudioInterface\b'
   register: nx_audio_interface_result
 
 - name: specify pulseaudio command in nxserver
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /usr/NX/etc/node.cfg
     line: 'CommandStartPulseAudio "/usr/bin/pulseaudio --high-priority=no"'
     regexp: '^#?CommandStartPulseAudio\b'
   register: nx_pulseaudio_command_result
 
 - name: restart nxserver if configuration has changed
-  systemd:
+  ansible.builtin.systemd:
     name: nxserver
     state: restarted
   when: nx_audio_interface_result is changed

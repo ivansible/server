@@ -1,10 +1,10 @@
 ---
 - name: add mongodb 4.x signing key
-  apt_key:
+  ansible.builtin.apt_key:
     url: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version }}.asc"
 
 - name: add mongodb 4.x repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "deb [arch={{ lin_apt_arch }}] https://repo.mongodb.org/apt/ubuntu {{ repodir }} multiverse"
     filename: mongodb
     mode: 0644
@@ -15,7 +15,7 @@
     _codename: "{{ ansible_lsb.codename }}"
 
 - name: install mongodb packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ pkg_list |select |join(',') }}"
   vars:
     pkg_list: "{{ pkg_mongodb + pkg_pymongo_noxenial + pkg_pip + pkg_helpers }}"
@@ -31,8 +31,8 @@
     pkg_helpers: [ssl-cert, jq]
 
 - name: upgrade to pymongo >3.7 to avoid problems with SCRAM-SHA-256
-  # see: https://github.com/ansible/ansible/issues/44970
-  pip:
+  ## see: https://github.com/ansible/ansible/issues/44970
+  ansible.builtin.pip:
     name: pymongo>3.7
     executable: "{{ item }}"
   loop: "{{ lin_use_python2 |bool |ternary(['pip','pip3'], ['pip3']) }}"

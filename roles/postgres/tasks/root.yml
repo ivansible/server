@@ -1,25 +1,27 @@
 ---
 - name: install postgresql.org signing key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
   tags: srv_postgres_install
 
 - name: add postgresql.org apt repository
-  apt_repository:
-    repo: "deb [arch={{ lin_apt_arch }}] http://apt.postgresql.org/pub/repos/apt/ {{ ansible_lsb.codename }}-pgdg main"
+  ansible.builtin.apt_repository:
+    repo: "deb [arch={{ lin_apt_arch }}] {{ url }} {{ ansible_lsb.codename }}-pgdg main"
     filename: pgdg
     mode: 0644
     update_cache: true
+  vars:
+    url: http://apt.postgresql.org/pub/repos/apt/
   tags: srv_postgres_install
 
 - name: install postgresql packages with retry
   block:
     - name: install postgresql server (will retry if fails)
-      apt:
+      ansible.builtin.apt:
         name: "{{ packages }}"
   rescue:
     - name: install postgresql server (retry)
-      apt:
+      ansible.builtin.apt:
         name: "{{ packages }}"
         update_cache: true
   vars:
@@ -30,7 +32,7 @@
 
 
 - name: tune kernel for postgresql server
-  sysctl:
+  ansible.posix.sysctl:
     name: net.core.somaxconn
     value: '1024'
     state: present
@@ -45,7 +47,7 @@
 
 
 - name: grant postgres user access to letsencrypt certificate
-  user:
+  ansible.builtin.user:
     name: postgres
     groups: "{{ certbot_group }}"
     append: true
@@ -55,31 +57,31 @@
   tags: srv_postgres_ssl
 
 - name: check that postgres ssl certificate exists
-  file:
+  ansible.builtin.file:
     path: "{{ srv_pg_ssl_cert }}"
     state: file
   tags: srv_postgres_ssl
 
-# postgresql-10 server refuses to use world-readable private keys
+## postgresql-10 server refuses to use world-readable private keys
 - name: check that ssl private key exists and is not world-readable
-  file:
+  ansible.builtin.file:
     path: "{{ srv_pg_ssl_key }}"
     state: file
-    group: "{{ certbot_group |default('ssl-cert') }}"
+    group: "{{ certbot_group |d('ssl-cert') }}"
     mode: 'o='
   tags: srv_postgres_ssl
 
 - name: ensure that ssl unix group can accces private key directory
-  file:
+  ansible.builtin.file:
     path: "{{ srv_pg_ssl_key |dirname }}"
     state: directory
-    group: "{{ certbot_group |default('ssl-cert') }}"
+    group: "{{ certbot_group |d('ssl-cert') }}"
     mode: g+rx
   tags: srv_postgres_ssl
 
 
 - name: backup vanilla config
-  command:
+  ansible.builtin.command:
     argv:
       - cp
       - -a
@@ -89,7 +91,7 @@
   tags: srv_postgres_config
 
 - name: tweak postgres parameters
-  ini_file:
+  community.general.ini_file:
     path: "{{ srv_pg_conf_dir }}/postgresql.conf"
     section: ""
     option: "{{ item.key }}"
@@ -104,7 +106,7 @@
   tags: srv_postgres_config
 
 - name: ansible-managed header in postgresql.conf
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ srv_pg_conf_dir }}/postgresql.conf"
     line: '# ansible-managed'
     insertbefore: BOF
@@ -112,7 +114,7 @@
 
 
 - name: configure postgres authentication
-  template:
+  ansible.builtin.template:
     src: pg_hba.conf.j2
     dest: "{{ srv_pg_conf_dir }}/pg_hba.conf"
     owner: postgres
@@ -124,7 +126,7 @@
   tags: srv_postgres_config
 
 - name: allow root to login as postgres locally
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ srv_pg_conf_dir }}/pg_ident.conf"
     line: "root_postgres\t{{ item }}\t\tpostgres"  # noqa no-tabs
     owner: postgres
@@ -140,7 +142,7 @@
 
 
 - name: enable postgres service
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ srv_pg_service }}"
     state: started
     enabled: true
@@ -148,7 +150,7 @@
   tags: srv_postgres_service
 
 - name: open postgres port in ufw
-  ufw:
+  community.general.ufw:
     rule: allow
     port: "{{ srv_pg_port |string }}"
     proto: tcp
@@ -169,7 +171,7 @@
 
 
 - name: enable/disable postgres log compression
-  replace:
+  ansible.builtin.replace:
     path: /etc/logrotate.d/postgresql-common
     regexp: "{{ lookbehind }}(compress|delaycompress)"
     replace: "{{ commentout }}\\1"
@@ -181,6 +183,6 @@
 
 
 - name: notify postgres handlers now
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
   tags: srv_postgres_service
 ...

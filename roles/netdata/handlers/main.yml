@@ -1,14 +1,14 @@
 ---
-# handlers for ivansible.srv_netdata
+## handlers for ivansible.server.netdata
 
 - name: restart netdata service
-  systemd:
+  ansible.builtin.systemd:
     name: netdata
     state: restarted
     enabled: true
   become: true
 
 - name: reload netdata alarms
-  command: killall -USR2 netdata
+  ansible.builtin.command: killall -USR2 netdata
   become: true
 ...

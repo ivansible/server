@@ -2,13 +2,13 @@
 # see https://2019.www.torproject.org/docs/debian.html.en
 
 - name: add torproject signing key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc
   register: tor_repokey_result
   until: tor_repokey_result is successful
 
 - name: add torproject repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "deb [arch={{ lin_apt_arch }}] {{ url }} {{ codename }} main"
     filename: tor-project
     mode: 0644
@@ -19,24 +19,24 @@
   until: tor_repo_result is successful
 
 - name: update apt cache for torproject repository
-  apt:
+  ansible.builtin.apt:
     update_cache: true
   when: tor_repo_result is changed
 
 - name: install apt transport https for torproject install
-  apt:
+  ansible.builtin.apt:
     name: apt-transport-https
   register: apt_https_result
   until: apt_https_result is successful
 
 - name: install keyring from torproject
-  apt:
+  ansible.builtin.apt:
     name: deb.torproject.org-keyring
   register: tor_keyring_result
   until: tor_keyring_result is successful
 
 - name: install tor package from torproject
-  apt:
+  ansible.builtin.apt:
     name: tor
   register: tor_package_result
   until: tor_package_result is successful

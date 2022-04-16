@@ -1,6 +1,6 @@
 ---
 - name: install tor
-  include_tasks: "install-{{ method }}.yml"
+  ansible.builtin.include_tasks: "install-{{ method }}.yml"
   args:
     apply:
       become: true
@@ -10,18 +10,18 @@
   tags: lin_tor_install
 
 - name: activate tor service
-  systemd:
+  ansible.builtin.systemd:
     name: tor
     state: started
     enabled: true
   tags: lin_tor_service
 
 - name: configure tor
-  import_tasks: config.yml
+  ansible.builtin.import_tasks: config.yml
   tags: lin_tor_config
 
 - name: setup privoxy
-  import_tasks: privoxy.yml
+  ansible.builtin.import_tasks: privoxy.yml
   when: tor_privoxy_enable |bool
   tags: lin_tor_privoxy
 ...

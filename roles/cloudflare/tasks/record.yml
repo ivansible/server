@@ -1,6 +1,6 @@
 ---
 - name: setup cloudflare record '{{ rname }}' in zone '{{ zname }}'
-  cloudflare_dns:
+  community.general.cloudflare_dns:
     account_email: "{{ dns_cloudflare_email }}"
     account_api_token: "{{ dns_cloudflare_token }}"
     zone: "{{ zname }}"

@@ -1,10 +1,10 @@
 ---
 - name: add package cloud signing key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://packagecloud.io/netdata/netdata/gpgkey
 
 - name: add package cloud repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "deb [arch={{ lin_apt_arch }}] {{ url }} {{ codename }} main"
     filename: netdata
     mode: 0644
@@ -13,13 +13,13 @@
     codename: "{{ ansible_lsb.codename }}"
 
 - name: install netdata package
-  apt:
+  ansible.builtin.apt:
     name: netdata
     state: "{{ srv_netdata_upgrade |bool |ternary('latest', 'present') }}"
   notify: restart netdata service
 
 - name: silence systemd warning on xenial
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /lib/systemd/system/netdata.service
     line: ProtectControlGroups=true
     state: absent
@@ -27,7 +27,7 @@
   when: ansible_lsb.codename == 'xenial'
 
 - name: configure netdata
-  template:
+  ansible.builtin.template:
     src: netdata/netdata.conf
     dest: /etc/netdata/netdata.conf
     owner: root
@@ -44,7 +44,7 @@
     have_rclone_dirs: "{{ srv_netdata_rclone_dirs |d([],true) |length > 0 }}"
 
 - name: enable netdata service
-  systemd:
+  ansible.builtin.systemd:
     name: netdata
     state: started
     enabled: true

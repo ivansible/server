@@ -1,6 +1,6 @@
 ---
 - name: install tor package from universe
-  apt:
+  ansible.builtin.apt:
     name: tor
     state: present
 ...

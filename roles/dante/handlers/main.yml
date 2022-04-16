@@ -1,8 +1,8 @@
 ---
-# handlers for ivansible.srv_dante
+## handlers for ivansible.server.dante
 
 - name: restart dante service
-  systemd:
+  ansible.builtin.systemd:
     name: danted
     state: restarted
   become: true

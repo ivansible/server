@@ -1,11 +1,11 @@
 ---
 - name: reboot after fresh install (warnings are ok)
-  reboot:
+  ansible.builtin.reboot:
     pre_reboot_delay: 20
   when: allow_reboot |bool
 
 - name: ask user to reboot
-  debug:
+  ansible.builtin.debug:
     msg: "please reboot {{ inventory_hostname }} manually"
   when: not allow_reboot |bool
 ...

@@ -1,6 +1,6 @@
 ---
 - name: become root and install mongodb
-  import_tasks: root.yml
+  ansible.builtin.import_tasks: root.yml
   become: true
   ## mongodb-org is not available for arm64 until focal
   when: ansible_lsb.release is version('20.04','>=')

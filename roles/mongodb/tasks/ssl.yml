@@ -1,6 +1,6 @@
 ---
 - name: check that mongodb ssl certificate and key are readable
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: file
   loop:
@@ -10,7 +10,7 @@
     label: "{{ item |basename }}"
 
 - name: create a script for updating ssl certificate in mongodb
-  copy:
+  ansible.builtin.copy:
     dest: "{{ mongodb_cert_update_script }}"
     owner: root
     group: root
@@ -23,25 +23,25 @@
       chown root:mongodb "{{ mongodb_ssl_pem_file }}" && \
       chmod 0640 "{{ mongodb_ssl_pem_file }}" && \
       systemctl restart mongod
-  # a change in the script denotes ssl configuration change
+  ## a change in the script denotes ssl configuration change
   register: mongodb_cert_script_result
 
 - name: directory for letsencrypt post-renewal hooks
-  file:
+  ansible.builtin.file:
     path: "{{ certbot_post_dir }}"
     state: directory
     mode: 0755
   when: mongodb_ssl_cert is search('/letsencrypt/')
 
 - name: link a letsencrypt post-renewal hook for mongodb
-  file:
+  ansible.builtin.file:
     state: link
     src: "{{ mongodb_cert_update_script }}"
     dest: "{{ certbot_post_dir }}/mongodb"
   when: mongodb_ssl_cert is search('/letsencrypt/')
 
 - name: find modification times of mongodb ssl files
-  stat:
+  ansible.builtin.stat:
     path: "{{ item }}"
   loop:
     - "{{ mongodb_ssl_pem_file }}"
@@ -52,14 +52,15 @@
   register: stat_mongodb_ssl_files
 
 - name: update mongodb pem file if it's stale
-  shell: cat "{{ mongodb_ssl_cert }}" "{{ mongodb_ssl_key }}" > "{{ mongodb_ssl_pem_file }}"
+  ansible.builtin.shell:
+    cmd: cat "{{ mongodb_ssl_cert }}" "{{ mongodb_ssl_key }}" > "{{ mongodb_ssl_pem_file }}"
   when: mongodb_cert_script_result is changed
         or not stat_mongodb_ssl_files.results[0].stat.exists
         or stat_mongodb_ssl_files.results[0].stat.ctime < stat_mongodb_ssl_files.results[1].stat.ctime
         or stat_mongodb_ssl_files.results[0].stat.ctime < stat_mongodb_ssl_files.results[2].stat.ctime
 
 - name: ensure mongodb pem file permissions
-  file:
+  ansible.builtin.file:
     path: "{{ mongodb_ssl_pem_file }}"
     state: file
     owner: root

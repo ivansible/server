@@ -1,8 +1,8 @@
 ---
-# handlers for ivansible.srv_ziproxy
+## handlers for ivansible.server.ziproxy
 
 - name: restart ziproxy service
-  systemd:
+  ansible.builtin.systemd:
     name: ziproxy
     state: restarted
   become: true

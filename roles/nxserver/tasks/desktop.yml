@@ -1,6 +1,6 @@
 ---
 - name: install desktop (xfce) packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ lin_nxserver_desktop_packages }}"
     install_recommends: false
   register: nx_desktop_packages

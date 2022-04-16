@@ -1,8 +1,8 @@
 ---
-# handlers for ivansible.srv_mtproxy
+## handlers for ivansible.server.mtproxy
 
 - name: restart mtproxy service
-  systemd:
+  ansible.builtin.systemd:
     name: mtproxy
     state: restarted
     daemon_reload: true
