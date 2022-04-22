@@ -80,4 +80,37 @@
   tags:
     - skip_ansible_lint
     - srv_mtproxy_firewall
+
+
+- name: setup nginx sni upstream for mtproxy
+  ansible.builtin.include_role:
+    name: ivansible.base.nginx
+    tasks_from: setup_sni_upstream.yml
+  vars:
+    facility: mtproxy
+    hostname: "{{ mtproxy_nginx_host }}"
+    port: "{{ mtproxy_port }}"
+  tags: srv_mtproxy_nginx
+
+
+- name: setup cname record in cloudflare
+  community.general.cloudflare_dns:
+    account_email: "{{ mtproxy_cloudflare_email }}"
+    account_api_token: "{{ mtproxy_cloudflare_token }}"
+    zone: "{{ zone }}"
+    record: "{{ name }}"
+    type: CNAME
+    value: "{{ mtproxy_cname_host }}"
+    proxied: false  # mtproxy tls won't work behind cloudflare
+  delegate_to: localhost
+  vars:
+    fqdn: "{{ mtproxy_nginx_host }}"
+    name: "{{ fqdn |regex_replace('^([^.]+)[.](.*)$', '\\1') }}"
+    zone: "{{ fqdn |regex_replace('^([^.]+)[.](.*)$', '\\2') }}"
+  when:
+    - mtproxy_cloudflare_email |d('')
+    - mtproxy_cloudflare_token |d('')
+    - mtproxy_nginx_host |d('')
+    - mtproxy_cname_host |d('')
+  tags: srv_mtproxy_proxy
 ...

@@ -1,9 +1,7 @@
 ---
-# defaults for ivansible.srv_mtproxy
-
 mtproxy_enable: true
 
-mtproxy_secret: deadbeefdeadbeef0123456789abcdef
+mtproxy_secret: ee123deadbeef
 mtproxy_port: 13128
 mtproxy_bindip: 0.0.0.0
 mtproxy_direct: true
@@ -11,4 +9,12 @@ mtproxy_direct: true
 mtproxy_release: latest
 mtproxy_upgrade: false
 mtproxy_bin_file: /usr/local/sbin/mtg
+
+## nginx sni passthrough
+mtproxy_nginx_host: ~
+
+## cloudflare dns passthrough
+mtproxy_cname_host: ~
+mtproxy_cloudflare_email: ~
+mtproxy_cloudflare_token: ~
 ...

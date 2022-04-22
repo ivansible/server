@@ -21,6 +21,12 @@ Available variables are listed below, along with default values.
     mtproxy_bin_file: /usr/local/sbin/mtg
 
 
+    mtproxy_nginx_host: ~
+    mtproxy_cname_host: ~
+    mtproxy_cloudflare_email: ~
+    mtproxy_cloudflare_token: ~
+
+
 ## Tags
 
 - `srv_mtproxy_install`

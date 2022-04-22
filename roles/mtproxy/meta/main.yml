@@ -1,6 +1,7 @@
 ---
 dependencies:
   - ivansible.base.linux  # for lin_use_docker and firewall flag/module
+  - ivansible.base.nginx  # for web_domain and task setup_sni_upstream
 
 galaxy_info:
   role_name: srv_mtproxy
