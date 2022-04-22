@@ -10,9 +10,10 @@
     repository: 9seconds/mtg
     release: "{{ mtproxy_release }}"
     template: '{download_url}/mtg-{ver}-linux-{goarch}.tar.gz'
-    creates: "{{ mtproxy_bin_file }}"
-    reinstall: "{{ mtproxy_upgrade |bool }}"
     strip_v: true
+    version_script: "{{ mtproxy_bin_file }} --version"
+    script_regex: '[0-9]+[.][0-9._-]+'
+    reinstall: "{{ mtproxy_upgrade |bool }}"
   register: latest_mtg_release
   tags: srv_mtproxy_install
 
