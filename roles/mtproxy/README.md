@@ -17,14 +17,12 @@ Available variables are listed below, along with default values.
     mtproxy_secret: cf18fa8ea0267057e2c61a5f7322a8e7
     mtproxy_release: latest
 
-    mtproxy_rmdocker: false
     mtproxy_upgrade: false
     mtproxy_bin_file: /usr/local/sbin/mtg
 
 
 ## Tags
 
-- `srv_mtproxy_rmdocker`
 - `srv_mtproxy_install`
 - `srv_mtproxy_service`
 - `srv_mtproxy_firewall`

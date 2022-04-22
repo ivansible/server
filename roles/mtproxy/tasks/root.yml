@@ -1,11 +1,4 @@
 ---
-- name: remove stale docker container
-  ansible.builtin.include_tasks: rmdocker.yml
-  when:
-    - mtproxy_rmdocker |bool
-    - lin_use_docker |bool
-  tags: srv_mtproxy_rmdocker
-
 - name: create group for proxy processes
   ansible.builtin.group:
     name: proxy

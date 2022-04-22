@@ -11,5 +11,4 @@ mtproxy_direct: true
 mtproxy_release: latest
 mtproxy_upgrade: false
 mtproxy_bin_file: /usr/local/sbin/mtg
-mtproxy_rmdocker: false
 ...
