@@ -34,23 +34,29 @@
   tags: srv_dante_conf
 
 
-- name: install foreign dante package on xenial (with workarounds)
-  ansible.builtin.import_tasks: install-xenial.yml
-  when: ansible_lsb.codename in ['xenial']
-  tags: srv_dante_install
-
-- name: install dante server on ubuntu bionic+
+- name: install dante server package
   ansible.builtin.apt:
     name: dante-server
-  when: ansible_lsb.codename not in ['xenial']
-  register: dante_install_bionic_result
+  register: _dante_apt_result
   tags: srv_dante_install
 
-- name: dante service workarounds
-  ansible.builtin.import_tasks: service.yml
-  vars:
-    _stop_dante: "{{ dante_install_xenial_result is changed
-                  or dante_install_bionic_result is changed }}"
+- name: temporarily stop dante service after fresh install
+  ## note: this step is a workaround,
+  ## without such "recycling" the service might end up disabled.
+  ansible.builtin.systemd:
+    name: danted
+    state: stopped
+    enabled: false
+    daemon_reload: true
+  when: _dante_apt_result is changed
+  tags: srv_dante_service
+
+- name: enable dante service
+  ansible.builtin.systemd:
+    name: danted
+    state: started
+    enabled: true
+    daemon_reload: "{{ _dante_apt_result is changed }}"
   tags: srv_dante_service
 
 

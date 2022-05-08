@@ -1,6 +1,4 @@
 ---
-# defaults for ivansible.srv_dante
-
 dante_enable: true
 dante_port: 1080
 dante_direct: true
@@ -24,13 +22,4 @@ dante_verbose_log: false
 
 ## see: https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#hash-filters
 dante_salt: "{{ 32100 |random(seed=inventory_hostname) |string }}"
-
-## make dante service restart after boot problems
-dante_service_boot_fix: false
-
-## we deliberately use bionic package on xenial:
-## https://packages.ubuntu.com/bionic/dante-server
-## http://mirrors.kernel.org/ubuntu/pool/universe/d/dante/dante-server_1.4.2+dfsg-2build1_amd64.deb
-## use a dropbox copy of the package as mirrors are sometimes flaky
-dante_xenial_deb_url: https://www.dropbox.com/s/g9xfvwker5vcjvr/dante-server_1.4.2+dfsg-2build1_amd64.deb?dl=1
 ...
