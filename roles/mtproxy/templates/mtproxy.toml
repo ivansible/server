@@ -1,3 +1,7 @@
 # ansible-managed
 secret = "{{ mtproxy_secret }}"
 bind-to = "{{ mtproxy_bindip }}:{{ mtproxy_port }}"
+{# fix "cannot dial to telegram: cannot dial to 203 dc" #}
+{# https://github.com/9seconds/mtg/issues/208 #}
+{# https://github.com/9seconds/mtg/pull/216 #}
+allow-fallback-on-unknown-dc = true
