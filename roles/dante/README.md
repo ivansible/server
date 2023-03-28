@@ -34,6 +34,12 @@ Password and salt.
     dante_verbose_log: false
 Enables verbose logging (see https://www.inet.no/dante/doc/1.4.x/config/logging.html).
 
+    dante_logoutput: syslog
+Override default log output
+
+    dante_user_privileged: root
+Change default user privileged
+
 
 ## Tags
 

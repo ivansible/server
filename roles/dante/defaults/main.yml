@@ -3,6 +3,13 @@ dante_enable: true
 dante_port: 1080
 dante_direct: true
 
+## config customization
+dante_logoutput: syslog
+dante_user_privileged: root
+
+dante_timeout_negotiate: 300
+dante_timeout_io: 3600
+
 ## dante username must start with 'dante_' because it's global linux user
 dante_user: dante_socks
 dante_pass: secret
